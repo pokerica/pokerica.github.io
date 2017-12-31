@@ -1,1 +1,1 @@
-0,upload-data,0,0,1,aas,555,55,0,reset-init,0,0
+0,upload-data,0,0,1,aas,555,55
