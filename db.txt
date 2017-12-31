@@ -1,1 +1,1 @@
-0,upload-data,0,0,1,aaa,53,12,0,reset-init,0,0
+0,upload-data,0,0,0,reset-init,0,0
