@@ -170,17 +170,18 @@ table.minimalistBlack td {
 
 
   <script id="jsbin-javascript">
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-
-function onDeviceReady() {
-    alert("deviceready");    
-}
+    
 // client.js
 // run by the browser each time page is loaded
 $(document).ready(
   function() {
 
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+
+function onDeviceReady() {
+    alert("deviceready");    
+  
     $.ajaxSetup({ async: true }); 
 
     var filesha="#init";
@@ -478,7 +479,7 @@ $(document).ready(
         reFresh();      
 
       });      
-
+}
 
   }); //doc.ready()
 
