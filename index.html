@@ -170,6 +170,12 @@ table.minimalistBlack td {
 
 
   <script id="jsbin-javascript">
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+
+function onDeviceReady() {
+    alert("deviceready");    
+}
 // client.js
 // run by the browser each time page is loaded
 $(document).ready(
