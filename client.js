@@ -1,27 +1,34 @@
 
-$(document).ready(
-  function() {   
-	  
-	  
-var devReady="im false";
-
 window.wakeuptimer.wakeup( successCallback,
    errorCallback,
    // a list of alarms to set
    {
         alarms : [{
             type : 'onetime',
-            time : { hour : 17, minute : 10 },
+            time : { hour : 17, minute : 48 },
             extra : { message : 'json containing app-specific information to be posted when alarm triggers' },
             message : 'Alarm has expired!'
        }]
    }
 );
-	  
+
 var successCallback = function(result) {
-	
-        alert("kkooooo");
-}
+    if (result.type==='wakeup') {
+        console.log('wakeup alarm detected--' + result.extra);
+    } else if(result.type==='set'){
+        console.log('wakeup alarm set--' + result);
+    } else {
+        console.log('wakeup unhandled type (' + result.type + ')');
+    }
+};
+
+$(document).ready(
+  function() {   
+	  
+	  
+var devReady="im false";
+
+
          
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
