@@ -229,10 +229,36 @@ $(document).ready(
           //frames['dbFrame'].contentWindow.document.body.textContent = upData;
         }
       });    
+    
+    $('input').on('keydown', 
+      function(e) { 
+         
+        if(e.which === 9 || e.which === 13 || e.which === 10) {
+           
+           var tabindex = $(this).attr('tabindex');
+            tabindex++; 
+            if(tabindex < 5)          
+              $('[tabindex=' + tabindex + ']').focus();      
+            else {
+              e.preventDefault();
+              $('#frmInput').submit(); 
+            }           
+            
+            return false;
+        } 
+    });
        
     $("#frmInput").submit(
       function(event) {
-        //event.preventDefault(); 
+        event.preventDefault(); 
+        //alert("aa: " + JSON.stringify(event));
+
+        if (event.type === "submit") {
+           //Handling "Go" Button to move to next input field
+         // $('input#in2').focus(); 
+          //return;
+       }
+        
         var col0 = $('input#in0').val();
         var col1 = $('input#in1').val();
         var col2 = $('input#in2').val();
