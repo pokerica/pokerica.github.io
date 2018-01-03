@@ -141,8 +141,8 @@ $(document).ready(
       
     $(".mnu").click(
       function() {
-        audClick.stop();
-        audClick.currentTime = "null";
+        //audClick.stop();
+        audClick.currentTime = "0";
         audClick.play();
       });
       
@@ -211,12 +211,14 @@ $(document).ready(
               function(e) { alert("Error: \n"+ JSON.stringify(e)); }
                    
             }).done(function(response, st, x) {
-              alert("proso: " + JSON.stringify(response.sha));
+              alert("proso: " + JSON.stringify(response.content.sha));
               alert("saveDB-done: " + x.getAllResponseHeaders());
               //reFresh();
               //updateCashe();
-              //document.getElementById("dbFrame").contentWindow.document.body.textContent = upData;
-              filesha= response.sha;
+              
+              filesha= response.content.sha;
+              document.getElementById("dbFrame").contentWindow.document.body.textContent = filesha;
+            
               alert("Database saved! cache.v" + cshVer);
             }); 
             //********************************************************* 
@@ -237,12 +239,15 @@ $(document).ready(
         var col3 = $('input#in3').val();
         var col4 = (100 * col3 / col2).toFixed(2);
         tPl.push([col0, col1, col2, col3, col4]);
+        
+        
+        $('input#in0').val('');
+        $('input#in1').val('');
+        $('input#in2').val('');
+        $('input#in3').val('');
+        $('input#in0').focus();
+        
         reFresh();
-        $('#in0').val("");
-        $('#in1').val("");
-        $('#in2').val("");
-        $('#in3').val("");
-        $('#in0').focus();
       });
       
     $("#rsBut").click(
