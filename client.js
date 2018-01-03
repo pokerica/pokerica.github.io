@@ -134,13 +134,14 @@ $(document).ready(
            
     $(".ord").click(
       function() {
-        audClick.currentTime = "0.0";
+        audClick.stop();
+        audClick.currentTime = "-1";
         audClick.play();
       });
       
     $(".mnu").click(
       function() {
-        audClick.currentTime = "-1.0";
+        audClick.currentTime = "null";
         audClick.play();
       });
       
@@ -209,11 +210,12 @@ $(document).ready(
               function(e) { alert("Error: \n"+ JSON.stringify(e)); }
                    
             }).done(function(response, st, x) {
-              alert("proso: " + JSON.stringify(response));
+              alert("proso: " + JSON.stringify(response.sha));
               alert("saveDB-done: " + x.getAllResponseHeaders());
               //reFresh();
               //updateCashe();
               //document.getElementById("dbFrame").contentWindow.document.body.textContent = upData;
+              filesha= response.sha;
               alert("Database saved! cache.v" + cshVer);
             }); 
             //********************************************************* 
