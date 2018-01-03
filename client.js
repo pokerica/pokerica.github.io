@@ -209,7 +209,7 @@ $(document).ready(
               function(e) { alert("Error: \n"+ JSON.stringify(e)); }
                    
             }).done(function(response, st, x) {
-              //alert("proso: " + response.toString());
+              alert("proso: " + response.toString());
               alert("saveDB-done: " + x.getAllResponseHeaders());
               //reFresh();
               //updateCashe();
