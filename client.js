@@ -1,8 +1,8 @@
 $(document).ready(
   function() {   
          
-    //var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
-    var audClick= new Audio("/audClick.wav"); 
+    var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
+    //var audClick= new Audio("audClick.wav"); 
     audClick.load();  
   
     $.ajaxSetup({ async: true }); 
