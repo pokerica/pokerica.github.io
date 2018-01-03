@@ -17,7 +17,7 @@
     * Create your own at http://cspisawesome.com
     -->   
 
-<title>Pokerica-m02</title>
+<title>Pokerica-m03</title>
     
 <style id="jsbin-css">
 * {
@@ -304,14 +304,14 @@ $(document).ready(
               
     $("#mnu1").click(
       function() {
-        document.getElementById('mask').style.visibility = "visible";
-        document.getElementById('popupbox').style.visibility = "visible";
-        $('input#lg0').focus();
+        //document.getElementById('mask').style.visibility = "visible";
+        //document.getElementById('popupbox').style.visibility = "visible";
+        //$('input#lg0').focus();
       });
       
     $("#mnu2").click(
       function() { 
-        alert(77);
+        
         if (prH != "1px 10px 1px 10px")
           prH = "1px 10px 1px 10px";
         else
@@ -322,10 +322,9 @@ $(document).ready(
     $("#mnu3").click(
       function() {
         //loadDB();
-        //reFresh();       
+        //reFresh();        
         
-        alert(99999);
-        var num= 10000;
+        var num= 100;
         tPl.length = 0;
         for (var i = 0; i < num; i++) {
           var name= (Math.random()+Math.random()).toString(36).replace(/[^a-zA-Z]+/g, '').substr(0, 9);
@@ -406,9 +405,7 @@ $(document).ready(
           ["0", "reset-init", "0", "0", "0"]
         ];
         reFresh();
-      }); 
-      
-      
+      });       
      
   }); //doc.ready()
   
