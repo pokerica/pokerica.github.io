@@ -20,8 +20,8 @@ window.wakeuptimer.wakeup( successCallback,
 	  
 var successCallback = function(result) {
 	
-        alert('wakeup alarm detected--' + result.extra);
-};
+        alert("kkooooo");
+}
          
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
