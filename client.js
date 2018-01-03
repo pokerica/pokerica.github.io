@@ -2,10 +2,8 @@
 $(document).ready(
   function() {   
 	  
-	  
-var devReady="im false";
-
-
+    var sleepOff= false; 
+    var noSleep = new NoSleep();
          
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
@@ -154,12 +152,19 @@ var devReady="im false";
       
               
     $("#mnu1").click(
-      function() {
-        //document.getElementById('mask').style.visibility = "visible";
-        //document.getElementById('popupbox').style.visibility = "visible";
-        //$('input#lg0').focus();
-	      window.powermanagement.acquire();
-	      document.getElementById("dbFrame").contentWindow.document.body.textContent = devReady;
+      function() {       
+      
+        if (!sleepOff) {
+          noSleep.enable(); 
+          sleepOff = true;	
+        } 
+	else {		
+          noSleep.disable(); 
+          wakeLockEnabled = false;	
+        } 
+	      
+	document.getElementById("dbFrame").contentWindow.document.body.textContent = "sleepOff: " + sleepOff;
+	      
       });
       
     $("#mnu2").click(
