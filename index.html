@@ -22,7 +22,7 @@
     --> 
     
     <title>Pokerica-m21</title>
-    
+  
     <link rel="stylesheet" type="text/css" href="style.css" /> 
     
     <!--script> 
@@ -41,12 +41,12 @@
      <script type="text/javascript" src="client.js"></script> 
 </head>
   
-  <body style="background-color:#555555; width:500px; margin: 0 auto">     
+  <body style="background-color:#555555; width:480px; margin: 0 auto">     
 
     <div id="mask"></div>
     <div id="popupbox">
       <form id="logIn" onsubmit="return false" > 
-        <input id="pasIn" placeholder="PASSWORD" type="password" size="9" />
+        <input id="pasIn" placeholder="PASSWORD" type="password" size="9" tabindex="4"/>
         <input class="ord" type="submit" value="Login" />
       </form> 
     </div>
@@ -61,10 +61,9 @@
     <div id="bdy" style="background-color:white; padding:0px 10px 10px 10px"> 
       
       <form id="frmInput" onsubmit="return false" 
-            style="width:480px; padding:10px 10px 0px 5px; background-color:#ffffff"> 
+            style="width:100%; padding:10px 10px 0px 5px; background-color:#ffffff"> 
 
          <button class="ord" type="submit" style="float:right; margin-top:10pt">Submit</button> 
-
          <input id="in0" type="number" placeholder="ID" style="text-align:right; width:2em" autocomplete="off" tabindex="1" /><br> 
          <input id="in1" placeholder="NAME" size="10" autocomplete="off" tabindex="2"/> 
          &nbsp;<input id="in2" type="number" placeholder="GAMES" style="text-align:right; width:4.5em" autocomplete="off" tabindex="3"/> 
@@ -82,7 +81,7 @@
       &nbsp; <button class="ord" id="svBut">Save</button> 
       &nbsp; <button class="ord" id="psBut">Persistent Storage</button>      
       <br><br>  
-      <iframe id="dbFrame" width="480px" height="50px" style="border:none">
+      <iframe id="dbFrame" width="100%" height="50px" style="border:1px solid Black;">
 
         <p>Your browser does not support iframes.</p>
       </iframe>     
