@@ -43,7 +43,7 @@
     <plugin name="cordova-plugin-vibration"           source="npm" spec="~2.1.5" /-->
         
         
-        <gap:plugin name="cordova-plugin-powermanagement" source="npm" />        
+        <gap:plugin name="cordova-plugin-wakeuptimer.git" />        
         <plugin name="cordova-plugin-whitelist" source="npm" />
 
 
