@@ -44,7 +44,7 @@
         
         
         <gap:plugin name="cordova-plugin-powermanagement" source="npm" />        
-        <plugin name="cordova-plugin-powermanagement" source="npm" spec="1.0.5" />
+        <plugin name="cordova-plugin-whitelist" source="npm" />
 
 
     <!--
