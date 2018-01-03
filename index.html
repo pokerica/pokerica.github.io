@@ -126,10 +126,10 @@ table.minimalistBlack td {
 
          <button class="ord" type="submit" style="float:right; margin-top:10pt">Submit</button> 
 
-         <input id="in0" type="number" placeholder="ID" style="text-align:right; width:2em" autocomplete="off"/><br> 
-         <input id="in1" type="text" placeholder="NAME" size="11" autocomplete="off"/> 
-         &nbsp;<input id="in2" type="number" placeholder="GAMES" style="text-align:right; width:4.5em" autocomplete="off"/> 
-         &nbsp;<input id="in3" type="number" placeholder="WINS" style="text-align:right; width:4.5em" autocomplete="off"/> 
+         <input id="in0" type="text" placeholder="ID" style="text-align:right; width:2em" autocomplete="off"/><br> 
+         <input id="in1" type="text" placeholder="NAME" size="10" autocomplete="off"/> 
+         &nbsp;<input id="in2" type="text" placeholder="GAMES" style="text-align:right; width:4em" autocomplete="off"/> 
+         &nbsp;<input id="in3" type="text" placeholder="WINS" style="text-align:right; width:4em" autocomplete="off"/> 
       </form> 
        
       <table class="minimalistBlack">
@@ -226,7 +226,7 @@ $(document).ready(
         alert("loadDB-done: " + x.getAllResponseHeaders());
           
         var data = atob(response.content).split(',');
-        alert(data)
+        //alert(data)
         
         tPl.length = 0;
         for (var i = 0; i < data.length / 4; i++) {
@@ -287,8 +287,20 @@ $(document).ready(
         getSha();
       });
       
- 
-        
+           
+    $(".ord").click(
+      function() {
+        audClick.currentTime = "0.1";
+        audClick.play();
+      });
+      
+    $(".mnu").click(
+      function() {
+        audClick.currentTime = "0.1";
+        audClick.play();
+      });
+      
+              
     $("#mnu1").click(
       function() {
         document.getElementById('mask').style.visibility = "visible";
@@ -322,20 +334,8 @@ $(document).ready(
         reFresh();      
       });            
       
-          
-    $(".ord").click(
-      function() {
-        audClick.currentTime = 0;
-        audClick.play();
-      });
-      
-    $(".mnu").click(
-      function() {
-        audClick.currentTime = 0;
-        audClick.play();
-      });
            
-  /*    
+     
     $("#svBut").click(
       function() {
         
@@ -378,12 +378,10 @@ $(document).ready(
         } else {
           reFresh();
           alert("No connection to server, saved to memory!");
-          frames['dbFrame'].contentWindow.document.body.textContent = upData;
+          //frames['dbFrame'].contentWindow.document.body.textContent = upData;
         }
-      });
-      
- */
-      
+      });    
+       
     $("#frmInput").submit(
       function(event) {
         //event.preventDefault(); 
