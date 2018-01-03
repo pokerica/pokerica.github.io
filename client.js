@@ -4,7 +4,9 @@ $(document).ready(
 	  
 	  
 var devReady="im false";
-document.addEventListener("deviceready", 
+
+/*
+	  document.addEventListener("deviceready", 
   function(){ 
     window.powermanagement.acquire();
     //window.powermanagement.release();
@@ -13,7 +15,7 @@ document.addEventListener("deviceready",
 	
   }, false);
 		
-
+*/
          
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
