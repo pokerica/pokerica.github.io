@@ -134,13 +134,14 @@ $(document).ready(
            
     $(".ord").click(
       function() {
-        audClick.stop();
-        audClick.currentTime = "-1";
+        //audClick.stop();
+        audClick.currentTime = "0";
         audClick.play();
       });
       
     $(".mnu").click(
       function() {
+        audClick.stop();
         audClick.currentTime = "null";
         audClick.play();
       });
