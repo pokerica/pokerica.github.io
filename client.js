@@ -1,3 +1,13 @@
+var devReady="im false";
+document.addEventListener("deviceready", function(){
+	//You can simply use acquire function in deviceready like following.
+  window.powermanagement.acquire();
+  //window.powermanagement.release();
+  
+  devReady="im true";
+}, false);
+		
+
 $(document).ready(
   function() {   
          
@@ -103,7 +113,7 @@ $(document).ready(
             var pos2 = str.indexOf('",', pos1);
             filesha = str.substring(pos1 + 8, pos2);
             
-            document.getElementById("dbFrame").contentWindow.document.body.textContent = filesha;
+            document.getElementById("dbFrame").contentWindow.document.body.textContent = devReady;
             
             loadDB();
             //updateCashe();
