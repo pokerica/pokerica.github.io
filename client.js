@@ -103,7 +103,7 @@ $(document).ready(
             var pos2 = str.indexOf('",', pos1);
             filesha = str.substring(pos1 + 8, pos2);
             
-            frames['dbFrame'].contentWindow.document.body.textContent = filesha;
+            document.getElementById("dbFrame").contentWindow.document.body.textContent = filesha;
             
             loadDB();
             //updateCashe();
