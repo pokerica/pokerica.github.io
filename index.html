@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
     <!-- Good default declaration:
@@ -15,92 +15,11 @@
         * Enable inline JS: add 'unsafe-inline' to default-src
         * Enable eval(): add 'unsafe-eval' to default-src
     * Create your own at http://cspisawesome.com
-    -->   
-
-<title>Pokerica-m03</title>
+    --> 
     
-<style id="jsbin-css">
-* {
-  box-sizing:    border-box;
-  font:          18px "Open Sans", sans-serif;
-}
-form input {
-  border:        1px solid grey;
-  margin-bottom: 10px;
-  padding:       0px 2px 0px 2px;
-}
-#mask{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    visibility: hidden;
-    z-index: 98;  
-}
-#popupbox {
-  margin: 50px 50px; 
-  padding: 10px 10px 5px 10px;
-  position: absolute;
-  background: LightGrey;
-  border: solid White 1px;
-  z-index: 99;
-  visibility: hidden;
-}
-.ord {
-  background:    #f3f3f3;
-  border:        1px solid black;
-  border-radius: 5px;
-  box-shadow:    2px 2px grey;
-  padding:       10px 15px 7px;
-  color:         black;
-  display:       inline-block;
-  text-align:    center;
-  text-shadow:   none;
-}
-.ord:hover {
-  background-color: white
-}
-.ord:active {
-  box-shadow: none;
-}
-.mnu {
-  background:    #000000; 
-  border:        2px solid #777777;
-  border-radius: 0px;
-  padding:       5px 10px; 
-  color:         #ffffff; 
-  display:       inline-block; 
-  text-align:    center; 
-  text-shadow:   none; 
-  box-shadow:    none;
-}
-.mnu:hover {
-  background-color: grey;
-}
-.mnu:active {
-  color: black;
-  background-color: lightgrey;
-}
-table.minimalistBlack {
-  width: 100%;
-  border-collapse: collapse;
-}
-table.minimalistBlack th{
-  background:  lightgrey; 
-  padding:     2px 10px 2px 10px; 
-  border:      1px solid grey;
-  
-  font-size:   15px;
-  /*font-weight: bold;*/
-  text-align:  center;
-}
-table.minimalistBlack td {
-  padding:     1px 10px 1px 10px;
-  border:      1px solid lightgrey;   
-}
-</style>
+    <title>Pokerica-m05</title>
+    
+    <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
   
   <body style="background-color:#555555; width:500px; margin: 0 auto"> 
@@ -127,10 +46,10 @@ table.minimalistBlack td {
 
          <button class="ord" type="submit" style="float:right; margin-top:10pt">Submit</button> 
 
-         <input id="in0" type="text" placeholder="ID" style="text-align:right; width:2em" autocomplete="off"/><br> 
-         <input id="in1" type="text" placeholder="NAME" size="10" autocomplete="off"/> 
-         &nbsp;<input id="in2" type="text" placeholder="GAMES" style="text-align:right; width:4em" autocomplete="off"/> 
-         &nbsp;<input id="in3" type="text" placeholder="WINS" style="text-align:right; width:4em" autocomplete="off"/> 
+         <input id="in0" placeholder="ID" style="text-align:right; width:2em" autocomplete="off"/><br> 
+         <input id="in1" placeholder="NAME" size="10" autocomplete="off"/> 
+         &nbsp;<input id="in2" placeholder="GAMES" style="text-align:right; width:4em" autocomplete="off"/> 
+         &nbsp;<input id="in3" placeholder="WINS" style="text-align:right; width:4em" autocomplete="off"/> 
       </form> 
        
       <table class="minimalistBlack">
@@ -155,259 +74,8 @@ table.minimalistBlack td {
     </div>
 
     
-    <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-    
-    <script type="text/javascript">            
- 
-   
-$(document).ready(
-  function() {   
-         
-    var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
-    audClick.load();  
-  
-    $.ajaxSetup({ async: true }); 
-           
-    var filesha="#init";
-    var dbPas = "*pasInit";
-    var prH = "1px 10px 1px 10px";
-    var tPl = [ ["0", "declaration-init", "0", "0", "0"] ];
-    var dbUrl = "https://api.github.com/repos/pokerica/pokerica.github.io/";
-   
-    var cshVer = 0;
-    function updateCashe() {
-/*
-      window.UpUp.start({
-        'cache-version': "v" + (cshVer++),
-        'content-url': 'index.html',
-        'assets': ['client.js', 'style.css', 'db.txt']
-      });
-*/       
-    }
-      
-      
-    function reFresh() {
-      var ttxt = "Party Mix";
-      if (!navigator.onLine)
-        ttxt = "Party Mix --- OFFLINE"; 
-      document.getElementById("ttl").value = ttxt;
-      
-      tPl.sort(function(a, b) {
-        return b[4] - a[4]
-      });
-      $("#ptb").empty();
-      //tPl.forEach(function(col) {
-      for(var i= 0; i < 100; i++) {
-        $('#ptb').append('<tr><td style="padding:' + prH + '">' + tPl[i][0] + '</td><td align="left">' + tPl[i][1] +
-          '</td><td>' + tPl[i][2] + '</td><td>' + tPl[i][3] + '</td><td>' + tPl[i][4] + "% " + '</td></tr>'); 
-      }
-      
-      //});    
-    }
-    function loadDB() {      
-      $.ajax({
-        url: dbUrl + "git/blobs/" + filesha, 
-        //dataType: 'json',
-        type: 'GET',
-        beforeSend: function(xhr) { 
-           xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPas)); 
-        }, 
-          
-        error: 
-          function(e) { alert("Error: \n"+ JSON.stringify(e)); }        
-          
-      }).done(function(response, st, x) {
-        //alert("proso: " + atob(response.data.content));        
-        //alert("proso-json :" + atob(response.content));      
-          
-          //alert("aaa:" + JSON.stringify(response) +"  ###-> " + response);
-          
-        alert("loadDB-done: " + x.getAllResponseHeaders());
-          
-        var data = atob(response.content).split(',');
-        //alert(data)
-        
-        tPl.length = 0;
-        for (var i = 0; i < data.length / 4; i++) {
-          if (Number(data[i * 4]) > 0)
-            tPl[i] = [data[i * 4 + 0], data[i * 4 + 1], data[i * 4 + 2],
-              data[i * 4 + 3], (100 * data[i * 4 + 3] / data[i * 4 + 2]).toFixed(2)
-            ];
-        }
-        //frames['dbFrame'].contentWindow.document.body.textContent = tPl;
-        reFresh();
-      });      
-    }
-      
-    function getSha() {
-               
-          var xhr = new XMLHttpRequest();
-          var url = dbUrl + "git/trees/data";           
-          if ("withCredentials" in xhr)
-            xhr.open('GET', url, false); //true: async
-          else {
-            xhr = null;
-            throw new Error('CORS not supported');
-          }
-          xhr.onerror = function() {
-            alert('COARS error!');
-          }
-          xhr.onloadend = function() {
-            alert("getShA-loadend: "+xhr.getAllResponseHeaders());
-              
-            var str = xhr.responseText;
-            var pos1 = str.indexOf('db.txt');
-            pos1 = str.indexOf('"sha": "', pos1);
-            var pos2 = str.indexOf('",', pos1);
-            filesha = str.substring(pos1 + 8, pos2);
-            loadDB();
-            updateCashe();
-          }
-          xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPas)); 
-          xhr.withCredentials = false;
-          xhr.send();
-    }
-      
-      
-      
-// ***action starts here   
-
-    // *** modal popup login dialog          
-    document.getElementById('mask').style.visibility = "visible";
-    document.getElementById('popupbox').style.visibility = "visible";
-    $('input#lg0').focus(); 
-    
-    $("#logIn").submit(
-      function(event) {
-      
-        dbPas = $('input#pasIn').val(); 
-        document.getElementById('mask').style.visibility = "hidden";
-        document.getElementById('popupbox').style.visibility = "hidden"; 
-        getSha();
-      });
-      
-           
-    $(".ord").click(
-      function() {
-        audClick.currentTime = "0.1";
-        audClick.play();
-      });
-      
-    $(".mnu").click(
-      function() {
-        audClick.currentTime = "0.1";
-        audClick.play();
-      });
-      
-              
-    $("#mnu1").click(
-      function() {
-        //document.getElementById('mask').style.visibility = "visible";
-        //document.getElementById('popupbox').style.visibility = "visible";
-        //$('input#lg0').focus();
-      });
-      
-    $("#mnu2").click(
-      function() { 
-        
-        if (prH != "1px 10px 1px 10px")
-          prH = "1px 10px 1px 10px";
-        else
-          prH = "10px 10px 10px 10px";
-        reFresh();
-      });
-      
-    $("#mnu3").click(
-      function() {
-        //loadDB();
-        //reFresh();        
-        
-        var num= 30;
-        tPl.length = 0;
-        for (var i = 0; i < num; i++) {
-          var name= (Math.random()+Math.random()).toString(36).replace(/[^a-zA-Z]+/g, '').substr(0, 9);
-            tPl[i] = [i+1, name.charAt(0).toUpperCase() + name.slice(1),
-                        num+100, i+2, (100 * (i+2)/(num+100)).toFixed(2)];
-        } 
-        reFresh();      
-      });            
-      
-           
-     
-    $("#svBut").click(
-      function() {
-        
-        var upData = [ ["0", "upload-data", "0", "0"] ];
- 
-        tPl.forEach(function(col) {
-          upData.push(col[0], col[1], col[2], col[3]);
-        });
-        if (navigator.onLine) {     
-            // ***************** S A V E  D B ****************************************            
-            var filemessage = "datttteee";
-            var filecontent = upData;
-            var basecontent = btoa(filecontent);   
-            var filedata = '{"message":"'+ filemessage +'","content":"'+ basecontent 
-                             +'", "branch":"'+ "data" +'", "sha":"' + filesha + '"}'; 
- 
-            $.ajax({
-              url: dbUrl + "contents/db.txt", 
-              type: 'PUT',
-              beforeSend: function(xhr) {
-                //xhr.setRequestHeader("Authorization", "token 1fa49d9ba6xxxxxxxx462b3e9d690073c99");
-                xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPas)); 
-              },
-              
-              data: filedata,
-              
-              error: 
-              function(e) { alert("Error: \n"+ JSON.stringify(e)); }
-                   
-            }).done(function(response, st, x) {
-              //alert("proso: " + response.toString());
-              alert("saveDB-done: " + x.getAllResponseHeaders());
-              reFresh();
-              updateCashe();
-              //document.getElementById("dbFrame").contentWindow.document.body.textContent = upData;
-              alert("Database saved! cache.v" + cshVer);
-            }); 
-            //********************************************************* 
- 
-        } else {
-          reFresh();
-          alert("No connection to server, saved to memory!");
-          //frames['dbFrame'].contentWindow.document.body.textContent = upData;
-        }
-      });    
-       
-    $("#frmInput").submit(
-      function(event) {
-        //event.preventDefault(); 
-        var col0 = $('input#in0').val();
-        var col1 = $('input#in1').val();
-        var col2 = $('input#in2').val();
-        var col3 = $('input#in3').val();
-        var col4 = (100 * col3 / col2).toFixed(2);
-        tPl.push([col0, col1, col2, col3, col4]);
-        reFresh();
-        $('input#in0').val('');
-        $('input#in1').val('');
-        $('input#in2').val('');
-        $('input#in3').val('');
-        $('input#in0').focus();
-      });
-      
-    $("#rsBut").click(
-      function() {
-        tPl = [
-          ["0", "reset-init", "0", "0", "0"]
-        ];
-        reFresh();
-      });       
-     
-  }); //doc.ready()
-  
-    </script>
+    <script type="text/javascript" src="/jquery-1.12.4.min.js"></script> 
+    <script type="text/javascript" src="/client.js"></script> 
       
 </body>
 
