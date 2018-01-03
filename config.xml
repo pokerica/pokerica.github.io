@@ -42,6 +42,7 @@
     <plugin name="cordova-plugin-network-information" source="npm" spec="~1.3.3" />
     <plugin name="cordova-plugin-vibration"           source="npm" spec="~2.1.5" /-->
         
+    <gap:plugin name="cordova-plugin-powermanagement" source="npm" />
     <plugin name="cordova-plugin-whitelist" source="npm" spec="1.3.3" />
 
     <!--
