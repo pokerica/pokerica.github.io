@@ -5,17 +5,23 @@ $(document).ready(
 	  
 var devReady="im false";
 
-/*
-	  document.addEventListener("deviceready", 
-  function(){ 
-    window.powermanagement.acquire();
-    //window.powermanagement.release();
-  
-    devReady="im true";    	
+window.wakeuptimer.wakeup( successCallback,
+   errorCallback,
+   // a list of alarms to set
+   {
+        alarms : [{
+            type : 'onetime',
+            time : { hour : 17, minute : 10 },
+            extra : { message : 'json containing app-specific information to be posted when alarm triggers' },
+            message : 'Alarm has expired!'
+       }]
+   }
+);
+	  
+var successCallback = function(result) {
 	
-  }, false);
-		
-*/
+        alert('wakeup alarm detected--' + result.extra);
+};
          
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
