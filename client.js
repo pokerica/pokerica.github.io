@@ -209,7 +209,7 @@ $(document).ready(
             }).done(function(response, st, x) {
               //alert("proso: " + response.toString());
               alert("saveDB-done: " + x.getAllResponseHeaders());
-              reFresh();
+              //reFresh();
               //updateCashe();
               //document.getElementById("dbFrame").contentWindow.document.body.textContent = upData;
               alert("Database saved! cache.v" + cshVer);
