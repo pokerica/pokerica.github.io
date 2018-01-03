@@ -132,13 +132,13 @@ $(document).ready(
            
     $(".ord").click(
       function() {
-        audClick.currentTime = "0.1";
+        audClick.currentTime = "0.0";
         audClick.play();
       });
       
     $(".mnu").click(
       function() {
-        audClick.currentTime = "0.1";
+        audClick.currentTime = "-1.0";
         audClick.play();
       });
       
