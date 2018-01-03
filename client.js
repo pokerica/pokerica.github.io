@@ -9,8 +9,7 @@ document.addEventListener("deviceready",
     window.powermanagement.acquire();
     //window.powermanagement.release();
   
-    devReady="im true"; 
-    alert("im ready!!"); 	
+    devReady="im true";    	
 	
   }, false);
 		
@@ -167,6 +166,7 @@ document.addEventListener("deviceready",
         //document.getElementById('mask').style.visibility = "visible";
         //document.getElementById('popupbox').style.visibility = "visible";
         //$('input#lg0').focus();
+	      document.getElementById("dbFrame").contentWindow.document.body.textContent = devReady;
       });
       
     $("#mnu2").click(
