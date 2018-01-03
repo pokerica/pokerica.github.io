@@ -1,27 +1,4 @@
 
-window.wakeuptimer.wakeup( successCallback,
-   errorCallback,
-   // a list of alarms to set
-   {
-        alarms : [{
-            type : 'onetime',
-            time : { hour : 17, minute : 48 },
-            extra : { message : 'json containing app-specific information to be posted when alarm triggers' },
-            message : 'Alarm has expired!'
-       }]
-   }
-);
-
-var successCallback = function(result) {
-    if (result.type==='wakeup') {
-        console.log('wakeup alarm detected--' + result.extra);
-    } else if(result.type==='set'){
-        console.log('wakeup alarm set--' + result);
-    } else {
-        console.log('wakeup unhandled type (' + result.type + ')');
-    }
-};
-
 $(document).ready(
   function() {   
 	  
@@ -181,6 +158,7 @@ var devReady="im false";
         //document.getElementById('mask').style.visibility = "visible";
         //document.getElementById('popupbox').style.visibility = "visible";
         //$('input#lg0').focus();
+	      window.powermanagement.acquire();
 	      document.getElementById("dbFrame").contentWindow.document.body.textContent = devReady;
       });
       
@@ -192,6 +170,7 @@ var devReady="im false";
         else
           prH = "10px 10px 10px 10px";
         reFresh();
+	      window.powermanagement.release();
       });
       
     $("#mnu3").click(
