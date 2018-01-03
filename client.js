@@ -1,9 +1,6 @@
 $(document).ready(
   function() {   
-	  
-    //var wakeLockEnabled= false; 
-    //var noSleep = new NoSleep();
-     
+
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
     audClick.load();  
@@ -148,32 +145,17 @@ $(document).ready(
         audClick.currentTime = "0";
         audClick.play();
       });
-    
-    /*
-      var toggleEl = document.querySelector("#ttl");
-      toggleEl.addEventListener('click', function() {        
-        
-        if (!wakeLockEnabled) {
-          noSleep.enable(); // keep the screen on!
-          wakeLockEnabled = true;
-          this.value = "Wake Lock is enabled";
-          
-        } else {
-          noSleep.disable(); // let the screen turn off.
-          wakeLockEnabled = false;
-          this.value = "Wake Lock is disabled";          
-        }
 
-      }, false);
-              */
     
-
     $("#mnu1").click(
-      function() { 
- 
+      function() {  
+
+        // *** modal popup login dialog          
+        document.getElementById('mask').style.visibility = "visible";
+        document.getElementById('popupbox').style.visibility = "visible";
+        $('input#lg0').focus(); 
           
-      });
-      
+      });      
 
     $("#mnu2").click(
       function() { 
