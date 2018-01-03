@@ -1,6 +1,6 @@
 $(document).ready(
-  function() {   
-
+  function() { 	  
+         
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
     audClick.load();  
@@ -64,7 +64,7 @@ $(document).ready(
           
           //alert("aaa:" + JSON.stringify(response) +"  ###-> " + response);
           
-        alert("loadDB-done: " + x.getAllResponseHeaders());
+        //alert("loadDB-done: " + x.getAllResponseHeaders());
           
         var data = atob(response.content).split(',');
         //alert(data)
@@ -95,7 +95,7 @@ $(document).ready(
             alert('COARS error!');
           }
           xhr.onloadend = function() {
-            alert("getShA-loadend: "+xhr.getAllResponseHeaders());
+            //alert("getShA-loadend: "+xhr.getAllResponseHeaders());
               
             var str = xhr.responseText;
             var pos1 = str.indexOf('db.txt');
@@ -215,13 +215,13 @@ $(document).ready(
               function(e) { alert("Error: \n"+ JSON.stringify(e)); }
                    
             }).done(function(response, st, x) {
-              alert("proso: " + JSON.stringify(response.content.sha));
-              alert("saveDB-done: " + x.getAllResponseHeaders());
+              //alert("proso: " + JSON.stringify(response.content.sha));
+              //alert("saveDB-done: " + x.getAllResponseHeaders());
               //reFresh();
               //updateCashe();
               
               filesha= response.content.sha;
-              document.getElementById("dbFrame").contentWindow.document.body.textContent = filesha;
+              //document.getElementById("dbFrame").contentWindow.document.body.textContent = filesha;
             
               alert("Database saved! cache.v" + cshVer);
             }); 
@@ -255,14 +255,7 @@ $(document).ready(
     $("#frmInput").submit(
       function(event) {
         event.preventDefault(); 
-        //alert("aa: " + JSON.stringify(event));
-
-        if (event.type === "submit") {
-           //Handling "Go" Button to move to next input field
-         // $('input#in2').focus(); 
-          //return;
-       }
-        
+                
         var col0 = $('input#in0').val();
         var col1 = $('input#in1').val();
         var col2 = $('input#in2').val();
