@@ -4,14 +4,13 @@ $(document).ready(
 	  
 	  
 var devReady="im false";
-
-
 document.addEventListener("deviceready", 
   function(){ 
     window.powermanagement.acquire();
     //window.powermanagement.release();
   
     devReady="im true"; 
+    alert("im ready!!"); 	
 	
   }, false);
 		
