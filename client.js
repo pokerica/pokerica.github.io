@@ -1,19 +1,21 @@
 
-var devReady="im false";
-
-/*
-document.addEventListener("deviceready", function(){
-	//You can simply use acquire function in deviceready like following.
-  window.powermanagement.acquire();
-  //window.powermanagement.release();
-  
-  devReady="im true";
-}, false);
-		
-*/
-
 $(document).ready(
   function() {   
+	  
+	  
+var devReady="im false";
+
+
+document.addEventListener("deviceready", 
+  function(){ 
+    window.powermanagement.acquire();
+    //window.powermanagement.release();
+  
+    devReady="im true"; 
+	
+  }, false);
+		
+
          
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
