@@ -1,1 +1,1 @@
-0,upload-data,0,0,00,xxx,99,99,01,yyy,88,88,1,aaa,99,98,2,bbb,95,74,0,reset-init,0,0
+0,upload-data,0,0,1,a,99,98,2,b,99,97,3,c,99,90,0,reset-init,0,0
