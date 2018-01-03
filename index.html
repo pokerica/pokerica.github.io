@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>           
-      <title>P-07</title> 
+      <title>Pokerica</title> 
       
       <meta charset="utf-8">              
       <meta name="description" content="A cool thing made with Glitch"> 
@@ -102,19 +102,20 @@ table.minimalistBlack td {
 }
 
 </style>
-    
+
+
       <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
     
       <script> 
         window.onbeforeunload= function() { return "Reload database?"; } 
-        var audClick= new Audio('/audClick.wav'); 
-        audClick.load();  
+        var audClick= new Audio('https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav'); 
+        audClick.load(); 
+ 
       </script>
     
-       <script type="text/javascript" src="cordova.js.js"></script>
 </head>
   
-  <body onload="onLoad()" style="background-color:#555555; width:500px; margin: 0 auto"> 
+  <body style="background-color:#555555; width:500px; margin: 0 auto"> 
     
     <div id="mask"></div>
     <div id="popupbox">
@@ -166,21 +167,13 @@ table.minimalistBlack td {
 
     </div>
 
-<script id="jsbin-javascript">
-    
-function onLoad() {
-    document.addEventListener("deviceready", onDeviceReady, false);
-}
 
-function onDeviceReady() {
-    alert("deviceready");    
+  <script id="jsbin-javascript">
+// client.js
+// run by the browser each time page is loaded
+$(document).ready(
+  function() {
 
-    
-//$(document).ready(
-  //function() {
-
-    
-  
     $.ajaxSetup({ async: true }); 
 
     var filesha="#init";
@@ -478,9 +471,9 @@ function onDeviceReady() {
         reFresh();      
 
       });      
-}
 
-//  }); //doc.ready()
+
+  }); //doc.ready()
 
 /*  
    //var dburl= "https://lovely-depositooo.glitch.me/db.txt"; 
