@@ -167,9 +167,7 @@ $(document).ready(
     audClick.load();  
   
     $.ajaxSetup({ async: true }); 
-     alert("ocel svirat?");
-      audClick.play();
-      
+           
     var filesha="#init";
     var dbPas = "*pasInit";
     var prH = "1px 10px 1px 10px";
@@ -324,7 +322,7 @@ $(document).ready(
         //loadDB();
         //reFresh();        
         
-        var num= 100;
+        var num= 30;
         tPl.length = 0;
         for (var i = 0; i < num; i++) {
           var name= (Math.random()+Math.random()).toString(36).replace(/[^a-zA-Z]+/g, '').substr(0, 9);
