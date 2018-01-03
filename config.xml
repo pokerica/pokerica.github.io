@@ -20,9 +20,9 @@
     <content src="index.html" />
 
     <!-- Customize your app and platform with the preference element. -->
-      <preference name="DisallowOverscroll"         value="true" />
+      <preference name="DisallowOverscroll"         value="false" />
       <preference name="Fullscreen" value="true" /> 
-      <preference name="StatusBarOverlaysWebView" value="true" />
+      <preference name="StatusBarOverlaysWebView" value="false" />
         
 
     <!-- Define a specific version of PhoneGap to build into your app. -->
@@ -71,10 +71,7 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-          <allow-intent href="*" />
-          <preference name="enabled" value="true"/>
-          <preference name="Orientation" value="default"/>
-           <preference name="Fullscreen" value="true"/>
+          <allow-intent href="*" />      
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
