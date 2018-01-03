@@ -1,10 +1,9 @@
-
 $(document).ready(
   function() {   
 	  
-    var sleepOff= false; 
-    var noSleep = new NoSleep();
-         
+    //var wakeLockEnabled= false; 
+    //var noSleep = new NoSleep();
+     
     var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/audClick.wav"); 
     //var audClick= new Audio("audClick.wav"); 
     audClick.load();  
@@ -107,7 +106,7 @@ $(document).ready(
             var pos2 = str.indexOf('",', pos1);
             filesha = str.substring(pos1 + 8, pos2);
             
-            document.getElementById("dbFrame").contentWindow.document.body.textContent = devReady;
+            document.getElementById("dbFrame").contentWindow.document.body.textContent = filesha;
             
             loadDB();
             //updateCashe();
@@ -149,24 +148,33 @@ $(document).ready(
         audClick.currentTime = "0";
         audClick.play();
       });
-      
-              
+    
+    /*
+      var toggleEl = document.querySelector("#ttl");
+      toggleEl.addEventListener('click', function() {        
+        
+        if (!wakeLockEnabled) {
+          noSleep.enable(); // keep the screen on!
+          wakeLockEnabled = true;
+          this.value = "Wake Lock is enabled";
+          
+        } else {
+          noSleep.disable(); // let the screen turn off.
+          wakeLockEnabled = false;
+          this.value = "Wake Lock is disabled";          
+        }
+
+      }, false);
+              */
+    
+
     $("#mnu1").click(
-      function() {       
-      
-        if (!sleepOff) {
-          noSleep.enable(); 
-          sleepOff = true;	
-        } 
-	else {		
-          noSleep.disable(); 
-          wakeLockEnabled = false;	
-        } 
-	      
-	document.getElementById("dbFrame").contentWindow.document.body.textContent = "sleepOff: " + sleepOff;
-	      
+      function() { 
+ 
+          
       });
       
+
     $("#mnu2").click(
       function() { 
         
