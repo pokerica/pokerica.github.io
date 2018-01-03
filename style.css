@@ -1,6 +1,6 @@
 * {
   box-sizing:    border-box;
-  font:          18px "Open Sans", sans-serif;
+  font:          19px Arial;
 }
 form input {
   border:        1px solid grey;
@@ -70,7 +70,7 @@ table.minimalistBlack th{
   padding:     2px 10px 2px 10px; 
   border:      1px solid grey;
   
-  font-size:   15px;
+  font-size:   17px;
   /*font-weight: bold;*/
   text-align:  center;
 }
