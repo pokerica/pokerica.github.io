@@ -246,16 +246,18 @@ $(document).ready(
          
         if(e.which === 9 || e.which === 13 || e.which === 10) { 
           
-            this.blur();            
+            //this.blur();            
             e.preventDefault(); 
 
             var tmpFoc= $(this).nextAll("input").first();
 
             if(this.id != "in3") 
-              setTimeout(function() { tmpFoc.focus(); }, 250);              
+              //setTimeout(function() { tmpFoc.focus(); }, 250); 
+              tmpFoc.focus();
             else 
               $('#frmInput').submit(); 
-              
+          
+            this.blur();              
             return false;            
         } 
         
