@@ -232,25 +232,35 @@ $(document).ready(
           alert("No connection to server, saved to memory!");
           //frames['dbFrame'].contentWindow.document.body.textContent = upData;
         }
-      });    
+      });  
+         
+   
+    $(".finf").on('focus', 
+      function(e) { 
+        this.select();           
+      });
     
-    $('input').on('keydown', 
+
+    $(".finf").on('keydown',  
       function(e) { 
          
-        if(e.which === 9 || e.which === 13 || e.which === 10) {
-           
-           var tabindex = $(this).attr('tabindex');
-            tabindex++; 
-            if(tabindex < 5)          
-              $('[tabindex=' + tabindex + ']').focus();      
-            else {
-              e.preventDefault();
+        if(e.which === 9 || e.which === 13 || e.which === 10) { 
+          
+            this.blur();            
+            e.preventDefault(); 
+
+            var tmpFoc= $(this).nextAll("input").first();
+
+            if(this.id != "in3") 
+              setTimeout(function() { tmpFoc.focus(); }, 250);              
+            else 
               $('#frmInput').submit(); 
-            }           
-            
-            return false;
+              
+            return false;            
         } 
-    });
+        
+      });
+
        
     $("#frmInput").submit(
       function(event) {
