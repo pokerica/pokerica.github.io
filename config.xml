@@ -33,10 +33,10 @@
         <allow-intent href="market:*" /> 
             
         <!--preference name="ShowTitle" value="false"/>             
-        <preference name="KeepRunning" value="true"/> 
-        <preference name="AndroidLaunchMode" value="singleTop"/-->    
+        <preference name="KeepRunning" value="true"/--> 
+        <preference name="AndroidLaunchMode" value="singleTask"/>    
             
-        <!--preference name="Fullscreen" value="true" /-->
+        <!--preference name="Fullscreen" value="true"/-->
         <preference name="SetFullscreen" value="true"/>            
     </platform>
         
