@@ -1,27 +1,12 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8" />
-    <!--meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" /-->
- <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=3, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-  
-    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
-    <!--meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
-     -->
-
-<!-- Good default declaration:
-    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-        * Enable inline JS: add 'unsafe-inline' to default-src
-        * Enable eval(): add 'unsafe-eval' to default-src
-    * Create your own at http://cspisawesome.com
-    --> 
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="msapplication-tap-highlight" content="yes" />
+    <meta name="viewport" content="user-scalable=yes, initial-scale=1, width=device-width, height=device-height" />
     
-    <title>Pokerica-m23</title>
+    <title>Pokerica-m24</title>
   
     <link rel="stylesheet" type="text/css" href="style.css" /> 
     
@@ -81,8 +66,7 @@
       &nbsp; <button class="ord" id="svBut">Save</button> 
       &nbsp; <button class="ord" id="psBut">Persistent Storage</button>      
       <br><br>  
-      <iframe id="dbFrame" width="100%" height="50px" style="border:1px solid Black;">
-
+      <iframe id="dbFrame" width="100%" height="50px" style="border:1px solid Black;"> 
         <p>Your browser does not support iframes.</p>
       </iframe>     
     
@@ -90,9 +74,7 @@
       <input type="file" name="db.txt"/>
       <a href="db.txt" download> <button class="ord">Download</button></a> 
       
-
-   <!--input type="button" id="toggle" value="Wake Lock is disabled" /-->
-    
+   
    <script src="NoSleep.min.js"></script>
     <script>
       var noSleep = new NoSleep();
@@ -116,5 +98,4 @@
     </div>
      
 </body>
-
 </html>
