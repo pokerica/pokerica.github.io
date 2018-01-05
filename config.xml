@@ -26,10 +26,10 @@
         <preference name="LoadingDialog" value="My Title,My Message"/>
         <preference name="LoadingPageDialog" value="My Title2,My Message2"/>
         <preference name="ShowTitle" value="true"/>
-        <preference name="AndroidLaunchMode" value="singleTop"/>
+        <preference name="AndroidLaunchMode" value="singleInstance"/>
 
-      <preference name="Fullscreen" value="true" /> 
-      <preference name="StatusBarOverlaysWebView" value="false" />
+      <!--preference name="Fullscreen" value="true" /> 
+      <preference name="StatusBarOverlaysWebView" value="false" /-->
         
 
     <!-- Define a specific version of PhoneGap to build into your app. -->
