@@ -17,8 +17,7 @@
     </author>
 
     <content src="index.html" />
-
-    <!--preference name="Fullscreen" value="true" /-->              
+    
     <preference name="DisallowOverscroll" value="true" />
     <!-- <preference name="phonegap-version"       value="cli-6.0.0" /> -->
         
@@ -27,24 +26,18 @@
     <plugin name="cordova-plugin-whitelist" source="npm" /> 
         
     <access origin="*" />
-      <allow-intent href="*" />  
-      <allow-navigation href="*" />
-        
-    <!--allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" /-->
+    <allow-intent href="*" />  
+    <allow-navigation href="*" />
+
     <platform name="android">
         <allow-intent href="market:*" /> 
             
-      <preference name="KeepRunning" value="true"/> 
-      <preference name="AndroidLaunchMode" value="singleInstance"/> 
+       <preference name="KeepRunning" value="true"/> 
+       <preference name="AndroidLaunchMode" value="singleInstance"/> 
                                     
-      <preference name="ShowTitle" value="false"/> 
-      <!--preference name="Fullscreen" value="true" /-->
-      <preference name="SetFullscreen" value="true"/>
+       <preference name="ShowTitle" value="false"/> 
+       <!--preference name="Fullscreen" value="true" /-->
+       <!--preference name="SetFullscreen" value="true"/-->
             
     </platform>
     <platform name="ios">
