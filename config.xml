@@ -32,12 +32,12 @@
     <platform name="android">
         <allow-intent href="market:*" /> 
                         
-        <!--preference name="Fullscreen" value="true"/-->
-        <preference name="SetFullscreen" value="true"/>       
+        <!--preference name="Fullscreen" value="true"/>
+        <preference name="SetFullscreen" value="true"/-->       
             
         <preference name="ShowTitle" value="true"/>             
         <preference name="KeepRunning" value="true"/> 
-        <preference name="AndroidLaunchMode" value="singleTask"/>    
+        <preference name="AndroidLaunchMode" value="singleTop"/>    
      
     </platform>
         
