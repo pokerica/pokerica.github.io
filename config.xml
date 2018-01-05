@@ -31,13 +31,14 @@
 
     <platform name="android">
         <allow-intent href="market:*" /> 
-            
-        <!--preference name="ShowTitle" value="false"/>             
-        <preference name="KeepRunning" value="true"/--> 
-        <preference name="AndroidLaunchMode" value="singleTask"/>    
-            
+                        
         <!--preference name="Fullscreen" value="true"/-->
-        <preference name="SetFullscreen" value="true"/>            
+        <preference name="SetFullscreen" value="true"/>       
+            
+        <preference name="ShowTitle" value="true"/>             
+        <preference name="KeepRunning" value="true"/> 
+        <preference name="AndroidLaunchMode" value="singleTask"/>    
+     
     </platform>
         
     <platform name="ios">
