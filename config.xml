@@ -3,34 +3,26 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.phonegap.helloworld"
-        version   = "1.0.0">
+        id        = "com.phonegap.pokerica"
+        version   = "0.0.1">
 
-    <name>Hello World</name>
+    <name>Pokerica (beta.01)</name>
 
     <description>
-        Hello World sample application that responds to the deviceready event.
+        Party Mix Pokerica, description it is.
     </description>
 
-    <author href="http://phonegap.com" email="support@phonegap.com">
-        PhoneGap Team
+    <author href="https://pokerica.github.io" email="lazy@pmp.com">
+        Polar Elephant Inc.
     </author>
 
     <!-- Define the main entry-point to the application -->
     <content src="index.html" />
 
     <!-- Customize your app and platform with the preference element. -->
-      
-      <preference name="DisallowOverscroll" value="true" />
-      <preference name="KeepRunning" value="true"/>
-        <preference name="LoadingDialog" value="My Title,My Message"/>
-        <preference name="LoadingPageDialog" value="My Title2,My Message2"/>
-        <preference name="ShowTitle" value="true"/>
-        <preference name="AndroidLaunchMode" value="singleInstance"/>
 
-      <!--preference name="Fullscreen" value="true" /> 
-      <preference name="StatusBarOverlaysWebView" value="false" /-->
-        
+      <!--preference name="Fullscreen" value="true" /-->              
+      <preference name="DisallowOverscroll" value="true" />
 
     <!-- Define a specific version of PhoneGap to build into your app. -->
     <!-- <preference name="phonegap-version"       value="cli-6.0.0" /> -->
@@ -83,7 +75,14 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-          <allow-intent href="*" />      
+          <allow-intent href="*" /> 
+
+      <preference name="KeepRunning" value="true"/>
+      <preference name="AndroidLaunchMode" value="singleInstance"/>           
+                        
+      <preference name="ShowTitle" value="false"/> 
+      <preference name="SetFullscreen" value="true"/>
+            
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
