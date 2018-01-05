@@ -35,9 +35,9 @@
         <!--preference name="Fullscreen" value="true"/>
         <preference name="SetFullscreen" value="true"/-->       
             
-        <preference name="ShowTitle" value="true"/>             
+        <preference name="ShowTitle" value="false"/>             
         <preference name="KeepRunning" value="true"/> 
-        <preference name="AndroidLaunchMode" value="singleTop"/>    
+        <preference name="AndroidLaunchMode" value="singleInstance"/>    
      
     </platform>
         
