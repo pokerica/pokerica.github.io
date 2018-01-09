@@ -1,1 +1,1 @@
-0,upload-data,0,0,2,bbb,33,28,1,aaa,25,21,0,reset-init,0,0
+0,upload-data,0,0,9,xxx,99,98,2,bbb,33,28,1,aaa,25,21,3,ccc,42,35
