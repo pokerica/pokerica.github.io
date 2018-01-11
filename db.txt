@@ -1,1 +1,1 @@
-0,upload-data,0,0,15,Pvzjm,115,16,14,Xejidzp,115,15,13,Frtnrcmkk,115,14,12,Uxxozvdug,115,13,11,Iiioswhnf,115,12,10,Mqqmfv,115,11,9,Xxwlsr,115,10,8,Pasnsofi,115,9,7,Vwddxqq,115,8,6,Maunypr,115,7,5,Lnjoadtjn,115,6,4,Ykhltuui,115,5,3,Gniysmh,115,4,2,Btljymwo,115,3,1,Dgzyuslsn,115,2
+0,upload-data,0,0,1,hh,33,23,0,reset-init,0,0
