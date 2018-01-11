@@ -1,1 +1,1 @@
-0,upload-data,0,0,0,reset-init,0,0
+0,upload-data,0,0,10,Crni,14,8,1,Vanja,122,55,2,Deki,86,34,11,Aca,46,18,12,Buda,39,15,14,Rade,23,8,3,Misa,109,35,4,Djile,59,18,5,Kostur,71,21,15,Hofman,38,10,7,Dzek,98,22,8,Lavi,89,19,9,Marko,108,23,17,Zele,38,7,18,Djami,6,1
