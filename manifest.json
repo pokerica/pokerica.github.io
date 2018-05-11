@@ -3,7 +3,7 @@
   "short_name": "Pokerica",
   "icons": [{
     
-      "src": "https://pokerica.github.io/icons/Icon-192.png",
+      "src": "https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/icons/Icon-192.png",
       "sizes": "128x128 144x144 152x152 192x192",
       "type": "image/png"      
       
