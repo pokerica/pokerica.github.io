@@ -30,8 +30,7 @@
     <allow-navigation href="*" />
 
     <platform name="android">
-        <allow-intent href="market:*" /> 
-                        
+                               
         <!--preference name="Fullscreen" value="true"/>
         <preference name="SetFullscreen" value="true"/-->       
             
@@ -39,11 +38,6 @@
         <preference name="KeepRunning" value="true"/> 
         <preference name="AndroidLaunchMode" value="singleInstance"/>    
      
-    </platform>
-        
-    <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
     </platform>
 
 </widget>
