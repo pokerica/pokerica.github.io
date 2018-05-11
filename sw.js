@@ -1,5 +1,4 @@
-// *** 01234
-
+// *** 0123
 
 //'use strict';
 self.addEventListener('install', e => {
