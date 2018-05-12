@@ -2091,8 +2091,8 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    
      var scd= ''; //'BANK: $'+ fCash(...                                      ---|
      //    ' 99.|NAME______| 99k| 999,9xx|   +-999.9xx| +-99,9xx|+-99,9xx|+-99.99 \n';
-     scd+= 'RNK  NAME       $BUY     $WON       $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
-        +  '----------------------------------------------------------------------\n';
+     scd+= '  RNK   NAME      $BUY       $WON     \n' //  $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
+        +  '-----------------------------------\n'; //------------------------------------\n';
       
    
      var miniGm= tHiFull[ri][7].split(':');
@@ -2133,14 +2133,16 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
          var totl= col6 + col7;
          var tots= (totl < 0) ? '-'+ (-totl/10).toFixed(1) : '+'+ (totl/10).toFixed(1);
        
-         scd+= ('   ' + cx).slice(-2) +'.  '
-             + (sortedPl[ pid ] +'          ').substring(0, 10)
+         scd+= '  '+ ('  ' + cx).slice(-2) +'.   '
+             + (sortedPl[ pid ] +'        ').substring(0, 8)
              + ('     '+ (buy+'k')).slice(-5) 
-             + ('         '+ wons).slice(-9)
+             + ('            '+ wons).slice(-12)
+       /*
              + ('           '+ bals).slice(-11)              
              + ('            '+ col6s).slice(-12)
              + ('        '+ col7s).slice(-9) 
              + ('       '+ tots).slice(-8)
+       */            
              + ' \n';
 //                0    1    2     3     4 
 // *** mini-Gm:  pid  buy  ∑nG  ∑buy  ∑won   
