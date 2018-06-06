@@ -1,4 +1,4 @@
-let versionCode= "v1.1r83 \n";
+let versionCode= "v1.2r84 \n";
 
 $(document).ready(
 function() {  
@@ -1772,12 +1772,18 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
 // *** tHiFull:       date  np    bnk  $1    1st   $2    2nd   m-tGm  gid
 // *** tGm:           isIn  pid   rnk  $won  $buy
    
+     var dtCode= tHiFull[ri][0].toString();
+     var mon= +dtCode.substring(4,6);
+     var dtStr= dtCode.substring(6,8)+" " + monthStr[mon-1] +" "+dtCode.substring(0,4)
+              + " @ "+ dtCode.substring(8,10) +":"+ dtCode.substring(10,12);
+   
      var scd= ''; //'BANK: $'+ fCash(...                                      ---|
      //    ' 99.|NAME______| 99k| 999,9xx|   +-999.9xx| +-99,9xx|+-99,9xx|+-99.99 \n';
-     scd+= ' RANK   NAME      $BUY      $WON     \n' //  $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
-        +  '---------------------------------\n'; //------------------------------------\n';
-      
+     scd+= ' RANK  NAME     $BUY    $WON     \n' //  $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
+        +  '-----------------------------'
+        +  '              '+ dtStr +' \n';
    
+    
      var miniGm= tHiFull[ri][7].split(':');
    
      for(var i= 5; i < miniGm.length; i+= 5) {
@@ -1790,44 +1796,18 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
          else
          if(cx === 2)
            mnyw= +tHiFull[ri][5]; // $:2 
-         else if(cx === 3) scd+= '\n';
+         else 
+         if(cx === 3) scd+= '\n';
        
          var wons= (mnyw === 0) ? '   ' : fCash(+mnyw*100);
        
          var pid= +miniGm[i+0]-1;
          var buy= +miniGm[i+1];
-        /*
-         var ngTI= +miniGm[i+2];
-         var byTI= +miniGm[i+3];
-         var wnTI= +miniGm[i+4];
-         var blTI= wnTI - byTI*10;
-         
-         var balnG= mnyw - buy*10;
-         var balnT= blTI + balnG;
-         //var bals= (baln < 0) ? '-'+ fCash(-baln*100) : '+'+ fCash(baln*100);
-         var bals= fCash(balnT*100);
-         
-         var col6= balnG; //c6Avg(baln, 1);
-         var col6s= (col6 < 0) ? '-'+ fCash(-col6*100) : '+'+ fCash(col6*100);
        
-         var col7= c7Avg(balnG, buy);
-         var col7s= (col7 < 0) ? '-'+ fCash(-col7*100) : '+'+ fCash(col7*100);
-       
-         var totl= col6 + col7;
-         var tots= (totl < 0) ? '-'+ (-totl/10).toFixed(1) : '+'+ (totl/10).toFixed(1);
-       */
-       
-         scd+= '  '+ ('  ' + cx).slice(-2) +'.   '
+         scd+= '  '+ ('  ' + cx).slice(-2) +'.  '
              + (sortedPl[ pid ] +'        ').substring(0, 8)
-             + ('     '+ (buy+'k')).slice(-5) 
-             + ('           '+ wons).slice(-11)
-       /*
-             + ('           '+ bals).slice(-11)              
-             + ('            '+ col6s).slice(-12)
-             + ('        '+ col7s).slice(-9) 
-             + ('       '+ tots).slice(-8)
-       */            
-             + ' \n';
+             + ('    '+ (buy+'k')).slice(-4) 
+             + ('         '+ wons).slice(-9) +' \n';
 
      } //end for
      
