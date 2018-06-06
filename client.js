@@ -93,10 +93,8 @@ function() {
 // *** recalc. selected history-table rows  
  function reclcSelHrows() {
    
-   //var tSelSum= [[0, 'name', 0, 0, 0, 0, 0, 0, ]];
-   //tSelSum.length= 0;
-   //tSelSum= tPl.slice();
-   var tSelSum = JSON.parse(JSON.stringify(tPl))
+   
+   var tSelSum = JSON.parse(JSON.stringify(tPl));
    tSelSum.sort(function(a, b) { return a[0] - b[0] });
    tSelSum.forEach(function(row) {
      
@@ -760,6 +758,7 @@ function() {
 
                  tGm.length= 0;            
                  tGm= tmpGm.slice(0);
+                 //tGm= JSON.parse(JSON.stringify(tmpGm));
 
                  nBar.innerText+= "Game state imported"+ endNotfChar;
                  adminInfo.innerText+= "Game state imported, rows#: "+ tGm.length +'\n';
@@ -805,7 +804,8 @@ function() {
                  adminInfo.innerText+= "Game state recorded, rows#: "+ tGm.length +'\n';
             
                  tmpGm.length= 0; 
-                 tmpGm= tGm.slice(0);
+                 //tmpGm= tGm.slice(0);
+                 //tmpGm= JSON.parse(JSON.stringify(tGm));
                
                  prtGm();
              });
