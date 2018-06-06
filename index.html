@@ -21,7 +21,7 @@
     
   
   
-    <title>Pokerica (v1r81)</title>
+    <title>Pokerica</title>
   
     <link rel="stylesheet" type="text/css" href="style.css" > 
   
@@ -131,15 +131,20 @@ style="float:right"
       <!--
             v    v    v     v     v                 v    
       <!-- id  name  gms  $buy  $won  $bal  csh%  rnk%  total -->      
-      <table id="playerTable">
+      <table id="playerTable" style="width:100%">
       <thead id="pth"><!--/thead-->
-        <tr><th class="admin" style="width:30px">id</th>
-          <th style="width:150px">NAME</th>
-          <th style="width:40px">#nG</th>
-          <th>$BUYIN</th><th>$WON</th><th>$BALANCE</th>
-          <th style="width:75px">$( # )</th>
-          <th style="width:75px">%( $ )</th>          
-          <th style="width:59px">TOTAL</th></tr></thead>
+        <tr><th class="admin" style="width:40px">id</th>
+          <th>NAME</th>
+          <th>$BUY</th><th>$WON</th><th>$BALANCE</th>
+          
+          <th style="width:90px; text-align:right">#(gms)</th>
+          
+          <th style="width:80px; text-align:right">%(buy)</th>
+          <th style="width:80px; text-align:right">%(won)</th>          
+          <!-- th style="width:59px">TOTAL</th -->
+        </tr>
+      </thead>
+
       <tbody id="ptb" style="text-align:right"></tbody> 
       </table>
       
@@ -221,13 +226,11 @@ style="float:right"
      
     
     
-    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:20px 20px">
+    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:10px 20px">
       
-      <canvas id="canvasA" width="660" height="100" 
-           style="margin:0; border:0px solid lightgrey; overflow:visible"></canvas>
+      <pre id="selSum" style="height:90px; font:bold 15px monospace; padding:10px 10px;
+                              margin-bottom:20px; text-align:left;">___selected games balance___</pre>
       
-      <canvas id="canvasB" width="660" height="100" 
-           style="margin:1px 0 20px 0; border:0px solid lightgrey"></canvas>
       
       <div class="adminEdit" style="display:none; text-align:right; margin:10px 0">
         
@@ -247,13 +250,13 @@ style="float:right"
 -->      
       <table id="historyTable">
       <thead id="hth"><!--/thead-->
-        <tr><th style="width:70px">DATE</th><th style="width:40px">#nP</th>
-          <th style="width:90px; text-align:right">$BANK</th>
-          <th style="width:95px; text-align:right">1st $</th>
-          <th style="text-align:left; width:120px"> : NAME</th>
-          <th style="width:80px; text-align:right">2nd $</th>
-          <th style="text-align:left; width:120px"> : NAME</th>
-          <th class="admin" style="">gid</th>
+        <tr><th style="width:90px">DATE</th><th style="width:30px">#nP</th>
+          <th style="width:70px; text-align:right">$BANK</th>
+          <th style="width:90px; text-align:right">1st $</th>
+          <th style="text-align:left; width:80px"> : NAME</th>
+          <th style="width:70px; text-align:right">2nd $</th>
+          <th style="text-align:left; width:90px"> : NAME</th>
+          <th class="admin" style="width:40px">gid</th>
           <th style="display:none"></th>
         </tr></thead>
       <tbody id="htb" style="text-align:right"></tbody> 
