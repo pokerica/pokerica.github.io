@@ -1,3 +1,4 @@
+let versionCode= "v1.1r83 \n";
 
 $(document).ready(
 function() {  
@@ -16,8 +17,6 @@ function() {
 */
   
 
-
-  
   
  $.ajaxSetup({ async:true, cache:true, timeout:5000 });       
   
@@ -37,13 +36,14 @@ function() {
  var nextID= 0;
  var curTab= 1;
  var vSpace= 10;
- var sortColP= 8;
+ var sortColP= 4;
  var sortColH= 0;
  var muteAudio= false;
   
   
  // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
  var tPl = [ ["0", "declaration-init", "0", "0", "0", "0", "0", "0", "0"] ];
+  
   
  var sortedPl= [ 'name1', 'name2', 'name3' ];
   
@@ -66,7 +66,7 @@ function() {
  var hit= document.getElementById('historyTable');
  var selected= tb.getElementsByClassName('selected');
  //var selected= $('#ptb')[0].getElementsByClassName('selected');
-   
+  
  function fCash(num) {
    // *** clear commas: .replace(/,/g, '')
    
@@ -90,6 +90,105 @@ function() {
  }
   
   
+// *** recalc. selected history-table rows  
+ function reclcSelHrows() {
+   
+   //var tSelSum= [[0, 'name', 0, 0, 0, 0, 0, 0, ]];
+   //tSelSum.length= 0;
+   //tSelSum= tPl.slice();
+   var tSelSum = JSON.parse(JSON.stringify(tPl))
+   tSelSum.sort(function(a, b) { return a[0] - b[0] });
+   tSelSum.forEach(function(row) {
+     
+     row[2]= row[3]= row[4]= row[5]= row[6]= row[7]= row[8]= 0;
+   });
+   
+   
+   var selHgm= hit.getElementsByClassName('selected');
+   for(var j= 0; j < selHgm.length; j++) {
+   
+     var ri= +$(selHgm[j]).children()[8].innerText;
+     
+     var fSiz= 5;
+     var miniGm= tHiFull[ri][7].split(':');
+     for(var i= fSiz; i < miniGm.length; i+= 5) {
+        
+         var pid= +miniGm[i+0]-1;
+         var buy= +miniGm[i+1];
+       
+         var won= 0;
+         if(i/fSiz === 1) won= +tHiFull[ri][3]; // $:1
+           else if(i/fSiz === 2) won= +tHiFull[ri][5]; // $:2
+       
+         //var wons= (mnyw === 0) ? '   ' : fCash(+mnyw*100);
+         
+         tSelSum[pid][2]++;
+         tSelSum[pid][3]+= buy;
+         tSelSum[pid][4]+= won;
+        
+     } //end for i
+     
+   } //end for j
+  
+   
+  
+   document.getElementById('selSum')
+     .innerText= ' NAME      $BUY    $WON      >$BAL<            #(gms)  %(buy)   %(won)  \n'
+               + '----------------------------------------------------------------------- \n';
+   
+   tSelSum.forEach(function(row) {
+     
+     row[5]= row[4] - row[3]*10;
+     row[6]= c6Avg(row[3], row[2]);
+     row[7]= c6Avg(row[4], row[2]);
+     
+   });
+   
+   
+   tSelSum.sort(function(a, b) { return b[5] - a[5] });
+   
+   var pl= 0;
+   for(var pid= 0; pid < tSelSum.length; pid++) {
+
+     if(tSelSum[pid][2] > 0) {
+       
+       pl++;
+       
+       var gms= tSelSum[pid][2];
+       var buy= tSelSum[pid][3];
+       var won= tSelSum[pid][4];
+       
+       var bal= tSelSum[pid][5];
+       var av6= tSelSum[pid][6];
+       var av7= tSelSum[pid][7];
+      
+       document.getElementById('selSum')
+         .innerText+= ' '+(tSelSum[pid][1] +'        ').substring(0, 8)
+       
+             + ('     '+ (buy +'k')).slice(-5)
+             + ('         '+ fCash(won *100)).slice(-9)
+       
+             + ('           '+ fCash(bal *100)).slice(-11)
+       
+             + '              '+ ('    '+ gms).slice(-4)
+       
+             + ('         '+ fCash(av6 *100)).slice(-9)
+             + ('         '+ fCash(av7 *10)).slice(-9)
+       
+             + " \n";
+     }
+   }
+   
+  if(selHgm.length < 1) 
+     document.getElementById('selSum').innerText= "___selected games balance___";
+   
+   $('#selSum').css({height:(pl +3)*18 +'px'});
+   
+     //document.getElementById('selSum').innerText+= i+'. pooo \n';
+     //selHgm[i].firstChild.innerText 
+ }
+  
+  
  var keepMsgBar= false;
  function rowAnim(tbrow, turnOn) {
 
@@ -99,11 +198,11 @@ function() {
              setTimeout( function() {
                $(tbrow).removeClass('already').removeClass('clean'); 
                if(listMode > 1) $(tbrow).addClass('clean').removeClass('selected');
-                 else $(tbrow).removeClass('selected'); }, 280);
+                 else $(tbrow).removeClass('selected'); reclcSelHrows(); }, 280);
            else
            if(turnOn === 1)
              setTimeout( function() {      
-               $(tbrow).removeClass('clean').addClass('selected'); }, 100);
+               $(tbrow).removeClass('clean').addClass('selected'); reclcSelHrows(); }, 100);
        }
 
        if(tbrow.style.transform === 'rotate3d(1, 0, 0, 360deg)')
@@ -111,7 +210,7 @@ function() {
                        "transform-style":'preserve-3d', transform:'rotate3d(1, 0, 0, 0deg)'});
        else
          $(tbrow).css({transition:'transform 0.5s ease-out',
-                       "transform-style":'preserve-3d', transform:'rotate3d(1, 0, 0, 360deg)'});
+                       "transform-style":'preserve-3d', transform:'rotate3d(1, 0, 0, 360deg)'});   
  }
   
    
@@ -257,17 +356,22 @@ function() {
   
  function freshTab1() {
      
+   let tscp= sortColP;
+   
+   if(tscp === 5) tscp= 2;
+   else if(tscp > 1 && tscp < 5) tscp++;
+     
    if(revSort)
      tPl.reverse();
    else
-   if(sortColP !== 1)    
-     tPl.sort(function(a, b) { if(sortColP === 0) 
-       return a[sortColP] - b[sortColP]; else return b[sortColP] - a[sortColP]; });
+   if(tscp !== 1)    
+     tPl.sort(function(a, b) { if(tscp === 0) 
+       return a[tscp] - b[tscp]; else return b[tscp] - a[tscp]; });
    else 
      tPl.sort( function(a, b) { 
-       if(b[sortColP] > a[sortColP]) return -1;
+       if(b[tscp] > a[tscp]) return -1;
        else
-         if(b[sortColP] < a[sortColP]) return 1;
+         if(b[tscp] < a[tscp]) return 1;
        else 
          return 0; 
      });
@@ -288,16 +392,27 @@ function() {
      //var rvg= Math.round(col[7]/col[2]);
      if(+col[0] > nextID) nextID= +col[0];         
      $('#ptb').append('<tr><td class="admin">'+ col[0]
-                      +'</td><td style="padding:' + vpd
-                      +'; text-align:left">'+ col[1] +'</td><td>'+ col[2] 
-                      +'</td><td>'+ ((col[2] === 0) ? '-' : fCash(col[3]*1000))
-                      +'</td><td>'+ ((col[2] === 0) ? '-' : fCash(col[4]*100))
-                      +'</td><td>'+ ((col[2] === 0) ? '-' : fCash(col[5]*100))
-                      +'</td><td>'+ ((col[2] === 0) ? '-' : fCash(col[6]*100))
-                      +'</td><td>'+ ((col[2] === 0) ? '-' : fCash(col[7]*100))
+                      +'</td><td style="padding:' + vpd                      
+                      +'; text-align:left">'+ col[1]
+                      
+                      
+                      +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[3]*1000))
+                      +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[4]*100))
+                      +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[5]*100))
+                      
+                      
+                      +'</td><td>'+ ((col[2] === 0) ? ' ' : col[2])
+                      
+                      +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[6]*100))
+                      +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[7]*100))
+                      /*
                       +'</td><td>'+ ((col[2] === 0) ? '-' : (col[8]/10).toFixed(1))
+                      */
+                      
                       +'</td></tr>'); 
    });
+   
+   
    
    
    
@@ -309,6 +424,11 @@ function() {
    }
    
 
+   // *** header
+   $('#pth>tr').children().css({border:'none'});
+   $("#pth>tr").children().eq(sortColP).css({border:'2px solid grey'});
+   
+   
    for(var i= 0; i < tPl.length; i++) {
      
      var pid= (+tPl[i][0]) - 1;
@@ -323,10 +443,6 @@ function() {
    
    
    
-   // *** header
-   $('#pth>tr').children().css({border:'none'});
-   $("#pth>tr").children().eq(sortColP).css({border:'2px solid grey'});
-//                                            "border-bottom":'2px solid lightgrey'});
    
    if(initGanim) { var ttcnt= 0; initGanim= false; //noSwitch= true;
                   
@@ -502,456 +618,6 @@ function() {
   
   
   
-  
- // *** CANVAS GRAPHICS, DRAW LINE GRAPH ------------------------
-  
- var ctx, isBar= false, curCanv= 0, cnvsAhow= 0, cnvsBhow= 0;
- function linGrap(ofset, mx, mn, ptList, lCol, leg, ttl) {
-
-   var vertMax= mx-mn; 
-   var horDist= 470 / (ptList.length-1);
-   var zeroLine= 97 - (15+ Math.round(-mn/vertMax*70));
-   
-   ctx.fillStyle= "black";
-   ctx.font= "11px monospace";
-   
-    var fDec= ptList[0];
-    var fMul= fDec ? 0.1 : 1;
-   
-    var single= false;
-    if((curCanv === 1 && cnvsAhow > 0)
-       || (curCanv === 2 && cnvsBhow > 0)) { //mn <= 0 && 
-
-        single= true;
-        horDist= 500 / (ptList.length-1);
-      
-        ctx.fillText(("     "+(mn *fMul).toFixed(fDec)).slice(-5), 1, 80 +4);
-        ctx.fillText(("     "+(mx *fMul).toFixed(fDec)).slice(-5), 1, 10 +4);
-        ctx.fillText(("     "+((mn + vertMax/2) *fMul).toFixed(fDec)).slice(-5), 1, 45 +4);      
-    }
-    
-   
-    if(single || ofset === 0) {
-      
-      ctx.lineWidth= 1.0;
-      ctx.strokeStyle= "black";
-      ctx.beginPath();
-
-      ctx.moveTo(38, 80); ctx.lineTo(555, 80);
-      ctx.moveTo(45, 5); ctx.lineTo(45, 85);
-      ctx.stroke();
-     
-      ctx.strokeStyle= "lightgrey";
-      ctx.beginPath();
-      
-      ctx.moveTo(38, 10); ctx.lineTo(555, 10);
-      ctx.moveTo(38, 45); ctx.lineTo(555, 45);
-       
-      ctx.stroke();
-      var srtCH= sortColH; 
-      if(sortColH === 7) srtCH= 8;
-      var xa0= tHiFull[tHiFull.length-1][srtCH];
-      var xa1= $("#hth>tr").children()[sortColH].innerText;
-      if(revSort) xa1= "<- "+xa1; else xa1= xa1+" ->";
-      
-      var xa2= tHiFull[0][srtCH];
-
-      ctx.fillText(xa0, 40, 97);
-      ctx.fillText(xa1, 40 +220, 97);
-      ctx.fillText(("              "+xa2).slice(-14), 40 +420, 97);
-      
-      if(!single) {
-        ctx.fillText(("    low%").slice(-4), 4, 80 +4);
-        ctx.fillText(("    top%").slice(-4), 4, 10 +4);
-        ctx.fillText(("    mid%").slice(-4), 4, 45 +4);
-      }
-    }
-   
-    ctx.lineWidth= 2.0;
-    ctx.fillStyle= lCol;
-    ctx.strokeStyle= lCol;
-
-    var wof= (single) ? 0 : (3-ofset) *10;
-   
-    if(!isBar) ctx.beginPath();
-    ptList.forEach( function(pt, cnt) {
-
-      if(cnt < 1) return;
-      
-      
-      var cooY= pt - mn;
-      var horX= 5+ Math.round(wof + cnt * horDist);
-      var verY= (cooY < 1) ? 15 : (15+ Math.round(cooY/vertMax * 70));
-      
-      verY= 95 - verY;
-      horX= 550 - horX;
-       
-      if(isBar) { horX+= 4;
-        ctx.fillRect(horX-3.5, 83, 7, -(100- verY-14)); }
-      else {
-        
-        if(cnt ===  0) 
-          ctx.moveTo(horX, verY);
-        else
-          ctx.lineTo(horX, verY); 
-      
-        ctx.fillRect(horX-3.5, verY-3.5, 7, 7);
-      }
-    });
-   
-    if(!isBar) ctx.stroke();
-
-   /*
-    if(leg === "#ng") leg= "#np";
-    if(leg === "name") leg= "1st id";
-    if(ttl === "#ng") ttl= "#np";
-    if(ttl === "name") ttl= "1st id";
-    */
-   
-    leg= leg.substring(0, 6);
-   
-    ofset= Math.round(ofset*17);
-   
-    //ctx.font= "14px sans-serif";
-    ctx.font= "bold 12px monospace";
-    ctx.fillText(leg, 615, 41+ofset );
-   
-    ctx.beginPath();
-    ctx.moveTo(585, 37+ofset);
-    ctx.lineTo(605, 37+ofset);   
-    ctx.stroke();
-   
-    ctx.fillRect(605-3.5, 37+ofset-3.5, 7, 7);
-   
-    if(!ttl) return;
-    ctx.fillStyle= "grey";
-    ctx.fillRect(570, 1, 100, 20);
-   
-    ctx.fillStyle= "white";
-    ctx.fillText(ttl, 580, 15);
- }
-  
-  
- function freshCanvas() {
-   
-  // *** CANVAS GRAPHICS -------------------------------------------
-  
-  var canvas = document.getElementById('canvasA');
-  if(!canvas.getContext) return;
-
-  ctx= canvas.getContext('2d');
-  ctx.clearRect(0, 0, 660, 100);
-   
-  var tmpCol= 0;
-  var npMax= 0, npMin= 9999, npLine= [ 1, 2, 3 ]; npLine.length= 0;
-  var bkMax= 0, bkMin= 9999, bkLine= [ 1, 2, 3 ]; bkLine.length= 0;
-  var r1Max= 0, r1Min= 9999, r1Line= [ 1, 2, 3 ]; r1Line.length= 0;
-  var r2Max= 0, r2Min= 9999, r2Line= [ 1, 2, 3 ]; r2Line.length= 0;
-  
-  var p1Id= tPl[0][0], p2Id= tPl[1][0], p3Id= tPl[2][0], p4Id= tPl[3][0];
-   
-  if(selected.length === 1)
-    p2Id= p3Id= p4Id= p1Id= +selected[0].firstChild.innerText;
-    
-   npLine.push( 0 );
-   bkLine.push( 1 );   
-   r1Line.push( 1 );   
-   r2Line.push( 1 );
-   
-  // *** tHiFull:  0:date  1:#nP  2:$bnk  3:$1  4:1name  5:$2  6:2name  7:m-tGm
-  tHiFull.forEach(function(col) { 
-    
-    if(selected.length === 1) {
-        
-      
-      var cx= 0;
-      var miniGm= col[7].split(':');
-      for(var i= 5; i < miniGm.length; i+= 5) {
-        cx= i/5;
-        if( +miniGm[i+0] === p1Id ) {
-
-          tmpCol= +col[1]; npLine.push( tmpCol ); ///$nP
-          if(tmpCol > npMax) npMax= tmpCol; if(tmpCol < npMin) npMin= tmpCol;
-
-          tmpCol= +col[2]*10; bkLine.push( tmpCol ); //$bnk
-          if(tmpCol > bkMax) bkMax= tmpCol; if(tmpCol < bkMin) bkMin= tmpCol;
-
-          tmpCol= +col[3]; //+miniGm[i+1]*10;
-          r1Line.push( tmpCol ); //buyGm
-          if(tmpCol > r1Max) r1Max= tmpCol; if(tmpCol < r1Min) r1Min= tmpCol;
-
-/*          tmpCol= 0; 
-          if(cx === 1) tmpCol= col[3];
-          if(cx === 2) tmpCol= col[5]; */
-          
-          tmpCol= +col[5];
-          r2Line.push( tmpCol ); //wonGm
-          if(tmpCol > r2Max) r2Max= tmpCol; if(tmpCol < r2Min) r2Min= tmpCol;
-        }
-      }
-    }
-    else {
-
-      tmpCol= +col[1]; npLine.push( tmpCol );
-      if(tmpCol > npMax) npMax= tmpCol; if(tmpCol < npMin) npMin= tmpCol;
-
-      tmpCol= +col[2]*10; bkLine.push( tmpCol ); //$bnk
-      if(tmpCol > bkMax) bkMax= tmpCol; if(tmpCol < bkMin) bkMin= tmpCol;
-
-      tmpCol= +col[3]; r1Line.push( tmpCol ); //$1
-      if(tmpCol > r1Max) r1Max= tmpCol; if(tmpCol < r1Min) r1Min= tmpCol;
-
-      tmpCol= +col[5]; r2Line.push( tmpCol ); //$2
-      if(tmpCol > r2Max) r2Max= tmpCol; if(tmpCol < r2Min) r2Min= tmpCol;
-    }
-    
-  });
-   
-   /*
-   alert('  npMax: '+ npMax +'  npMin: '+ npMin +'\n'
-       + '  bkMax: '+ bkMax +'  bkMin: '+ bkMin );
-  */
-   
-  curCanv= 1;
-  isBar= false;
-  var ts= $('#hth>tr')[0].cells;
-     
-  if(selected.length === 1) {
-    
-    isBar= true;
-    if(cnvsAhow === 0 || cnvsAhow === 1)
-      linGrap(0, npMax, npMin, npLine, "red", (ts[1].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-    if(cnvsAhow === 0 || cnvsAhow === 2)
-      linGrap(1, bkMax, bkMin, bkLine, "green", (ts[2].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-    if(cnvsAhow === 0 || cnvsAhow === 3)
-      linGrap(2, r1Max, r1Min, r1Line, "darkorange", (ts[3].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-    if(cnvsAhow === 0 || cnvsAhow === 4)
-      linGrap(3, r2Max, r2Min, r2Line, "brown", (ts[5].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-  }
-  else {
-
-    var fts= "all games";
-    if(cnvsAhow === 0 || cnvsAhow === 1)
-      linGrap(0, npMax, npMin, npLine, "red", (ts[1].innerText).toLowerCase(), fts);
-    if(cnvsAhow === 0 || cnvsAhow === 2)
-      linGrap(1, bkMax, bkMin, bkLine, "green", (ts[2].innerText).toLowerCase(), fts);
-    if(cnvsAhow === 0 || cnvsAhow === 3)
-      linGrap(2, r1Max, r1Min, r1Line, "darkorange", (ts[3].innerText).toLowerCase(), fts);
-    if(cnvsAhow === 0 || cnvsAhow === 4)
-      linGrap(3, r2Max, r2Min, r2Line, "brown", (ts[5].innerText).toLowerCase(), fts);
-  }
-  
-   
-   
-   
-// *** CANVAS B ---------------------
-   
-  canvas = document.getElementById('canvasB');
-  if(!canvas.getContext || tPl.length < 5) return;
-
-  ctx= canvas.getContext('2d');
-  ctx.clearRect(0, 0, 660, 100);
-   
-   
-  var p1Max= 0, p1Min= 9999, p1Line= [ 1, 2, 3 ]; p1Line.length= 0;
-  var p2Max= 0, p2Min= 9999, p2Line= [ 1, 2, 3 ]; p2Line.length= 0;
-  var p3Max= 0, p3Min= 9999, p3Line= [ 1, 2, 3 ]; p3Line.length= 0;
-  var p4Max= 0, p4Min= 9999, p4Line= [ 1, 2, 3 ]; p4Line.length= 0;
-  p1Id= tPl[0][0], p2Id= tPl[1][0], p3Id= tPl[2][0], p4Id= tPl[3][0];
-   
-  //alert('selected.len: '+ selected.length +'\n'+ selected[0].firstChild.innerText);
-  if(selected.length > 3) {
-   
-    p1Id= +selected[0].firstChild.innerText;
-    p2Id= +selected[1].firstChild.innerText;
-    p3Id= +selected[2].firstChild.innerText;
-    p4Id= +selected[3].firstChild.innerText;
-  }
-  else
-  if(selected.length === 1) {
-   
-    p2Id= p3Id= p4Id= p1Id= +selected[0].firstChild.innerText;
-  }
-  else
-  if(selected.length === 2) {
-   
-    p3Id= p4Id= -9;
-    p1Id= +selected[0].firstChild.innerText;
-    p2Id= +selected[1].firstChild.innerText;
-  }
-  else
-  if(selected.length === 3) {
-   
-    p4Id= -9;
-    p1Id= +selected[0].firstChild.innerText;
-    p2Id= +selected[1].firstChild.innerText;
-    p3Id= +selected[2].firstChild.innerText;
-  }
-  
-   
-   if(selected.length === 1) {
-
-       if(sortColP < 5) {
-              p1Line.push(0); p2Line.push(0); p3Line.push(1); p4Line.push(1); }
-       else {
-              p1Line.push(1); p2Line.push(1); p3Line.push(1); p4Line.push(1); }
-   }
-   else
-   if(selected.length !== 1) {
-        
-       if(sortColP < 3) { 
-         p1Line.push(0); p2Line.push(0); p3Line.push(0); p4Line.push(0); }
-       else {
-         p1Line.push(1); p2Line.push(1); p3Line.push(1); p4Line.push(1); }
-   }
-   
-   
-  // *** tHiFull:  0:date  1:#nP  2:$bnk  3:$1  4:1name  5:$2  6:2name  7:m-tGm  8:gid
-  tHiFull.forEach(function(col) {
-    
-    var cx= 0;
-    var miniGm= col[7].split(':');
-    for(var i= 5; i < miniGm.length; i+= 5) {
-      
-      cx= i/5;;
-          
-        var col0= +("    "+ col[0]).slice(-4); //id -> date?
-        var col1= +miniGm[5]; //name -> 1st:id?
-        
-        var col2= +miniGm[i+2] //#nG         
-        var col3= +miniGm[i+1] //buy
-        
-        var col4= 0; //won
-        if(cx === 1) col4= +col[3];
-        if(cx === 2) col4= +col[5];
-            
-        var ngmTi= +miniGm[i+2];
-        var buyTi= +miniGm[i+3];
-        var wonTi= +miniGm[i+4];
-      
-        var balTi= wonTi - buyTi*10; 
-      
-        var balGm= col4 - col3*10;
-        var balTe= balTi + balGm;
-      
-        var col5= balTe; //bal
-        var col6= balGm; //$(#)
-        var col7= c7Avg(balGm, col3); //%($)
-        var col8= col6 + col7; //tot
-
-      if(selected.length === 1) {
-        
-        if( +miniGm[i] === p1Id ) {
-
-            if(sortColP < 5) {
-
-              tmpCol= col1; p1Line.push( tmpCol );
-              if(tmpCol > p1Max) p1Max= tmpCol; if(tmpCol < p1Min) p1Min= tmpCol;
-
-              tmpCol= col2; p2Line.push( tmpCol );
-              if(tmpCol > p2Max) p2Max= tmpCol; if(tmpCol < p2Min) p2Min= tmpCol;
-
-              tmpCol= col3*10; p3Line.push( tmpCol );
-              if(tmpCol > p3Max) p3Max= tmpCol; if(tmpCol < p3Min) p3Min= tmpCol;
-
-              tmpCol= col4; p4Line.push( tmpCol );
-              if(tmpCol > p4Max) p4Max= tmpCol; if(tmpCol < p4Min) p4Min= tmpCol;
-            }
-            else {
-
-              tmpCol= col5; p1Line.push( tmpCol );
-              if(tmpCol > p1Max) p1Max= tmpCol; if(tmpCol < p1Min) p1Min= tmpCol;
-
-              tmpCol= col6; p2Line.push( tmpCol );
-              if(tmpCol > p2Max) p2Max= tmpCol; if(tmpCol < p2Min) p2Min= tmpCol;
-
-              tmpCol= col7; p3Line.push( tmpCol );
-              if(tmpCol > p3Max) p3Max= tmpCol; if(tmpCol < p3Min) p3Min= tmpCol;
-
-              tmpCol= col8; p4Line.push( tmpCol );
-              if(tmpCol > p4Max) p4Max= tmpCol; if(tmpCol < p4Min) p4Min= tmpCol;
-            }
-          
-        }
-      }
-      else {
-        
-        switch(sortColP) {               
-          case 0: tmpCol= col0; break;
-          case 1: tmpCol= col1; break;
-          case 2: tmpCol= col2; break;
-          case 3: tmpCol= col3*10; break;
-          case 4: tmpCol= col4; break;
-          case 5: tmpCol= col5; break;
-          case 6: tmpCol= col6; break;
-          case 7: tmpCol= col7; break;
-          case 8: tmpCol= col8; break;
-        }
-        
-        if( +miniGm[i] === p1Id ) { p1Line.push( tmpCol );
-          if(tmpCol > p1Max) p1Max= tmpCol; if(tmpCol < p1Min) p1Min= tmpCol; }
-
-        if( +miniGm[i] === p2Id ) { p2Line.push( tmpCol );
-          if(tmpCol > p2Max) p2Max= tmpCol; if(tmpCol < p2Min) p2Min= tmpCol; }
-
-        if( +miniGm[i] === p3Id ) { p3Line.push( tmpCol );
-          if(tmpCol > p3Max) p3Max= tmpCol; if(tmpCol < p3Min) p3Min= tmpCol; }
-
-        if( +miniGm[i] === p4Id ) { p4Line.push( tmpCol );
-          if(tmpCol > p4Max) p4Max= tmpCol; if(tmpCol < p4Min) p4Min= tmpCol; }
-      }
-     
-    }
-  });
-
-  
-  curCanv= 2;
-  isBar= false; 
-  if(sortColP < 5) isBar= true;
-  var c1= "#238EB8", c2= "#82BDD4", c3= "#819A28", c4= "#ABCE2C";
-   //c1= "#DA27B4", c2= "#0131B7", c3= "#9319F0", c4= "#7285E1";
-   
-  if(selected.length === 1) { //9A0794
-       
-    var ts= $('#pth>tr')[0].cells;
-    var tn= (sortColP < 5) ? 1 : 5;
-    
-    if(p2Id > 0 && (cnvsBhow === 0 || cnvsBhow === 1))
-      linGrap(0, p2Max, p2Min, p2Line, c1, (ts[tn +1].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-    
-    if(p3Id > 0 && (cnvsBhow === 0 || cnvsBhow === 2))
-      linGrap(1, p3Max, p3Min, p3Line, c2, (ts[tn +2].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-     
-    if(p1Id > 0 && (cnvsBhow === 0 || cnvsBhow === 3))
-      linGrap(2, p1Max, p1Min, p1Line, c3, (ts[tn +0].innerText).toLowerCase(), sortedPl[ p1Id-1 ]);
-    
-    if(p4Id > 0 && (cnvsBhow === 0 || cnvsBhow === 4))
-      linGrap(3, p4Max, p4Min, p4Line, c4, (ts[tn +3].innerText).toLowerCase(), sortedPl[ p1Id-1 ]); 
-  }
-  else {
-    
-    if(selected.length && cnvsBhow > selected.length) cnvsBhow= 0;
-   
-    var ts= $('#pth>tr')[0].cells[sortColP].innerText; 
-    
-    if(p1Id > 0 && (cnvsBhow === 0 || cnvsBhow === 1))
-      linGrap(0, p1Max, p1Min, p1Line, c1, sortedPl[ p1Id-1 ], ts.toLowerCase());
-    if(p2Id > 0 && (cnvsBhow === 0 || cnvsBhow === 2))
-      linGrap(1, p2Max, p2Min, p2Line, c2, sortedPl[ p2Id-1 ], ts.toLowerCase());
-    if(p3Id > 0 && (cnvsBhow === 0 || cnvsBhow === 3))
-      linGrap(2, p3Max, p3Min, p3Line, c3, sortedPl[ p3Id-1 ], ts.toLowerCase());
-    if(p4Id > 0 && (cnvsBhow === 0 || cnvsBhow === 4))
-      linGrap(3, p4Max, p4Min, p4Line, c4, sortedPl[ p4Id-1 ], ts.toLowerCase()); //blueviolet
-  }
-
- }
-  
- $('#canvasA').click( function() { if(++cnvsAhow > 4) cnvsAhow= 0; freshCanvas(); });
- $('#canvasB').click( function() { if(++cnvsBhow > 4) cnvsBhow= 0; freshCanvas(); });
-  
-
-  
-  
  var monthStr= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   
@@ -990,11 +656,16 @@ function() {
    tHiFull.forEach(function(col) {
      var showAdmin= ''; //'style="font:7px monospace; white-space:pre-wrap"';  
      if(!editMode) showAdmin= 'style="display:none"';
+    
+     var mon= +(''+col[0]).substring(4,6);
+     var dtStr= (''+col[0]).substring(6,8)+" " + monthStr[mon-1] + "`"+(''+col[0]).substring(2,4);
+     //var dtStr= ''+col[0];
      
-     var dtStr= ''+col[0];
-     //var mon= +dtStr.substring(4,5);
-     $('#htb').append('<tr><td style="font:12px monospace; text-align:center; white-space:pre-line">'
-                                      + dtStr.substring(0,8) +'\n'+ dtStr.substring(8) 
+     $('#htb').append(
+                    //'<tr><td style="font:15px bold monospace; text-align:center; white-space:pre-line">'
+                    //'<tr><td>'+ dtStr
+                      
+                      '<tr><td style="font:17px bold monospace; text-align:center;">'+ dtStr
                      +'</td><td style="padding:' + vpd + '">'+ col[1]
                      +'</td><td>'+ fCash(+col[2]*1000) // bank
                      +'</td><td>'+ fCash(+col[3]*100) // $:1
@@ -1017,9 +688,12 @@ function() {
      case 3: break;
    }
    
-   // *** header
+   
+   // *** header   
    $('#hth>tr').children().css({border:'none'});
-   $("#hth>tr").children().eq(sortColH).css({border:'2px solid grey'});
+   $('#hth>tr').children().eq(sortColH).css({'border':'2px solid grey'});
+   //[0].childNodes[sortColH].style= "border:1px solid g";
+   
    
    if(editMode) {
      
@@ -1027,7 +701,8 @@ function() {
      $('.initDis').prop("disabled", true);
    }
    
-   freshCanvas();
+   //freshCanvas();
+   reclcSelHrows();
  }
 
   
@@ -1142,6 +817,20 @@ function() {
   
 // *** GAME OVER *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 
+ function c6Avg(buy, nG) {
+   var retVal= buy*10 / nG;
+   if(isNaN(retVal)) retVal= -555; 
+   return Math.round(retVal);
+ }
+  
+ function c7Avg(won, nG) {
+
+   var retVal= won / nG;
+   if(isNaN(retVal)) retVal= -444; 
+   return Math.round(retVal);
+ }
+  
+  /* old v81
  function c6Avg(balance, nG) {
    var retVal= balance / nG;
    if(isNaN(retVal)) retVal= -555; 
@@ -1149,20 +838,12 @@ function() {
  }
   
  function c7Avg(balance, buyin) {
+
    var retVal= balance / buyin;
    if(isNaN(retVal)) retVal= -444; 
    return Math.round(retVal);
  }
-  
-/* old...  
- function rankAvg(nP, bank, rank, buyin) {
-   // Math.round(Math.sqrt((bnk+i*2)*40))
-   var retVal= Math.sqrt( (bank + nP*2) * 99 );
-   for(var i= 2; i < rank; i++) retVal/= 2;
-   if(isNaN(retVal)) retVal= 443;
-   return Math.round(retVal/buyin);
- }  
-*/
+  */
   
 // *** GAME OVER *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 var useThisDate= 0;
@@ -1206,9 +887,9 @@ function actSavG() {
                       tPl[cnt][4]+= isNaN(col[3]) ? 0 : col[3]; //won
                      
                       tPl[cnt][5]= tPl[cnt][4] - tPl[cnt][3]*10; //bal                      
-                      tPl[cnt][6]= c6Avg(tPl[cnt][5], tPl[cnt][2]); 
+                      tPl[cnt][6]= c6Avg(tPl[cnt][3], tPl[cnt][2]); 
                      
-                      tPl[cnt][7]= c7Avg(tPl[cnt][5], tPl[cnt][3]);
+                      tPl[cnt][7]= c7Avg(tPl[cnt][4], tPl[cnt][2]);
                       tPl[cnt][8]= tPl[cnt][6] + tPl[cnt][7]; //totl
                    }
                    
@@ -1477,6 +1158,7 @@ function mnySplit()
     
      tGm.length= 0;
      sortedPl.length= 0;
+     
      tPl.sort(function(a, b) { return a[0] - b[0] }); 
      tPl.forEach(function(col) { 
        
@@ -2028,6 +1710,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
        etpn.remove();
    });
  }
+
   
  hit.onclick= 
  function(e) {   // async? 
@@ -2091,8 +1774,8 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    
      var scd= ''; //'BANK: $'+ fCash(...                                      ---|
      //    ' 99.|NAME______| 99k| 999,9xx|   +-999.9xx| +-99,9xx|+-99,9xx|+-99.99 \n';
-     scd+= '  RNK   NAME      $BUY       $WON     \n' //  $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
-        +  '-----------------------------------\n'; //------------------------------------\n';
+     scd+= ' RANK   NAME      $BUY      $WON     \n' //  $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
+        +  '---------------------------------\n'; //------------------------------------\n';
       
    
      var miniGm= tHiFull[ri][7].split(':');
@@ -2113,7 +1796,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
        
          var pid= +miniGm[i+0]-1;
          var buy= +miniGm[i+1];
-        
+        /*
          var ngTI= +miniGm[i+2];
          var byTI= +miniGm[i+3];
          var wnTI= +miniGm[i+4];
@@ -2132,11 +1815,12 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
        
          var totl= col6 + col7;
          var tots= (totl < 0) ? '-'+ (-totl/10).toFixed(1) : '+'+ (totl/10).toFixed(1);
+       */
        
          scd+= '  '+ ('  ' + cx).slice(-2) +'.   '
              + (sortedPl[ pid ] +'        ').substring(0, 8)
              + ('     '+ (buy+'k')).slice(-5) 
-             + ('            '+ wons).slice(-12)
+             + ('           '+ wons).slice(-11)
        /*
              + ('           '+ bals).slice(-11)              
              + ('            '+ col6s).slice(-12)
@@ -2144,23 +1828,8 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
              + ('       '+ tots).slice(-8)
        */            
              + ' \n';
-//                0    1    2     3     4 
-// *** mini-Gm:  pid  buy  ∑nG  ∑buy  ∑won   
-       
-/*
-         tPl[pid][6]= c6Avg(tPl[pid][5], tPl[pid][2]);                   
-         tPl[pid][7]= c7Avg(tPl[pid][5], tPl[pid][3]);
-         tPl[pid][8]= tPl[pid][6] + tPl[pid][7]; //tot 
-       */
-/*
-       alert('( '+ pid + ' ) name: '+ sortedPl[ pid ] +'\n'
-             + '#nG: '+ tPl[pid][2] +'\n'
-             + 'bal: '+ tPl[pid][5] +'\n'
-             + 'col6: '+ tPl[pid][6] +'\n'
-             + 'col7: '+ tPl[pid][7] +'\n'
-             + 'tot: '+ tPl[pid][8] );
-*/
-     }
+
+     } //end for
      
 
 
@@ -2212,8 +1881,8 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
                          parseInt(data[i*nCol +4], 10), parseInt(data[i*nCol +5], 10) ];
        
        var bal= nbrs[4] - nbrs[3]*10;
-       var col6= c6Avg(bal, nbrs[2]);
-       var col7= c7Avg(bal, nbrs[3]);     
+       var col6= c6Avg(nbrs[3], nbrs[2]);
+       var col7= c7Avg(nbrs[4], nbrs[2]);     
        var totl= col6 + col7;
        
    // ***  id  name  gms  $buy  $won  rnk%    
@@ -2553,7 +2222,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
       isLogged= (!isNaN(xrlL) && xrlL > 99);
       if(isLogged) $('#mnu1').css('display', 'block'); 
       
-      adminInfo.innerText= ">logged-in: "+ isLogged +"\n";
+      adminInfo.innerText= versionCode + ">logged-in: "+ isLogged +"\n";
     
       if(!loginYet && isLogged) {
         nBar.innerText= 'Log-in success'+ endNotfChar;        
@@ -2779,7 +2448,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    
       
      if(tid === "#tab1") { //curTab !== 1 && 
-       sortColP= 8; revSort= false; curTab= 1; }
+       sortColP= 4; revSort= false; curTab= 1; }
      else   
      if(tid === "#tab3") { //curTab !== 3 && 
        sortColH= 0; revSort= false; curTab= 3; }
@@ -3006,7 +2675,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
      $('.adminEdit').css('display', 'block'); }
    else {
      //initOnceG= false;
-     if(curTab === 1) sortColP= 8;
+     if(curTab === 1) sortColP= 4;
        else if(curTab === 3) sortColH= 0;
      
      $('.adminEdit').css('display', 'none');
@@ -3102,8 +2771,8 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
 // ***  id  name  gms  $buy  $won  rnk%    
 // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
      var bal= col4 - col3*10;
-     var col6= c6Avg(bal, col2);
-     var col7= c7Avg(bal, col3);
+     var col6= c6Avg(col3, col2);
+     var col7= c7Avg(col4, col2);
      var totl= col6 + col6;
    
 
@@ -3245,8 +2914,8 @@ function delHrow() {
 
          tPl[id][5]= tPl[id][4] - tPl[id][3]*10; //bal
        
-         tPl[id][6]= c6Avg(tPl[id][5], tPl[id][2]);
-         tPl[id][7]= c7Avg(tPl[id][5], tPl[id][3]);
+         tPl[id][6]= c6Avg(tPl[id][3], tPl[id][2]);
+         tPl[id][7]= c7Avg(tPl[id][4], tPl[id][2]);
          tPl[id][8]= tPl[id][6] + tPl[id][7]; //totl
      }
      disMini.push([ miniGm[i +2], miniGm[i +3], miniGm[i +4] ]);

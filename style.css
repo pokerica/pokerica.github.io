@@ -202,21 +202,20 @@ select {
 table {
   width:100%; 
   position:relative;
-  
   table-layout: fixed;
 }
 
 
 table td {
   
-  font-size:17px; 
+  font-size:18px; 
   font-weight:normal; /* 100-900: 400 normal, 700 bold*/
   
   padding:10px 5px 7px 5px; 
 
   overflow:hidden;
   white-space:nowrap; 
-  text-overflow:ellipsis;  
+  text-overflow:ellipsis;
   
   word-break:break-all;
 }
@@ -228,12 +227,9 @@ table th {
 }
 
 
-#htb tr.selected { 
-  color:white; background:grey;
-}
-
+#htb tr.selected,
 #ptb tr.selected { /*:not(.already){ orange */
-  color:white; background:grey; 
+  color:white; background:grey;
 }
 
 #ptb tr.already {
@@ -244,7 +240,7 @@ table th {
 
 #htb tr.clean,
 #ptb tr.clean { /*:not(.selected) { */
-  color:black; background:white;  
+  color:black; background:white;
 }
 
 #htb tr:nth-child(odd):not(.clean):not(.selected),
