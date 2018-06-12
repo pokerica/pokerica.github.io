@@ -9,7 +9,6 @@ function() {
  var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cli.wav");
  var audChang= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cha.wav"); 
 
-
   
  $.ajaxSetup({ async:true, cache:true, timeout:7000 });       
   
