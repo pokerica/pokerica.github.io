@@ -1,9 +1,5 @@
-// *** 01234
+// *** 012
 
-
-
-
-//'use strict';
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('pmpAppCache')

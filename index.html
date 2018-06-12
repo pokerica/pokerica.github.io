@@ -8,7 +8,7 @@
     <!-- This, for AMP apps (google cdn)... check later...>
     <link rel="canonical" href="https://ze-29.glitch.me/index.html"-->
     
-    <meta name="mobile-web-app-capable" content="yes">     
+    <meta name=".mobile-web-app-capable" content="yes">     
     <link rel="manifest" href="manifest.json">
   
     <!-- Add to home screen for Safari on iOS, and WinMobile -->
@@ -20,61 +20,22 @@
     <meta name="msapplication-TileColor" content="#777777">
     
   
-  
     <title>Pokerica</title>
   
     <link rel="stylesheet" type="text/css" href="style.css" > 
   
-  
     <script> 
         window.onbeforeunload= function() { return "Reload database?"; }      
     </script> 
- 
-     <script type="text/javascript" src="jquery-1.12.4.min.js"></script>           
-     <script type="text/javascript" src="NoSleep.min.js"></script>      
-     <script type="text/javascript" src="client.js"></script> 
- 
+  
+    <script type="text/javascript" src="jquery-1.12.4.min.js"></script>           
+    <script type="text/javascript" src="NoSleep.min.js"></script>      
+    <script type="text/javascript" src="client.js"></script> 
 </head>
   
   <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false"      
         style="background-color:#777777; width:700px; height:100%; margin:auto">
     
-<!--        
-    <audio id="audQuack" type="audio/wav" 
-           src="https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav">
-           Your browser does not support the <code>audio</code> element. </audio>
-    <audio id="audCheng" type="audio/wav" 
-           src="https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/che.wav">
-           Your browser does not support the <code>audio</code> element. </audio>
-    <audio id="audClick" type="audio/wav" 
-           src="https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cli.wav">
-           Your browser does not support the <code>audio</code> element. </audio>
-    <audio id="audChang" type="audio/wav" 
-           src="https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cha.wav">
-           Your browser does not support the <code>audio</code> element. </audio>
-    
-<!--
-      <form id="logIn" > 
-        <input id="pasIn" type="text" autocomplete="off">
-
-        <!--button class="ord" type="submit">LogIn</button > 
-        <input class="ord" type="submit" value="LogIn" >
-      </form> 
-    
-type="password"
-onsubmit="return false"
-placeholder="PASSWORD" 
-style="float:right"
-
-<div id="popupbox">
-</div>
-
-<div id="mask" ontouchmove="return false" onmousemove="return false">
-</div>
-
- style="display:none"
-
---> 
     
   <div id="appFrame" style="background:white; width:100%">
       <p id="notif" style="font-size:15px; font-weight:900; padding:7px 10px 5px 10px; 
@@ -87,30 +48,32 @@ style="float:right"
         <input class="mtb dea" id="mtb3" type="button" value="History" >
         <input class="mtb dea" id="mtb4" type="button" value="System" >
         
-        <!-- 
-            style="color:transparent; text-shadow:0 0 0 white"
-            -webkit-transform: ...Safari
-            transform-origin: 50% 50%; transform:rotate(90deg); transform:scaleX(2);           
-
-                   display:inline; position:relative; vertical-align:middle; 
-                   height:100%; padding:0; margin:auto;
-
-                                    ↹ &#8633; ↨ &#8616; ≡ &#8801; Ξ &#926; 
-        -->            
+        
         <button class="mnu" id="mnu3">
-          <p style="font:28px monospace; position:relative; top:1px; margin:0">Ξ</p></button>
+          <!-- p style="font:28px monospace; position:relative; top:1px; margin:0">Ξ</p -->
+          <svg width="40px" height="35px" viewbox="0 -4 24 30"  fill="#505050" stroke="white" stroke-width="1.2px">
+            <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z" /></svg>         
+        </button>
+        
         <button class="mnu" id="mnu2">
-          <p style="font:25px monospace; position:relative; 
-                    margin:0; transform:rotate(90deg)">↹</p></button> 
+          <!-- p style="font:25px monospace; position:relative; margin:0; transform:rotate(90deg)">↹</p -->
+    
+          <svg width="40px" height="35px" viewbox="0 -8 256 450" fill="#505050" stroke="white" stroke-width="15px">
+            <path d="M256 272c0 4.25-1.75 8.25-4.75 11.25l-112 112c-3 3-7 4.75-11.25 4.75s-8.25-1.75-11.25-4.75l-112-112c-3-3-4.75-7-4.75-11.25 0-8.75 7.25-16 16-16h224c8.75 0 16 7.25 16 16zM256 176c0 8.75-7.25 16-16 16h-224c-8.75 0-16-7.25-16-16 0-4.25 1.75-8.25 4.75-11.25l112-112c3-3 7-4.75 11.25-4.75s8.25 1.75 11.25 4.75l112 112c3 3 4.75 7 4.75 11.25z" /></svg>   
+          
+        </button> 
+        
         <button class="mnu" id="mnu1">
-          <p style="font:30px monospace; line-height:0; position:relative; padding-top:3px; margin:0">☆</p></button> 
+          <!-- p style="font:30px monospace; line-height:0; position:relative; padding-top:3px; margin:0">☆</p -->
+           <svg width="40px" height="35px" viewbox="0 -70 512 652" fill="#505050" stroke="white" stroke-width="20px">
+            <path d="M512 198.525l-176.89-25.704-79.11-160.291-79.108 160.291-176.892 25.704 128 124.769-30.216 176.176 158.216-83.179 158.216 83.179-30.217-176.176 128.001-124.769z" /></svg>
+        </button> 
           
       </div>
     
     
     
 <!-- *** tabs stsrt here 
-; padding:5px 10px 5px 10px; margin-bottom:10px  margin-right:-10px; 
 ****************************************************-->
       
     <div id="tab1" class="ptab pac" style="padding:20px 20px"> 
@@ -157,7 +120,6 @@ style="float:right"
     </div> 
     
 
-    
     <div id="tab2" class="ptab pde" style="padding:10px 20px">                    
           
       <div class="adminEdit" style="display:none; text-align:right; margin:20px 0 -10px 0">
@@ -172,16 +134,8 @@ style="float:right"
       <p id="lblDate" style="font:normal 15px monospace; 
                               float:right; margin:0; z-level:-1;
                               position:relative; top:-30px; right:5px">date</p>
-                   
-    <!--  display:inline-block      filter:invert(50%);
-                             color:white; background:lightgrey;  
-   
-      <b id="lblPause" style="display:none; font:bold 38px monospace; 
-                              color:lightgrey; border:1px solid blue; 
-                              float:right; margin:0; z-level:-1;
-                              transform:scaleX(3);
-                              position:relative; top:90px; left:-370px">PAUSED</b>
-      -->
+      
+
       
       <!-- id  plid  $buy  $won  rnk  -->      
       <table id="gameTable">
@@ -228,9 +182,11 @@ style="float:right"
     
     <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:10px 20px">
       
-      <pre id="selSum" style="height:90px; font:bold 15px monospace; padding:10px 10px;
-                              margin-bottom:20px; text-align:left;">___selected games balance___</pre>
+      <svg style="border:0px solid black" width="40px" height="40px" viewbox="0 0 24 24" fill="#000000" >
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+        <path d="M0 0h24v24H0z" fill="none"/></svg>
       
+      <div id="sumSg" style="border:0px solid red; padding:0; margin-bottom:30px">___selected games balance___</div>
       
       <div class="adminEdit" style="display:none; text-align:right; margin:10px 0">
         
@@ -285,71 +241,28 @@ style="float:right"
       <pre id="dbFrame" style="width:100%; height:590px; padding:5px;
                                border:1px solid grey; margin:0; overflow:scroll;
                                font:normal 17px monospace"> \r\n .. former frame element</pre>
+
       
-      <button class="ord2" id="gms4But">Game State</button>
-      <button class="ord2" id="aps4But">Apply State</button>
-      <button class="ord2" id="kps4But">Keep State</button>
-      <button class="ord2" id="ems4But">Empty State</button>
-      <br>      
-      <button class="ord2" id="cad4But">Cache Data</button>
-      <button class="ord2" id="imc4But">Import Cache</button>
-      <button class="ord2" id="stc4But">Store Cache</button>
+      <div class="adminEdit" style="display:none">
+        <button class="ord2" id="gms4But">Game State</button>
+        <button class="ord2" id="aps4But">Apply State</button>
+        <button class="ord2" id="kps4But">Keep State</button>
+        <button class="ord2" id="ems4But">Empty State</button>
+        <br>      
+        <button class="ord2" id="cad4But">Cache Data</button>
+        <button class="ord2" id="imc4But">Import Cache</button>
+        <button class="ord2" id="stc4But">Store Cache</button>
         <input class="ord2" id="gpc4But" type="button" value="Grant Persistance" >
-      <br>
-      <button class="ord2" id="med4But">Memory Data</button>
-      <button class="ord2" id="sld4But">Server Load</button>
-      <button class="ord2" id="ssv4But">Server Save</button>
-      <button class="ord2" id="rpd4But">Ranking Points Distribution</button>
-      
-        
-      <div class="adminEdit" style="display:none; margin-top:20px">
-        
-      Svgs: <br>
-      <svg width="50" height="50" viewbox="0 0 24 24">
-        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" /> 
-        <path d="M0 0h24v24H0z" fill="none"/></svg>
-      
-      <svg width="50" height="40" viewbox="0 0 24 24" >
-        <path d="M0 0h24v24H0z" fill="none"/> "
-        <path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/></svg>
-      
-      <svg width="50" height="40" viewbox="0 0 24 24" fill="#000000" >
-        <path d="M3 21h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/>
-        <path d="M0 0h24v24H0z" fill="none"/></svg>
-      
-      <svg id="qqq" width="50" height="50" viewbox="0 0 512 512" fill="#ff9900" >
-        <path d="M512 198.525l-176.89-25.704-79.11-160.291-79.108 160.291-176.892 25.704 128 124.769-30.216 176.176 158.216-83.179 158.216 83.179-30.217-176.176 128.001-124.769z" /></svg>
-      
-      <svg width="50" height="50" viewbox="0 0 256 448">
-        <path d="M256 272c0 4.25-1.75 8.25-4.75 11.25l-112 112c-3 3-7 4.75-11.25 4.75s-8.25-1.75-11.25-4.75l-112-112c-3-3-4.75-7-4.75-11.25 0-8.75 7.25-16 16-16h224c8.75 0 16 7.25 16 16zM256 176c0 8.75-7.25 16-16 16h-224c-8.75 0-16-7.25-16-16 0-4.25 1.75-8.25 4.75-11.25l112-112c3-3 7-4.75 11.25-4.75s8.25 1.75 11.25 4.75l112 112c3 3 4.75 7 4.75 11.25z"></path></svg>
-  
-      <svg width="50" height="50" viewbox="0 0 24 24" fill="#000000" >
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-        <path d="M0 0h24v24H0z" fill="none"/></svg>
-    
-      <br><br>
-      Unicode glyphs/icons: <br><br><br>
-      
-      <b style="display:inline-block; position:relative; transform:rotate(90deg); color:purple; font:50px Arial">        
-        Rotate: <br> ↹ ↨ ≡ Ξ </b><br><br><br>
-      
-      <b style="color:violet; font:11px sans-serif">Baseline Ar ↹↨≡Ξ_☰☆ </b>
-      <b style="color:violet; font:11px monospace">mo ↹↨≡Ξ_☰☆ </b>
-      <br><br>
-      
-      <b style="color:blue; font:50px Arial">        
-        Arial: <br> ↹ &#8633; ↨ &#8616; ≡ &#8801; Ξ &#926; <br>
-        ☰ &#9776;&#xFE0E; ★ &#9733;&#xFE0E; ☆ &#9734;&#xFE0E; </b><br>
-      <b style="font:50px Arial; background:yellow; color:transparent; text-shadow:0 0 0 green">  
-        ☰ &#9776;&#xFE0E; ★ &#9733;&#xFE0E; ☆ &#9734;&#xFE0E; </b>      
-      <br>
-    </div>
+        <br>    
+        <button class="ord2" id="med4But">Memory Data</button>
+        <button class="ord2" id="sld4But">Server Load</button>
+        <button class="ord2" id="ssv4But"> ***Admin only*** Server Save</button>
+      </div>
     </div>
     
     
     <p style="text-align:right; font:7px monospace; margin:0; color:grey">zele-chelik! </p> 
   </div>  
-    
     
     <script>
       var noSleep = new NoSleep();
