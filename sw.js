@@ -1,5 +1,4 @@
-// *** 01234
-
+// *** 012345
 
 self.addEventListener('install', e => {
   e.waitUntil(
