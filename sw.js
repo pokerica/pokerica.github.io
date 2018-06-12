@@ -8,10 +8,7 @@ self.addEventListener('install', e => {
       return cache.addAll([ 
         '/', '/index.html', '/client.js', '/style.css', '/db', '/cchGm', 
         '/jquery-1.12.4.min.js', '/NoSleep.min.js', '/manifest.json',
-        'https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav',
-        'https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/che.wav',
-        'https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cli.wav',
-        'https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cha.wav'
+        'https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav'
       ]).then(() => self.skipWaiting());
     })
   );

@@ -6,9 +6,6 @@ function() {
      
  // ☆☆☆ load from cache blob? 
  var audQuack= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav");
- var audCheng= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/che.wav");  
- var audClick= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cli.wav");
- var audChang= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cha.wav"); 
 
   
  $.ajaxSetup({ async:true, cache:true, timeout:7000 });       
@@ -31,7 +28,6 @@ function() {
  var vSpace= 10;
  var sortColP= 4;
  var sortColH= 0;
- var muteAudio= false;
   
   
  // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
@@ -1235,10 +1231,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
 
 
    curRank++;
- 
-   audCheng.currentTime= 0; audCheng.play();
-   //audClick.currentTime= 0; audClick.play();
-   
+
    mny.innerText= '  $  ';
    mny.parentNode.parentNode.cells[3].innerText= (tGm[rx][2]= '-');
    
@@ -1250,12 +1243,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
     
   
  function outAnim(rx, rc) {
-      
-     if(rc){ 
-       audCheng.currentTime= 0; audCheng.play(); }
-     else {
-       audQuack.currentTime= 0; audQuack.play();}
-   
+     
      var mny= $('.money')[rx];
       
      if(!rc) return;
@@ -1327,9 +1315,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
        backAnim(rx);
        return;
      }
-     
-     audChang.currentTime= 0; audChang.play();
-   
+
      for(var i= 0; i < lmy.length; i++) {
        if(i !== rx) {
          //lmy[i].previousSibling.innerText= '';
@@ -1365,7 +1351,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
      var rx= e.target.parentNode.rowIndex-1;
      if(tGm[rx][0] !== 'F') {
        
-       audQuack.currentTime= 0; audQuack.play();       
+       //audQuack.currentTime= 0; audQuack.play();       
        e.target.parentNode.firstChild.innerText= tGm[rx][0]= 'F';
        $(e.target.parentNode).children()[5].innerText= tGm[rx][4]= 0;
      }
@@ -1392,16 +1378,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    if(e.target.cellIndex === 5) {
      
          var rx= e.target.parentNode.rowIndex-1;
-
-         if(e.target.innerText === "1,000") {
-           audQuack.currentTime= 0; audQuack.play();
-           return;       
-         }
-     
-         audCheng.currentTime= 0; audCheng.play();
-     
          var mny= e.target.nextSibling.firstChild.nextSibling;
-     
      
          for(var i= 0; i < lmy.length; i++) {
            if(i !== rx) {
@@ -1451,15 +1428,10 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    e.preventDefault(); e.stopPropagation();     
    e.stopImmediatePropagation();
      
-   
    if(!gameOver && nBar.innerText.length > 1) clrNotif();
    
-   
-   audClick.currentTime= 0; audClick.play();
-   
    var trx= e.target.parentNode.rowIndex;
-   
-   //alert(e.target.parentNode.rowIndex);
+
    if(trx === 0) {
      
      if(sortColP === e.target.cellIndex) 
@@ -1526,9 +1498,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
  function subrowDelete(etpn) {
    
        if(editMode) $('#dtEdit').val('');
-
        rowAnim(etpn.previousSibling, false);
-       audClick.currentTime= 0; audClick.play();  
      
        if(editMode) { editRow= -1;
          $('.initDis').prop("disabled", true);
@@ -1558,9 +1528,6 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
      if($(etpn).hasClass('selected')) { subrowDelete(etpn.nextSibling); return; }
 
      if(etpn.rowIndex === 0) {
-       //alert('Header cell: '+ e.target.cellIndex);
-
-       audClick.currentTime= 0; audClick.play();  
        
        if(sortColH === e.target.cellIndex) 
          revSort= !revSort;
@@ -1655,8 +1622,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
        
      $(etpn.nextSibling).focus();
    
-     rowAnim(etpn, true);   
-     audClick.currentTime= 0; audClick.play();  
+     rowAnim(etpn, true);
  });
 
   
@@ -2123,12 +2089,9 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    
    if(plNo < 0) {
      plNo= -(plNo +100);
-     
-     //audQuack.currentTime= 0; audQuack.play();
-     
+
      bankTotal+= tGm[plNo][4];
      document.getElementById('lblBank').innerText= 'Bank: $'+ fCash(bankTotal*1000);
-     
    }
    else 
      $('.money').eq(plNo).click();
@@ -2154,7 +2117,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
           
      // *** .load() no effect?? ..in reFresh(), so...
      // move to event listener & init audio upon actual user input event
-     audQuack.load(); audCheng.load(); audClick.load(); audChang.load();
+     audQuack.load();
    } 
    
      $(".mtb").removeClass("act dea").addClass("dea");
@@ -2168,9 +2131,6 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
      curTab= 0;
      if(editMode) { editMode= false;
        $('.adminEdit').css('display', 'none'); }
-   
-  
-     audClick.currentTime= 0; audClick.play();
 
      if(tid === "#tab2") { 
        
@@ -2267,8 +2227,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
    
    if(sirenState === 0) return;
    
-   audQuack.currentTime= 0;
-   audQuack.play();   
+   audQuack.currentTime= 0; audQuack.play();   
   
    timerPaint(true, '!!!');
    
@@ -2288,13 +2247,9 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
   
  $('#blindTimer').click(
  function(e) {
-      
-   audClick.currentTime= 0;
-   audClick.play();
-   
+
    if(gameOver) { finalSave(); return; }
          
-   
    if(btState === 0)      
      btState= 1;
    else
@@ -2412,13 +2367,7 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
   
 // *** BUTTONS #######################################################
 // *** ...............................................................
-  
- $(".ord, .ord2, .mnu").click(
- function() { // async? 
-     audClick.currentTime= 0;
-     audClick.play();
- });
-  
+
  $("#mnu1").click(
  function(e) {
    e.stopPropagation();
@@ -2549,13 +2498,6 @@ if(!keepMsgBar && useThisDate < 1 && nBar.innerText.length > 1)
 // *** -------------------------------------------------------------
   
 // *** tab1-class="ord2" : DARK BOTTOM BUTTON
-/*
-        <button class="ord2" id="raz1But">Reset All to Zero</button>
-        <button class="ord2" id="rli1But">Remove Last ID</button>
-        <button class="ord2" id="rma1But">Remove All</button>
-        <button class="ord2" id="ssv1But">Server Save</button>
-*/
-  
  $("#raz1But").click( //>Reset All to Zero<
  function() {
    // *** reset to zero  
@@ -2574,9 +2516,6 @@ $('#rli1But').click( //>Remove Last ID<
    
 $("#rma1But").click(//>Remove All<
    function() { tPl.length= 0; reFresh(); });
-  
-$("#ssv1But").click( //>Server Save<
-   function() { saveDB(); });
   
   
 // *** TAB 2 : ADMIN BUTTONS ***************************************
@@ -2746,9 +2685,6 @@ function delHrow() {
  function() {  
      tHi.length= 0; reFresh(); });
   
- $("#ssv3But").click( //>Server Save<
-   function() { saveDB(); } );
-  
   
 // *** TAB 4 : ADMIN BUTTONS ***************************************
 // *** -------------------------------------------------------------
@@ -2757,18 +2693,6 @@ function delHrow() {
    if(isLogged) return;   
    dbPass= $('input#pasIn').val(); getSha();   
  }); 
-   
- $("#mfx4But").click( //>Mute Audio FX<
- function() {
-   
-   muteAudio= !muteAudio;
-   
-   if(muteAudio) { this.value= "Audio FX Muted";
-     audCheng.muted= audClick.muted= audChang.muted= true; }
-   else { this.value= "Mute Audio FX";
-     audCheng.muted= audClick.muted= audChang.muted= false; }
- });
-  
   
 // *** class="ord2" : DARK BOTTOM BUTTON
  $("#gms4But").click( function() { // >Game State<
