@@ -10,6 +10,7 @@ function() {
  var audChang= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/cha.wav"); 
 
 
+  
  $.ajaxSetup({ async:true, cache:true, timeout:7000 });       
   
  var dbUrl= "https://api.github.com/repos/pokerica/pokerica.github.io/"; 
