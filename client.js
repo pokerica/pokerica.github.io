@@ -1,4 +1,4 @@
-var versionCode= "v1.3r87c \n";
+var versionCode= "v1.3r87e \n";
 
 $(document).ready(
 function() {  
@@ -6,7 +6,7 @@ function() {
  // ☆☆☆ load from cache blob? 
  var audQuack= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav");
 
-  
+   
  $.ajaxSetup({ async:true, cache:true, timeout:7000 });       
   
  var dbUrl= "https://api.github.com/repos/pokerica/pokerica.github.io/"; 
@@ -117,7 +117,6 @@ function() {
      row[5]= row[4] - row[3]*10;
      row[6]= c6Avg(row[3], row[2]);
      row[7]= c6Avg(row[4], row[2]);
-     
    });
    
    
@@ -278,7 +277,7 @@ function() {
  }
   
  var rotStrT= 'rot-T';
- $("#blindTimer").on("transitionend", //// webkitTransitionEnd oTransitionEnd MSTransitionEnd
+ $("#blindTimer").on("transitionend",
  function(e) {
 
     if (!e || e.defaultPrevented) return;
@@ -568,6 +567,7 @@ function() {
  }
   
  function loadState(isImport) {
+   
      //nBar.innerText= ''; clrNotif();   
      caches.open('pmpAppCache').then(
      function(cch) { cch.match('cchGm').then(
@@ -596,7 +596,6 @@ function() {
 
                  tGm.length= 0;            
                  tGm= tmpGm.slice(0);
-                 //tGm= JSON.parse(JSON.stringify(tmpGm));
 
                  nBar.innerText+= "Game state imported"+ endNotfChar;
                  adminInfo.innerText+= "Game state imported, rows#: "+ tGm.length +'\n';
@@ -616,8 +615,8 @@ function() {
      });    
  }
 
-  
- function saveState(isClear) {   
+ function saveState(isClear) {
+   
 //     nBar.innerText= ''; clrNotif();                 
          caches.open('pmpAppCache').then(
          function(cch) {
@@ -642,8 +641,7 @@ function() {
                  adminInfo.innerText+= "Game state recorded, rows#: "+ tGm.length +'\n';
             
                  tmpGm.length= 0; 
-                 //tmpGm= tGm.slice(0);
-                 //tmpGm= JSON.parse(JSON.stringify(tGm));
+                 tmpGm= tGm.slice(0);
                
                  prtGm();
              });
@@ -746,7 +744,6 @@ function actSavG() {
      btSec= btMin= ttMin= 0; btState= 8;  
      timerPaint(false, 'Click to START');
 
-
      $('#mtb3').click();
 
      if(useThisDate > 0 && editRow >= 0)
@@ -804,8 +801,7 @@ function mnySplit() {
   $(wf).css({border:'1px solid gold', width:'90%'});
     
   $(wf).off();  
-  $(wf).on('focus', function(e) {
-    
+  $(wf).on('focus', function(e) {    
     //e.stopImmediatePropagation(); 
     e.stopPropagation(); 
     if(!e || e.defaultPrevented) return;
@@ -818,27 +814,22 @@ function mnySplit() {
     this.setSelectionRange(0, 0);
     $('#gtb>tr')[rx2].cells[4].innerText= "???";
   });
-  
-
-
+ 
   $(wf).on("keydown", function(e) {
-
-   e.stopImmediatePropagation(); e.stopPropagation();
-   if(!e || !e.which || e.defaultPrevented) return;
-  
-     if(e.which === 13 || e.which === 9) {
-       
-       e.preventDefault();
-       finalSave();
-     }   
- });
-   
- $(wf).on("keyup", function(e) {
+    e.stopImmediatePropagation(); e.stopPropagation();
+    if(!e || !e.which || e.defaultPrevented) return;
     
-   e.stopImmediatePropagation(); e.stopPropagation();
-   if(!e || !e.which || e.defaultPrevented) return;
-   e.preventDefault(); 
-           
+    if(e.which === 13 || e.which === 9) {      
+      e.preventDefault();
+      finalSave();
+    }
+  });
+   
+  $(wf).on("keyup", function(e) {
+       e.stopImmediatePropagation(); e.stopPropagation();
+       if(!e || !e.which || e.defaultPrevented) return;
+       e.preventDefault(); 
+
        var w1Typ= e.target;  
        var w2Typ= $('#gtb>tr')[rx2].cells[4];
        
@@ -880,12 +871,10 @@ function mnySplit() {
   
   
   
- // *** main redraw function --- D O W N   B E L O W ****************
   
  var lastNotif= "";
  function clrNotif() {
-   lastNotif= nBar.innerText; nBar.innerText= ""; }  
-  
+   lastNotif= nBar.innerText; nBar.innerText= ""; }
   
  // *** main redraw function ************************************************
   
@@ -915,8 +904,9 @@ function mnySplit() {
      tPl.sort(function(a, b) { return a[0] - b[0] }); 
      tPl.forEach(function(col) { 
        
-         if(col[2] < 1) 
-           col[5]= col[6]= col[7]= col[8]= -900 - col[0];
+       
+       if(col[2] < 1) {
+           col[5]= col[6]= col[7]= col[8]= -900 - col[0]; }
        
        tGm.push([ 'F', +col[0], '-', '-', 0 ]); 
        sortedPl.push( col[1] );     
@@ -924,11 +914,11 @@ function mnySplit() {
      
      var cnt= 0;
      tHiFull.length= 0;
-     tHi.sort(function(a, b) { return b[0] - a[0] }); 
+     tHi.sort(function(a, b) { return b[0] - a[0] });
+     
      tHi.forEach(function(col) {
 
-       var miniGm= col[4].split(':');
-       
+       var miniGm= col[4].split(':');       
        tHiFull.push([ +col[0], +col[1], +col[2], 
                       +col[3], 
                       sortedPl[ +miniGm[5]-1 ], 
@@ -1021,62 +1011,51 @@ function mnySplit() {
    var mny= $('.money')[rx];
    
    if(!editMode && useThisDate === 0 && iRnk > curRank+1) {
-        
         audQuack.currentTime= 0; audQuack.play();
         return;
    }
 
-
    var cx= 0;
-
    tGm.forEach(
    function(col) {
                   
-                  var cr= 0;
-                  if(col[2] !== '-') cr= parseInt(col[2], 10);
-                  
-                  
-                  var tm= $('.money')[cx];
-                  
-                  var rp= '430px';
-                  if(cr === 1 || (cr === 2 && iRnk === 1)) {
-                    
-                     rp= '390px';
-                     tm.innerText= '2nd';
+      var cr= 0;
+      if(col[2] !== '-') 
+        cr= parseInt(col[2], 10);
 
-                    rx1= 0;
-                    if(cr === 2 || (cr === 1 && iRnk > 1)){
-                      rx2= cx;
-                      //alert('rx2= '+ rx2 + '   cx= '+ cx);
-                    }                            
-                  }
-                  
-                  
-                  if(cr === 1 || cr === 2) {
-                    
-                     if(gameOver) {                   
-                       gameOver= false;
-                       timerPaint(false, 'Click to START');
-                     }
-                    
-                     var wf= $('#gtb>tr')[cx].cells[4];
-                    
-                     $(wf.firstChild).off(); 
-                    
-                     wf.innerHTML= "";
-                     wf.innerText= '-'; 
-                     tGm[cx][3]= '0';                                            
-                  }
-                
-                  
-                  if(cr > 0 && cr < iRnk) {
-                    
-                    audQuack.currentTime= 0; audQuack.play();
-                    tm.parentNode.parentNode.cells[3].innerText=  (col[2]= cr+1); 
-             
-                    if(col[2] === 3) tm.innerText= 'OUT';
-                  }
-                  cx++;
+      var rp= '430px';
+      var tm= $('.money')[cx];
+      if(cr === 1 || (cr === 2 && iRnk === 1)) {
+        
+        rx1= 0; 
+        rp= '390px';
+        tm.innerText= '2nd';
+        if(cr === 2 || (cr === 1 && iRnk > 1)){ rx2= cx; }                            
+      }
+
+      if(cr === 1 || cr === 2) {
+
+         if(gameOver) {                   
+           gameOver= false;
+           timerPaint(false, 'Click to START');
+         }
+
+         var wf= $('#gtb>tr')[cx].cells[4];
+
+         $(wf.firstChild).off(); 
+
+         wf.innerHTML= "";
+         wf.innerText= '-'; 
+         tGm[cx][3]= '0';                                            
+      }
+
+      if(cr > 0 && cr < iRnk) {
+        audQuack.currentTime= 0; audQuack.play();
+        tm.parentNode.parentNode.cells[3].innerText=  (col[2]= cr+1);
+        if(col[2] === 3) tm.innerText= 'OUT';
+      }
+     
+      cx++;
    });
 
 
@@ -1088,45 +1067,38 @@ function mnySplit() {
    $(mny).css({right:'5px',color:'white',background:'darkgreen'});
    $(mny).css({font:'bold 24px monospace',height:'35px',width:''});
    (vSpace > 10)? $(mny).css({bottom:'17px'}):$(mny).css({bottom:'7px'});
-   
  }
     
   
  function outAnim(rx, rc) {
      
-     var mny= $('.money')[rx];
-      
      if(!rc) return;
-       
-           if(curRank === 2) {
-             rx2= rx; mny.innerText= '2nd'; }
-           else
-           if(curRank === 1) {
-             rx1= rx; mny.innerText= '1st'; }
-           else
-             mny.innerText= 'OUT';
-       
-           rc.innerText= (tGm[rx][2]= curRank--);
-          
-           var rp= (tGm[rx][2] === 1 || tGm[rx][2] === 2) ? '380px' : '430px';
-
-           $(mny).css({right:rp, bottom:'12px', width:'50px', height:'25px', 
-                  font:'bold 15px monospace', 'text-align':'center', 
-                  background:'lightgrey', color:'black'});
-
-           $(mny.previousSibling).innerText= '';
-           //$(mny.previousSibling).css({visibility:'hidden'});
    
+     var mny= $('.money')[rx];
    
-           // *** GAME OVER
-           if(curRank === 0)
-             mnySplit();
+     if(curRank === 2) {
+       rx2= rx; mny.innerText= '2nd'; }
+     else
+     if(curRank === 1) {
+       rx1= rx; mny.innerText= '1st'; }
+     else
+       mny.innerText= 'OUT';
+
+     rc.innerText= (tGm[rx][2]= curRank--);
+     var rp= (tGm[rx][2] === 1 || tGm[rx][2] === 2) ? '380px' : '430px';
+
+     $(mny).css({right:rp, bottom:'12px', width:'50px', height:'25px', 
+                 font:'bold 15px monospace', 'text-align':'center', 
+                 background:'lightgrey', color:'black'});
+
+     $(mny.previousSibling).innerText= '';
+
+     // *** GAME OVER
+     if(curRank === 0)
+       mnySplit();
  }
   
   
- // *** GAME TAB TABLEA
-
- //gmt.onclick= 
  $('#gameTable').click(
  function(e) {
   
@@ -1226,28 +1198,33 @@ function mnySplit() {
    }
    else
    if(e.target.cellIndex === 5) {
-     
-         var rx= e.target.parentNode.rowIndex-1;
-         var mny= e.target.nextSibling.firstChild.nextSibling;
-     
-         for(var i= 0; i < lmy.length; i++) {
-           if(i !== rx) {
-             //lmy[i].previousSibling.innerText= '';
-             $(lmy[i].previousSibling).css({font:'15px monospace', color:'grey'}); }
-         }
 
-     
-         mny.previousSibling.innerText=  '-'+ (tGm[rx][4] -1) +'k';
-     
-         if(listMode !== 3)
-           $(mny.previousSibling).css({font:'bold 18px monospace', color:'black'});
-         else
-           $(mny.previousSibling).css({font:'bold 18px monospace', color:'white'});
+       if(e.target.innerText === "1,000") {
+         audQuack.currentTime= 0; audQuack.play();
+         return;       
+       }
 
-     
-         bankTotal-= tGm[rx][4] -1;
-         document.getElementById('lblBank').innerText= 'Bank: $'+ fCash(bankTotal*1000);
-         e.target.innerText= fCash(1000* (tGm[rx][4]= 1));
+       var rx= e.target.parentNode.rowIndex-1;     
+       var mny= e.target.nextSibling.firstChild.nextSibling;
+
+       for(var i= 0; i < lmy.length; i++) {
+         if(i !== rx) {
+           //lmy[i].previousSibling.innerText= '';
+           $(lmy[i].previousSibling).css({font:'15px monospace', color:'grey'}); }
+       }
+
+
+       mny.previousSibling.innerText=  '-'+ (tGm[rx][4] -1) +'k';
+
+       if(listMode !== 3)
+         $(mny.previousSibling).css({font:'bold 18px monospace', color:'black'});
+       else
+         $(mny.previousSibling).css({font:'bold 18px monospace', color:'white'});
+
+
+       bankTotal-= tGm[rx][4] -1;
+       document.getElementById('lblBank').innerText= 'Bank: $'+ fCash(bankTotal*1000);
+       e.target.innerText= fCash(1000* (tGm[rx][4]= 1));
    }
    else {
 /*     
@@ -1270,7 +1247,6 @@ function mnySplit() {
    
   
  
-// tb.onclick= 
  $('#playerTable').click(   
  function(e) {
    
@@ -1342,19 +1318,29 @@ function mnySplit() {
  
  
  
- // *** $('#historyTable') ****************************
- 
+// *** $('#historyTable') ****************************
+  
+//firefox fix
+ function firefoxFix() {
+    if($('#hth>tr').children()[sortColH].style.borderColor === 'grey')
+      $('#hth>tr').children().eq(sortColH).css({'border-color':'rgb(128, 128, 127)'});
+    else
+      $('#hth>tr').children().eq(sortColH).css({'border-color':'grey'});
+ }
+  
  // ☆☆☆ subRow-content - REMOVE
  function subrowDelete(etpn) {
    
-       if(editMode) $('#dtEdit').val('');
-       rowAnim(etpn.previousSibling, false);
-     
-       if(editMode) { editRow= -1;
+   if(editMode) { 
+         editRow= -1;
+         $('#dtEdit').val('');
          $('.initDis').prop("disabled", true);
-       }
-     
-       etpn.remove();
+   }
+   
+   rowAnim(etpn.previousSibling, false);
+   etpn.remove();
+   
+   firefoxFix();
  }
 
   
@@ -1393,40 +1379,27 @@ function mnySplit() {
        return;     
      }
    
-   
-// ☆☆☆ subRow-content - CREATE ***********************
-   
+// ☆☆☆ subRow-content - CREATE ***********************   
      var cx, ri= +$(etpn).children()[8].innerText;
-   //alert(ri);
-  
      var selRows= $('#htb')[0].getElementsByClassName('selected');
-     if(editMode) { //        rowAnim($(selRows)[0], false);
+
+     if(editMode) { 
        $(selRows).children().eq(3).click();
        $('#dtEdit').val( tHiFull[ri][0] );
      }
 
      $(etpn).addClass('already');
    
-   
-// ***                 0     1     2     3     4    5     6     7       8
-// *** tPl:           id    name  gms  $buy  $won  $bal  csh%  rnk%  total
-// *** tHiFull:       date  np    bnk  $1    1st   $2    2nd   m-tGm  gid
-// *** tGm:           isIn  pid   rnk  $won  $buy
-   
      var dtCode= tHiFull[ri][0].toString();
      var mon= +dtCode.substring(4,6);
      var dtStr= dtCode.substring(6,8)+" " + monthStr[mon-1] +" "+dtCode.substring(0,4)
               + " @ "+ dtCode.substring(8,10) +":"+ dtCode.substring(10,12);
    
-     var scd= ''; //'BANK: $'+ fCash(...                                      ---|
-     //    ' 99.|NAME______| 99k| 999,9xx|   +-999.9xx| +-99,9xx|+-99,9xx|+-99.99 \n';
-     scd+= ' RANK  NAME     $BUY    $WON     \n' //  $BAL ∑    ± $(#)   ± %($)    ± ∑  \n'
-        +  '-----------------------------'
-        +  '              '+ dtStr +' \n';
-   
+     var scd= '';
+     scd+= ' RANK  NAME     $BUY    $WON     \n'
+        +  '-----------------------------              '+ dtStr +' \n';
     
      var miniGm= tHiFull[ri][7].split(':');
-   
      for(var i= 5; i < miniGm.length; i+= 5) {
        
          cx= i/5;
@@ -1453,30 +1426,27 @@ function mnySplit() {
      } //end for
      
 
+    rowAnim(etpn, true);
 
-     var ctes= 'style="color:white; background:black"';
-     if(listMode === 2) ctes= 'style="color:black; background:white"';
-       else if(listMode === 3) ctes= 'style="color:black; background:#f0f0f0"';
-         else if(editMode && vSpace > 10) ctes= '';
-   
-     $(etpn).after('<tr tabindex="1" class="extra"'+ ctes +'><td colspan='
+    var ctes= 'style="color:white; background:black"';
+    if(listMode === 2) ctes= 'style="color:black; background:white"';
+     else if(listMode === 3) ctes= 'style="color:black; background:#f0f0f0"';
+       else if(editMode && vSpace > 10) ctes= '';
+
+    $(etpn).after('<tr tabindex="1" class="extra"'+ ctes +'><td colspan='
                    + (editMode?8:7) +'><pre style="height:'+ (+tHiFull[ri][1] +4)*18 + 'px; padding:5px 10px; '
                    + 'margin:0; text-align:left; font:bold 15px monospace">'+ scd +'</pre></td></tr>'); 
 
-
-
-     if(editMode) {
+    firefoxFix();
+   
+    if(editMode) {
            editRow= etpn.rowIndex -1;
            $('.initDis').prop("disabled", false);
-     }
-       
-     $(etpn.nextSibling).focus();
-   
-     rowAnim(etpn, true);
+    }
+
+    $(etpn.nextSibling).focus();
  });
 
-  
-  
   
   
   
@@ -2403,12 +2373,7 @@ $("#rma1But").click(//>Remove All<
    $('#mtb2').click();
  });
   
-  
-// *** mini-Gm:        pid  buy   ∑nG  ∑buy  ∑won
-//                      0    1     2     3     4    5     6      7     8
-// *** tHiFull:       date  #nP   bnk    $1   1st   $2   2nd   m-tGm  gid
-// *** tGm:           isIn  pid   rnk  $won  $buy
-// *** tPl:            pid  name  #nG  $buy  $won  $bal  csh%  rnk%  total    
+
 function delHrow() {
   
 //Need this?, having rvsPLindex??
