@@ -204,8 +204,8 @@ table {
 }
 
 
-table td {
-  
+td {
+  border:none;
   font-size:18px; 
   font-weight:normal; /* 100-900: 400 normal, 700 bold*/
   
@@ -218,7 +218,7 @@ table td {
   word-break:break-all;
 }
 
-table th { 
+th { 
   padding:10px 5px 8px 5px;  
   font-size:14px; font-weight:bold;  
   text-align:center;
