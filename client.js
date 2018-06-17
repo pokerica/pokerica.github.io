@@ -1,4 +1,4 @@
-var versionCode= "v1.3r87e \n";
+var versionCode= "v1.3r88b \n";
 
 $(document).ready(
 function() {  
@@ -70,7 +70,7 @@ function() {
    
    return parseInt(retStr, 10);
  }
-  
+ 
   
 // *** recalc. selected history-table rows  
  function reclcSelHrows() {
@@ -169,7 +169,6 @@ function() {
            }
            else {             
              $(tbrow).removeClass('clean').addClass('selected');
-             
              if(curTab === 3) reclcSelHrows();
            }
  }
@@ -204,7 +203,7 @@ function() {
   
   
   
- // *** timer stuff... 
+ // *** ---------- T I M E R  1st part----------------
  var btSec= 0;
  var btMin= 0;
  var ttMin= 0;   
@@ -547,7 +546,7 @@ function() {
  var clrST;
  var ssPend= false;
   
- 
+  
 // ***  SAVE STATE - - - - - - - - - -  
  var tmpGm= [[ 1, 2, 3, 4, 5 ]];
   
@@ -566,10 +565,18 @@ function() {
    });   
  }
   
+  
  function loadState(isImport) {
    
+
+   if(!window.caches)
+   {
+     adminInfo.innerText+= 'No window.caches.\n';
+     return;
+   }
+   
      //nBar.innerText= ''; clrNotif();   
-     caches.open('pmpAppCache').then(
+     window.caches.open('pmpAppCache').then(
      function(cch) { cch.match('cchGm').then(
        function(mres) { 
          if(!mres) return "!empty"; 
@@ -597,7 +604,7 @@ function() {
                  tGm.length= 0;            
                  tGm= tmpGm.slice(0);
 
-                 nBar.innerText+= "Game state imported"+ endNotfChar;
+                 nBar.innerText+= ' #game state imported';
                  adminInfo.innerText+= "Game state imported, rows#: "+ tGm.length +'\n';
                  
                  resetEdit(false);
@@ -610,22 +617,30 @@ function() {
 
                prtGm();
              
-           }).catch(function(err) {
-               nBar.innerText+= 'Load game state failure: '+ err.message +endNotfChar; });
+           });
      });    
  }
 
+  
  function saveState(isClear) {
    
+   if(!window.caches)
+   {
+     adminInfo.innerText= 'No window.caches.\n';
+     return;
+   }
+   
+   
 //     nBar.innerText= ''; clrNotif();                 
-         caches.open('pmpAppCache').then(
+         window.caches.open('pmpAppCache').then(
          function(cch) {
-             cch.delete('cchGm', {ignoreSearch:true}).then( function(res) {
+          
+//cat             cch.delete('cchGm', {ignoreSearch:true}).then( function(res) {
 
                  if(isClear) {
                    cch.put('cchGm', new Response("!empty", {"status":200}) );
                    tmpGm.length= 0; tmpGm.push([ '.', '..', '..', '....', '..']);
-                   adminInfo.innerText+= "Game state cleared! \n"; prtGm(); return;
+                   adminInfo.innerText= "Game state cleared! \n"; prtGm(); return;
                  }
                
                  var upDat= [0,1,2];
@@ -637,16 +652,16 @@ function() {
                
                  cch.put('cchGm', new Response(upDat.join('|'), {"status":200}));
 
-                 nBar.innerText+= "Game state recorded"+ endNotfChar;           
-                 adminInfo.innerText+= "Game state recorded, rows#: "+ tGm.length +'\n';
+                 nBar.innerText+= ' #game state recorded';           
+                 adminInfo.innerText= "Game state recorded, rows#: "+ tGm.length +'\n';
             
                  tmpGm.length= 0; 
                  tmpGm= tGm.slice(0);
                
                  prtGm();
-             });
-         }).catch(function(err) { 
-              nBar.innerText+= "Save game state failure: "+ err.message+ endNotfChar; });
+
+//cat             });         
+         });
  }
   
   
@@ -734,6 +749,7 @@ function actSavG() {
 
 
      tHi.push([ gdat, gamePlayers, bankTotal, cf1, upGm ]);
+
 
      saveDB();  
      saveState(true); 
@@ -889,7 +905,7 @@ function mnySplit() {
   
    
    if(useThisDate > 0 && curTab === 1) {
-     nBar.innerText= 'Cannot now, save first' +endNotfChar;
+     nBar.innerText= ' #cannot now, save first';
      $('#mtb2').click(); return;
    }
    
@@ -989,7 +1005,7 @@ function mnySplit() {
      $(".admin").css("display", "none");
    
    if(useThisDate < 1) editRow= -1;
-     else nBar.innerText+= 'Game modification in progress' +endNotfChar;
+     else nBar.innerText+= ' #game modification in progress';
    
   
    if(reInit) gameOver= false;
@@ -1002,7 +1018,6 @@ function mnySplit() {
    
    lastTab= curTab;
  }     
-  
   
   
  function backAnim(rx) {  
@@ -1449,9 +1464,6 @@ function mnySplit() {
 
   
   
-  
- var endNotfChar= '. #'; 
- 
  // *** import... ************************************************************
  function importDB(data) {
    
@@ -1462,8 +1474,8 @@ function mnySplit() {
      var gmHistory= data[1];
      data= data[0].split('|'); 
          
-     if(!data) { nBar.innerText+=
-              'No cache data X' +endNotfChar; return; }
+     if(!data) { 
+       nBar.innerText+= ' #no cache data X'; return; }
                           
      var nCol= 6;              
      tPl.length = 0;
@@ -1493,8 +1505,8 @@ function mnySplit() {
                  
 // *** 2nd part - games history data
   
-     if(!gmHistory) { nBar.innerText+=
-              'No cache data Y' +endNotfChar; return; }
+     if(!gmHistory) {
+       nBar.innerText+= ' #no cache data Y'; return; }
                           
      nCol= 5;
      data= gmHistory.split('|');
@@ -1507,8 +1519,6 @@ function mnySplit() {
                        data[i*nCol +4] ]); 
      }
   
-//     alert("0: "+ tPl.length +"\ntPl: "+ tPl);
-
      reFresh();
      loadState(true);
  } 
@@ -1551,7 +1561,7 @@ function mnySplit() {
      adminInfo.innerText+= "No storage in navigator! \n"; 
    
    
-   if(caches) {   
+   if(window.caches) {   //cat
           
      caches.keys().then(
      function(cacheNames) { cacheNames.forEach(
@@ -1576,18 +1586,18 @@ function mnySplit() {
      adminInfo.innerText+= "No caches in window! \n";                   
  }
   
-     
+    
  function loadCache(isImport) {      
    
      nBar.innerText= ''; clrNotif();
    
-     caches.open('pmpAppCache').then(
+     window.caches.open('pmpAppCache').then(
      function(cch) { cch.match('db').then(
        function(mres) { return mres.text() }).then(
        function(dbData) {
          
-           if(!dbData) { nBar.innerText+=
-             'No cache data A' +endNotfChar; return; }
+           if(!dbData) {
+             nBar.innerText+= ' #no cache data A'; return; }
 
            if(isImport) { importDB(dbData.split('@'));
              adminInfo.innerText+=  '::import@loadCache \n'; }
@@ -1599,8 +1609,8 @@ function mnySplit() {
            
             dbData= dbData[0];
            
-            if(!dbData) { nBar.innerText+=
-              'No cache data B' +endNotfChar; return; }           
+            if(!dbData) {
+              nBar.innerText+= ' #no cache data B'; return; }           
            
             dbData= dbData.split('|');           
             adminInfo.innerText+= '[tPl @Ex]: 1         2      3       4        5  \n'
@@ -1630,8 +1640,8 @@ function mnySplit() {
              + '         date     #nP   $bnk   $1st  | id : $buy : id... \n'
              + '--------------------------------------------------------------------- \n'
            
-            if(!gmHistory) { nBar.innerText+=
-              'No cache data C' +endNotfChar; return; }
+            if(!gmHistory) {
+              nBar.innerText+= ' #no cache data C'; return; }
            
             nCol= 5;
             dbData= gmHistory.split('|');
@@ -1648,89 +1658,81 @@ function mnySplit() {
          adminInfo.innerText+= '\n';
          
          
-       }).catch(function(err) {
-           nBar.innerText+= 'Load cache failure: '+ err.message +endNotfChar; });                   
+       }); //cat .catch(function(err) { nBar.innerText+= 'Load cache failure: '+ err.message +endNotfChar; });                   
      });
    
    if(!isImport) cchInfo();
  }
   
- var timePerf, fileAction= 0;
- function fileJunction() {       
-       
-   var upData= "0|export-init|0|0|0|0";
-   var upHistory= "@12345678|2|0|0|0:0:0:0:0:1:1:1:1:1:2:2:2:2:2";
    
-   if(fileAction > 2) {
-     
-       // ***  id  name  gms  $buy  $won  rnk%    
-       // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
-       tPl.forEach(function(col) { 
-         upData+= '|'+ col[0] +'|'+ col[1] +'|'+ col[2] +'|'+ col[3] +'|'+ col[4] +'|'+ '#';
-       });
-     /*                 0       1      2      3      v-1st       v-2nd     
-             tHi:     date     #nP   $bnk   $1st  | id : $buy : id... 
-     // *** tHiFull:  date     #np    bnk    $1    1st   $2    2nd  |  m-tGm |  gid
-                        0       1      2      3     4     5     6      7         8  */
-       tHi.forEach(function(col) {
-         upHistory+= '|'+ col[0] +'|'+ col[1] +'|'+ col[2] +'|'+ col[3] +'|'+ col[4]; });
 
-       upData+= upHistory;
-     
-       adminInfo.innerText+= ':;fileAction('+ fileAction
-         +') @fileJunction \n'+ 'tPl= '+ tPl +'\n'+ 'tHi= '+ tHi +'\n';
-   }
-   else
-     adminInfo.innerText+= '::fileAction('+ fileAction + ') @fileJunction \n';
-   
-   
-   timePerf= performance.now();
-   
-   // *** joo, joo, joo, joonctni me you junction...
-   switch(fileAction) {
 
-       case 0: alert('err:fa0'); break;
-
-       case 1: // *** SERVER LOAD
-
-         tHi.length= 0;
-         tHiFull.length= 0;
-         $.ajax({
-           url: dbUrl + "git/blobs/" + filesha,
-           type: 'GET', //dataType: 'json',    
-           beforeSend: function(xhr) { 
-             xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPass)); 
-           },
-           error: 
-           function(err, bb, cc) {
-             adminInfo.innerText+= "Server load failure: "
-               + err.status +" "+ err.statusText + " ..loading from cache.\n";
-
-             loadCache(true);
-             $("#mtb4").click();
-             return;
-           }
-         }).done(function(response, st, x) {
-         //  alert("got this: " + response.?data?.content);
-           
-           var resCon= (response.content).replace(/\n|\r/g, "");
-           
-           importDB(atob(resCon).split('@'));
-           
-           timePerf= performance.now() - timePerf;
-           adminInfo.innerText+= "[*] load & import \n";
-           adminInfo.innerText+= x.getAllResponseHeaders() +'\n'
-             +"Done, time: "+ (timePerf/1000).toFixed(2) +" seconds.< \n";
-
-           nBar.innerText+= "Server load success: "
-                         + (timePerf/1000).toFixed(2) +' seconds'+ endNotfChar;
-         
-           
-// *** SAVE TO CACHE ---- put in importDB??
-           //setTimeout( function() { fileAction= 4; fileJunction(); }, 2500);
-         });       
+  var fileAction= 0;
+  function fileJunction()
+  {
+    var upData= "0|export-init|0|0|0|0";
+    var upHistory= "@12345678|2|0|0|0:0:0:0:0:1:1:1:1:1:2:2:2:2:2";
     
-       break;
+    if(fileAction > 2)
+    {
+      tPl.forEach(
+        function(col)
+        {
+          upData+= '|'+ col[0] +'|'+ col[1]
+            +'|'+ col[2]+'|'+ col[3] +'|'+ col[4] +'|'+ '#';
+        });
+      
+      tHi.forEach(
+        function(col)
+        {
+           upHistory+= '|'+ col[0] +'|'+ col[1]
+             +'|'+ col[2] +'|'+ col[3] +'|'+ col[4];
+        });
+
+      upData+= upHistory;
+    }
+    
+    adminInfo.innerText+= '@fileJunction:fileAction('+ fileAction +')\n';
+   
+   
+    switch(fileAction)
+    {
+
+      case 0:
+        alert('err:fa0');
+        break;
+
+      
+      case 1: // *** SERVER LOAD
+        tHi.length= 0;
+        tHiFull.length= 0;
+        
+        $.ajax
+        ({
+          url:dbUrl +'git/blobs/'+ filesha,
+          type:'GET', dataType: 'json',
+          beforeSend:function(xhr)
+          {
+            xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":"+ dbPass));
+          },
+          error:function(a, b)
+          {
+            adminInfo.innerText+= 'Server: '+ b +' '+ a.statusText +'\n...load cache.\n';
+            loadCache(true);
+            $("#mtb4").click();
+//             return;
+          },
+          success:function(a, b, c)
+          {
+            var resCon= (a.content).replace(/\n|\r/g, '');
+            importDB(atob(resCon).split('@'));
+           
+            adminInfo.innerText+= "[*] load & import \n";
+            adminInfo.innerText+= c.getAllResponseHeaders() +'\n';
+            nBar.innerText+= ' #server load success';
+          }
+        });
+        break;
 
 
        case 2: // *** CACHE LOAD
@@ -1745,160 +1747,152 @@ function mnySplit() {
            type: 'PUT',
            data: filedata,            
            beforeSend: function(xhr) {
-             //xhr.setRequestHeader("Authorization", "token 1fa49d9ba6xxxxxxxx462b3e9d690073c99");
              xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPass)); 
-           }, error: function(err) { 
-                //alert("Server save: \n"+ err.status +" "+ err.statusText) 
-                nBar.innerText+= "Server save failure: "+ err.status +" "+ err.statusText+ endNotfChar;
+           }, error: function(a, b) { 
+                nBar.innerText+= ' #server save failure: '+ b +' '+ a.statusText;
            }    
          }).done(function(response, st, x) {
 
-             timePerf= performance.now() - timePerf;   
              adminInfo.innerText+= "[*] export & save \n";               
              adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
-               + "Done, time: "+ (timePerf/1000).toFixed(2) +" seconds.< \n";
 
              filesha= response.content.sha;
-             nBar.innerText+= "Server save success: "
-                           + (timePerf/1000).toFixed(2) +' seconds'+ endNotfChar;
+             nBar.innerText+= ' #server save success';
          });       
 //  *** NO BREAK so it falls thru and does the cache save too
 //       break;
 
+       
        case 4: // *** CACHE SAVE                        
-         caches.open('pmpAppCache').then(          
+         window.caches.open('pmpAppCache').then(          
          function(cch) {
 
-           cch.delete('db', {ignoreSearch:true}).then(
-           function(res) {
+//cat           cch.delete('db', {ignoreSearch:true}).then( function(res) {
 
              cch.put('db', new Response(upData, {"status":200}));
              
-             //alert("Saved to cache: \n!"+ upData); // (del: "+ res +")");
-             nBar.innerText+= "Cache save success"+ endNotfChar;
+             nBar.innerText+= ' #cache save success';
              adminInfo.innerText+= "Cache save success, data: \n"+ upData +'\n';
-           });     
-         }).catch(function(err) { 
-              nBar.innerText+= "Cache save failure: "+ err.message+ endNotfChar; });
-       break;
-   }
-   
-   fileAction= 0;
- }
-  
-  
- var xrlL= 0, xrlR= 0; 
- function getSha() {
-   
-    var xhr= new XMLHttpRequest();
-    var url= dbUrl + "git/trees/data";
-
-    var loginYet= isLogged;
-    if(dbPass.length < 3) dbPass= "";
-   
-    xhr.open('GET', url, true); //true: async
-    xhr.onloadend = function() {            
-      var str= xhr.responseText;
-      var pos1 = str.indexOf('db.txt');
-      pos1 = str.indexOf('"sha": "', pos1);
-      var pos2 = str.indexOf('",', pos1);
-      
-      filesha= str.substring(pos1 + 8, pos2);    
-  
-      xrlL= parseInt(xhr.getResponseHeader("X-RateLimit-Limit"), 10);
-      xrlR= parseInt(xhr.getResponseHeader("X-RateLimit-Remaining"), 10);
-      
-      isLogged= (!isNaN(xrlL) && xrlL > 99);
-      if(isLogged) $('#mnu1').css('display', 'block'); 
-      
-      adminInfo.innerText= versionCode + ">logged-in: "+ isLogged +"\n";
-    
-      if(!loginYet && isLogged) {
-        nBar.innerText= 'Log-in success'+ endNotfChar;        
-        adminInfo.innerText+= '[*] getShA-done: '+ filesha + "\n";        
-        adminInfo.innerText+= (xhr.getAllResponseHeaders()).toString() +"\n";
-        
-        $('#log4But').css({background:'none', 'box-shadow':'none'});
-        $('#log4But').val("Logged In"); $('#pasIn').css({display:'none'});
-        return;
-      }
-      
-      if(fileAction === 1) fileJunction();
-        else adminInfo.innerText+= xhr.responseText +"\n";
-      
-      nBar.innerText+= 'SHA p/h: '+ xrlR+ ' out of '+ xrlL +endNotfChar;
-    }
-    
-    xhr.onerror = function() { 
-      //alert('Getting file SHA, COARS error!') 
-      nBar.innerText+= 'Getting file SHA, COARS error'+ endNotfChar;
-    }
-    
-    xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPass)); 
-    xhr.withCredentials = false;
-   
-    // *** catch timeout event & just load from cache... working?
-    xhr.ontimeout = function (e) {    
-       nBar.innerText+= "Cannot get SHA, loading from cache!"+ endNotfChar;
-       loadCache(true);     
-    };
-
-    xhr.timeout= 5900;   
-    xhr.send();
- }
-  
-  
- function loadDB() {
-   
-   adminInfo.innerText= "";
-   nBar.innerText= ''; clrNotif();
-   
-   if(navigator.storage) { 
-     navigator.storage.persisted().then(
-         function(getP) {
-             if(getP) { $('#gpc4But').val("Persistance Granted");
-               $('#gpc4But').css({background:'none', color:'black', 'box-shadow':'none'}); }
+           
+//cat           });     
+           
          });
-   }
+       break;
    
-   if(!navigator.onLine) {       
-       //alert("Server unavailable, loading from cache!");       
-       nBar.innerTex+= "Server unavailable, loading from cache"+ endNotfChar;
-       
-       loadCache(true);
-       return;
-   }
+    }
    
-   
-   fileAction= 1;
-   if(filesha === "#") 
-      getSha();
-   else
-     fileJunction();
- }
   
- function saveDB() { 
+    fileAction= 0;
+  }
+  
+  
+  
+  
+  function getSha()
+  {
+    var xrL= 0, xrR= 0;
+    var logYet= isLogged;
+    if(dbPass.length < 5) dbPass= '';
+    adminInfo.innerText= versionCode;
+    
+    $.ajax
+    ({
+      url:dbUrl+'git/trees/data',
+  
+    //  url:'https://ppxy.glitch.me/bb',      
+      type:'GET', 
+      
+      dataType:'json',
+      beforeSend:function(a)
+      {
+//        a.withCredentials= true;
+        a.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPass));
+      },
+      
+      error:function(a, b)
+      {
+        alert('JSONP: '+ b);
+        alert('aaa: '+ JSON.stringify(a));
+        
+        loadCache(true); $("#mtb4").click();
+        nBar.innerText+= ' #sha UAV, load cache';
+      },
+      success:function(a, b, c)
+      {
+     //   alert(0);
+        
+        filesha= a.tree[13].sha;
+        xrL= +c.getResponseHeader("X-RateLimit-Limit");
+        xrR= +c.getResponseHeader("X-RateLimit-Remaining");
+      
+        if(isLogged= (xrL > 99))
+          nBar.innerText+= ' #admin access:'+ xrR +'/'+ xrL;
+        else
+          nBar.innerText+= ' #guest access:'+ xrR +'/'+ xrL;
+
+        if(!logYet && isLogged)
+        {
+          nBar.innerText+= ' #login OK';
+          adminInfo.innerText+= 'sha:'+ filesha +'\n';
+           
+          $('#log4But').css({background:'none', 'box-shadow':'none'});
+          $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
+        }
+        else       
+        if(fileAction === 1)
+          fileJunction();
+      }
+    });
+  }
+  
+
+  function loadDB()
+  {
+    adminInfo.innerText= '';
+    nBar.innerText= ''; clrNotif();
    
-   initOnceG= false;
+    if(!navigator.onLine)
+    {
+      loadCache(true); $("#mtb4").click();
+      nBar.innerTex+= ' #server OFL, load cache';
+      return;
+    }
    
-   adminInfo.innerText= "";   
-   nBar.innerText= "" ; clrNotif();  
-   
-   fileAction= 3;
-   if(!navigator.onLine) { fileAction= 4;
-     nBar.innerText+= "Server unavailable, saving to cache only"+ endNotfChar; }
-   else
-   if(!isLogged) { fileAction= 4;
-     nBar.innerText+= "You must be logged-in to update server database"+ endNotfChar; }
-     
-   fileJunction();
- }
+    fileAction= 1;
+    if(filesha === '#')
+      getSha();
+    else
+      fileJunction();
+  }
+  
+  
+  function saveDB()
+  {
+    initOnceG= false;
+
+    adminInfo.innerText= '';
+    nBar.innerText= '' ; clrNotif();
+
+    fileAction= 3;
+    if(!navigator.onLine)
+    {
+      fileAction= 4;
+      nBar.innerText+= ' #server OFL, save cache only';
+    }
+    else
+    if(!isLogged)
+    {
+      fileAction= 4;
+      nBar.innerText+= ' #must be logged to update server database';
+    }
+    
+    fileJunction();
+  }
  
   
     
 // *** action starts here *********************************
  loadDB();
-  
   
   
   
@@ -1999,6 +1993,10 @@ function mnySplit() {
  });
 
   
+  
+  
+  
+ // *** ---------- T I M E R  2nd part ----------------
  var tsAdmin= 1000;  
  function minuteUp() {
    
@@ -2174,8 +2172,9 @@ function mnySplit() {
  });
   
   
+
   
-  
+   
 // *** BUTTONS #######################################################
 // *** ...............................................................
 
@@ -2304,6 +2303,7 @@ function mnySplit() {
   
   
   
+ 
 // *** TAB 1 : ADMIN BUTTONS ***************************************
 // *** -------------------------------------------------------------
   
@@ -2334,7 +2334,7 @@ $("#rma1But").click(//>Remove All<
  function() {
    
    if(tGm.length < 4) {    
-     nBar.innerText= 'There needs to be at least 4 players registered'+ endNotfChar;
+     nBar.innerText= ' #need 4 players min.';
      return;
    }   
    
