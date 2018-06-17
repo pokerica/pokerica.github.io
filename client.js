@@ -1798,8 +1798,6 @@ function mnySplit() {
     $.ajax
     ({
       url:dbUrl+'git/trees/data',
-  
-    //  url:'https://ppxy.glitch.me/bb',      
       type:'GET', 
       
       dataType:'json',
@@ -1818,10 +1816,16 @@ function mnySplit() {
         nBar.innerText+= ' #sha UAV, load cache';
       },
       success:function(a, b, c)
-      {
-     //   alert(0);
+      { 
+        for(var i= 0; i < 9; i++)
+        {
+          if(a.tree[i].path === 'db.txt')
+          {
+            filesha= a.tree[i].sha;
+            break;
+          } 
+        }
         
-        filesha= a.tree[13].sha;
         xrL= +c.getResponseHeader("X-RateLimit-Limit");
         xrR= +c.getResponseHeader("X-RateLimit-Remaining");
       
