@@ -1,4 +1,4 @@
-var versionCode= "v1.3r88b \n";
+var versionCode= "v1.3r88c \n";
 
 $(document).ready(
 function() {  
@@ -1468,7 +1468,6 @@ function mnySplit() {
  function importDB(data) {
    
    initOnceG= false;
-
 // *** 1st part - players data
                           
      var gmHistory= data[1];
@@ -1521,7 +1520,7 @@ function mnySplit() {
   
      reFresh();
      loadState(true);
- } 
+ }
   
   
  function cchInfo() {
@@ -1897,6 +1896,23 @@ function mnySplit() {
     
 // *** action starts here *********************************
  loadDB();
+  
+   
+   if(navigator.storage)
+   {
+     navigator.storage.persisted().then(function(getP)
+     {   
+       if(getP)
+       {
+         $('#gpc4But').val("Persistance Granted");
+         $('#gpc4But').css({background:'none', color:'black', 'box-shadow':'none'});
+       }
+     });
+   }
+  
+// *** action starts here *********************************
+  
+  
   
   
   
