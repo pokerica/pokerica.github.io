@@ -1,11 +1,11 @@
-// *** 012
+// *** ab
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('pmpAppCache')
     .then(cache => {
       return cache.addAll([ 
         '/', '/index.html', '/client.js', '/style.css', '/db', '/cchGm', 
-        '/jquery-1.12.4.min.js', '/NoSleep.min.js', '/manifest.json',
+        '/jquery-3.3.1.min.js', '/NoSleep.min.js', '/manifest.json',
         'https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav'
       ]).then(() => self.skipWaiting());
     })
