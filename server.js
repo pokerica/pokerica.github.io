@@ -3,6 +3,10 @@ var express= require('express');
 var app= express();
 app.use(express.static('./'));
 
+app.post("/ld", function(q, a)
+{
+  a.sendFile(__dirname + '/db.txt');  
+});
 
 app.post("/sv", function(q, a)
 { 

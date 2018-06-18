@@ -1,5 +1,5 @@
 var appPath= 'https://p203.glitch.me';
-var versionCode= "v2.0r03b \n";
+var versionCode= "v2.0r03c \n";
 $.ajaxSetup({dataType:'text', contentType:'text/plain',
              cache:false, timeout:4000, processData:false});
 
@@ -1705,8 +1705,7 @@ function mnySplit() {
         
         $.ajax(
         {
-          url:appPath +'/db.txt', type:'GET',
-          xhrFields:{withCredentials: true},
+          url:appPath +'/ld', data:'abc', type:'POST',
           error:function(e)
           {
             adminInfo.innerText+= 'Server: '+ e.statusText +'\n...load cache.\n';
