@@ -1,5 +1,5 @@
 var appPath= 'https://p203.glitch.me';
-var versionCode= "v2.0r03c \n";
+var versionCode= "v2.0r03d \n";
 $.ajaxSetup({dataType:'text', contentType:'text/plain',
              cache:false, timeout:4000, processData:false});
 
@@ -1663,6 +1663,10 @@ function mnySplit() {
  }
   
    
+    function jsonpCallback(data)
+    {
+      alert('opopo: '+ data.message);
+    }
 
 
   var fileAction= 0;
@@ -1692,20 +1696,44 @@ function mnySplit() {
     
     adminInfo.innerText+= '@fileJunction:fileAction('+ fileAction +')\n';
    
-   
+  
+  
     switch(fileAction)
     {
       case 0:
         alert('err:fa0');
         break;
 
+
+  
       case 1: // *** SERVER LOAD
         tHi.length= 0;
         tHiFull.length= 0;
         
         $.ajax(
         {
-          url:appPath +'/ld', data:'abc', type:'POST',
+          url:appPath +'/db.txt',
+         // dataType:'jsonp',
+          jsonp:'callback',
+          jsonpCallback:'jsonpCallback',
+          error:function(e)
+          {
+            alert('mmErr: '+ e.statusText);
+          },
+          success: function(r, s, x){
+            var resCon= r.replace(/\n|\r/g, '');
+            importDB(resCon.split('@'));
+            
+            adminInfo.innerText+= "[*] load & import \n";
+            adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
+            nBar.innerText+= ' #server load success';
+          }
+        });
+  
+/*        
+        $.ajax(
+        {
+          url:appPath +'/db.txt', type:'get',
           error:function(e)
           {
             adminInfo.innerText+= 'Server: '+ e.statusText +'\n...load cache.\n';
@@ -1722,6 +1750,7 @@ function mnySplit() {
             nBar.innerText+= ' #server load success';
           }
         });
+*/        
         break;
 
 
