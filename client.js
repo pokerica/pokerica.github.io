@@ -1,4 +1,5 @@
-var versionCode= "v2.0r02b \n";
+var appPath= 'https://p203.glitch.me';
+var versionCode= "v2.0r03a \n";
 $.ajaxSetup({dataType:'text', contentType:'text/plain',
              cache:false, timeout:4000, processData:false});
 
@@ -398,13 +399,13 @@ function() {
      var showStr= 'style="display:none"';
      if(reInit) { col[2]= '-'; col[3]= '-'; }
      if(editMode || col[0] === "T" || col[0] === "A") showStr= ''; //'style="display:table-row"';
-     $('#gtb').append('<tr '+ showStr +'><td class="admin" style="text-align:center">'+ col[0] 
+     $('#gtb').append('<tr tabindex="1" '+ showStr +'><td class="admin" style="text-align:center">'+ col[0] 
                       +'</td><td class="admin" style="padding-right:20px">'+ col[1]
-                      +'</td><td style="text-align:left; padding:' + vpd + '">'+ sortedPl[ +col[1] -1 ]
+                      +'</td><td tabindex="1" style="text-align:left; padding:' + vpd + '">'+ sortedPl[ +col[1] -1 ]
                       +'</td><td style="text-align:center">'+ col[2]
                       +'</td><td>'+ fCash(+col[3]) 
-                      +'</td><td style="text-align:right">'+ fCash(+col[4] *1000) 
-                      +'</td><td style="position:relative; overflow:visible">'
+                      +'</td><td tabindex="1" style="text-align:right">'+ fCash(+col[4] *1000) 
+                      +'</td><td tabindex="1" style="position:relative; overflow:visible">'
                       +'<pre class="mnyInfo"' +'> </pre>'
                       +'<pre class="money"' + vss +'>  $  </pre></td></tr>');  
      
@@ -1262,8 +1263,8 @@ function mnySplit() {
  $('#playerTable').click(   
  function(e) {
    
-   if(!e || e.defaultPrevented) return;        
-   e.preventDefault(); e.stopPropagation();
+//   if(!e || e.defaultPrevented) return;        
+//   e.preventDefault(); e.stopPropagation();
    
    if(!gameOver && nBar.innerText.length > 1) clrNotif();
    
@@ -1388,9 +1389,12 @@ function mnySplit() {
        return;     
      }
    
+   
 // ☆☆☆ subRow-content - CREATE ***********************   
      var cx, ri= +$(etpn).children()[8].innerText;
      var selRows= $('#htb')[0].getElementsByClassName('selected');
+   
+   nBar.innerText= ' #ri= '+ ri +' >>selRow.len= '+ selRows.length;
 
      if(editMode) { 
        $(selRows).children().eq(3).click();
@@ -1435,7 +1439,6 @@ function mnySplit() {
      } //end for
      
 
-    rowAnim(etpn, true);
 
     var ctes= 'style="color:white; background:black"';
     if(listMode === 2) ctes= 'style="color:black; background:white"';
@@ -1446,7 +1449,7 @@ function mnySplit() {
                    + (editMode?8:7) +'><pre style="height:'+ (+tHiFull[ri][1] +4)*18 + 'px; padding:5px 10px; '
                    + 'margin:0; text-align:left; font:bold 15px monospace">'+ scd +'</pre></td></tr>'); 
 
-    firefoxFix();
+   // firefoxFix();
    
     if(editMode) {
            editRow= etpn.rowIndex -1;
@@ -1454,6 +1457,8 @@ function mnySplit() {
     }
 
     $(etpn.nextSibling).focus();
+   
+    rowAnim(etpn, true);
  });
 
   
@@ -1700,7 +1705,7 @@ function mnySplit() {
         
         $.ajax(
         {
-          url:'/db.txt', type:'GET',
+          url:appPath +'/db.txt', type:'GET',
           error:function(e)
           {
          
@@ -1729,7 +1734,7 @@ function mnySplit() {
         
         $.ajax(
         {
-          url:'/sv', data:upData, type:'POST',
+          url:appPath +'/sv', data:upData, type:'POST',
           error:function(e)
           {
             nBar.innerText+= ' #server save failure: '+ e.statusText;
@@ -1857,7 +1862,7 @@ function mnySplit() {
      });
    }
   
-// *** action starts here *********************************
+// *** +++++++++++++++++++++ ********************************
   
   
   
