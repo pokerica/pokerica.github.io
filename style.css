@@ -2,11 +2,12 @@
   
 /*
   letter-spacing:-0.01em;
+  border:0; ☆☆☆ saves bandwidth, heh! 
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}  
   
-  Arial, Verdana, Helvetica, Geneva, sans-serif 
-  Courier, Monaco, monospace 
-  
-  border:0; ☆☆☆ saves bandwidth, heh! */
+*/
   
   border:none; 
 
@@ -27,8 +28,6 @@
   appearance: none;
 }
 
-:focus {outline:none;}
-::-moz-focus-inner {border:0;}
 
 .money {  
   background:darkgreen; color:white;

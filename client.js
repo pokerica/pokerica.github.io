@@ -1,13 +1,13 @@
-var versionCode= "v1.3r88c \n";
+var versionCode= "v2.0r02b \n";
+$.ajaxSetup({dataType:'text', contentType:'text/plain',
+             cache:false, timeout:4000, processData:false});
 
 $(document).ready(
-function() {  
-     
+function() {
+  
  // ☆☆☆ load from cache blob? 
- var audQuack= new Audio("https://raw.githubusercontent.com/pokerica/pokerica.github.io/data/qua.wav");
+ var audQuack= new Audio("https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488%2Fqua.wav?1529301744850");
 
-   
- $.ajaxSetup({ async:true, cache:true, timeout:7000 });       
   
  var dbUrl= "https://api.github.com/repos/pokerica/pokerica.github.io/"; 
  var adminInfo= document.getElementById("dbFrame");
@@ -280,9 +280,7 @@ function() {
  function(e) {
 
     if (!e || e.defaultPrevented) return;
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
+    e.preventDefault(); e.stopPropagation();
         
     if(this.style.transform === rotStrT +"90deg)") {
       
@@ -344,7 +342,7 @@ function() {
  // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
      //var rvg= Math.round(col[7]/col[2]);
      if(+col[0] > nextID) nextID= +col[0];         
-     $('#ptb').append('<tr><td class="admin">'+ col[0]
+     $('#ptb').append('<tr tabindex="1"><td class="admin">'+ col[0]
                       +'</td><td style="padding:' + vpd                      
                       +'; text-align:left">'+ col[1]
                       +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[3]*1000))
@@ -817,11 +815,10 @@ function mnySplit() {
   $(wf).css({border:'1px solid gold', width:'90%'});
     
   $(wf).off();  
-  $(wf).on('focus', function(e) {    
-    //e.stopImmediatePropagation(); 
-    e.stopPropagation(); 
+  $(wf).on('focus', function(e) {
+      
     if(!e || e.defaultPrevented) return;
-    e.preventDefault();
+    e.preventDefault();e.stopPropagation();
   
     tGm[rx1][3]= 0;
     tGm[rx2][3]= 0;
@@ -832,8 +829,9 @@ function mnySplit() {
   });
  
   $(wf).on("keydown", function(e) {
-    e.stopImmediatePropagation(); e.stopPropagation();
+
     if(!e || !e.which || e.defaultPrevented) return;
+    e.stopPropagation();
     
     if(e.which === 13 || e.which === 9) {      
       e.preventDefault();
@@ -842,9 +840,9 @@ function mnySplit() {
   });
    
   $(wf).on("keyup", function(e) {
-       e.stopImmediatePropagation(); e.stopPropagation();
+
        if(!e || !e.which || e.defaultPrevented) return;
-       e.preventDefault(); 
+       e.preventDefault(); e.stopPropagation();
 
        var w1Typ= e.target;  
        var w2Typ= $('#gtb>tr')[rx2].cells[4];
@@ -1118,9 +1116,8 @@ function mnySplit() {
  function(e) {
   
    if(!e || e.defaultPrevented) return;  
-   e.preventDefault(); 
-   e.stopPropagation();
-   e.stopImmediatePropagation();
+   e.preventDefault(); e.stopPropagation();
+  
    
    if(e.target.parentNode.rowIndex === 0) {
      // *** header click, sort game table?
@@ -1266,9 +1263,8 @@ function mnySplit() {
  function(e) {
    
    if(!e || e.defaultPrevented) return;        
-   e.preventDefault(); e.stopPropagation();     
-   e.stopImmediatePropagation();
-     
+   e.preventDefault(); e.stopPropagation();
+   
    if(!gameOver && nBar.innerText.length > 1) clrNotif();
    
    var trx= e.target.parentNode.rowIndex;
@@ -1363,10 +1359,8 @@ function mnySplit() {
  $('#historyTable').click(
  function(e) {
 
-     if(!e || e.defaultPrevented) return; 
-
-     e.stopImmediatePropagation();
-     e.preventDefault(); e.stopPropagation();
+//     if(!e || e.defaultPrevented) return; 
+//     e.preventDefault(); e.stopPropagation();
    
 
      if(!gameOver && nBar.innerText.length > 1) clrNotif();
@@ -1696,38 +1690,31 @@ function mnySplit() {
    
     switch(fileAction)
     {
-
       case 0:
         alert('err:fa0');
         break;
 
-      
       case 1: // *** SERVER LOAD
         tHi.length= 0;
         tHiFull.length= 0;
         
-        $.ajax
-        ({
-          url:dbUrl +'git/blobs/'+ filesha,
-          type:'GET', dataType: 'json',
-          beforeSend:function(xhr)
+        $.ajax(
+        {
+          url:'/db.txt', type:'GET',
+          error:function(e)
           {
-            xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":"+ dbPass));
-          },
-          error:function(a, b)
-          {
-            adminInfo.innerText+= 'Server: '+ b +' '+ a.statusText +'\n...load cache.\n';
+         
+            adminInfo.innerText+= 'Server: '+ e.statusText +'\n...load cache.\n';
             loadCache(true);
             $("#mtb4").click();
-//             return;
           },
-          success:function(a, b, c)
+          success:function(r, s, x)
           {
-            var resCon= (a.content).replace(/\n|\r/g, '');
-            importDB(atob(resCon).split('@'));
-           
+            var resCon= r.replace(/\n|\r/g, '');
+            importDB(resCon.split('@'));
+            
             adminInfo.innerText+= "[*] load & import \n";
-            adminInfo.innerText+= c.getAllResponseHeaders() +'\n';
+            adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
             nBar.innerText+= ' #server load success';
           }
         });
@@ -1738,26 +1725,25 @@ function mnySplit() {
        break;
 
 
-       case 3: // *** SERVER SAVE
-         var filedata = '{"message":"'+ "update" +'","content":"'+ btoa(upData) 
-                          +'", "branch":"'+ "data" +'", "sha":"' + filesha + '"}'; 
-         $.ajax({
-           url: dbUrl + "contents/db.txt", 
-           type: 'PUT',
-           data: filedata,            
-           beforeSend: function(xhr) {
-             xhr.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPass)); 
-           }, error: function(a, b) { 
-                nBar.innerText+= ' #server save failure: '+ b +' '+ a.statusText;
-           }    
-         }).done(function(response, st, x) {
-
-             adminInfo.innerText+= "[*] export & save \n";               
-             adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
-
-             filesha= response.content.sha;
-             nBar.innerText+= ' #server save success';
-         });       
+      case 3: // *** SERVER SAVE
+        
+        $.ajax(
+        {
+          url:'/sv', data:upData, type:'POST',
+          error:function(e)
+          {
+            nBar.innerText+= ' #server save failure: '+ e.statusText;
+          },
+          success:function(r, s, x)
+          {
+            alert('rsp: >'+ r +'<');
+                  
+            adminInfo.innerText+= "[*] export & save \n";               
+            adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
+            nBar.innerText+= ' #server save success';
+          }
+        });
+        
 //  *** NO BREAK so it falls thru and does the cache save too
 //       break;
 
@@ -1789,66 +1775,23 @@ function mnySplit() {
   
   function getSha()
   {
-    var xrL= 0, xrR= 0;
     var logYet= isLogged;
     if(dbPass.length < 5) dbPass= '';
     adminInfo.innerText= versionCode;
     
-    $.ajax
-    ({
-      url:dbUrl+'git/trees/data',
-      type:'GET', 
-      
-      dataType:'json',
-      beforeSend:function(a)
-      {
-//        a.withCredentials= true;
-        a.setRequestHeader("Authorization", "Basic " + btoa("pokerica" + ":" + dbPass));
-      },
-      
-      error:function(a, b)
-      {
-        alert('JSONP: '+ b);
-        alert('aaa: '+ JSON.stringify(a));
-        
-        loadCache(true); $("#mtb4").click();
-        nBar.innerText+= ' #sha UAV, load cache';
-      },
-      success:function(a, b, c)
-      { 
-        for(var i= 0; i < 9; i++)
-        {
-          if(a.tree[i].path === 'db.txt')
-          {
-            filesha= a.tree[i].sha;
-            break;
-          } 
-        }
-        
-        xrL= +c.getResponseHeader("X-RateLimit-Limit");
-        xrR= +c.getResponseHeader("X-RateLimit-Remaining");
-      
-        if(isLogged= (xrL > 99))
-          nBar.innerText+= ' #admin access:'+ xrR +'/'+ xrL;
-        else
-          nBar.innerText+= ' #guest access:'+ xrR +'/'+ xrL;
+    if(!logYet && isLogged)
+    {
+      nBar.innerText+= ' #login OK';
+//      adminInfo.innerText+= 'sha:'+ filesha +'\n';
 
-        if(!logYet && isLogged)
-        {
-          nBar.innerText+= ' #login OK';
-          adminInfo.innerText+= 'sha:'+ filesha +'\n';
-           
-          $('#log4But').css({background:'none', 'box-shadow':'none'});
-          $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
-        }
-        else       
-        if(fileAction === 1)
-          fileJunction();
-      }
-    });
+      $('#log4But').css({background:'none', 'box-shadow':'none'});
+      $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
+    }
+    else       
+    if(fileAction === 1)
+      fileJunction();
   }
   
-
   function loadDB()
   {
     adminInfo.innerText= '';
@@ -1876,6 +1819,10 @@ function mnySplit() {
     adminInfo.innerText= '';
     nBar.innerText= '' ; clrNotif();
 
+    
+    // ================
+    isLogged= true;
+    
     fileAction= 3;
     if(!navigator.onLine)
     {
@@ -2200,7 +2147,6 @@ function mnySplit() {
 
  $("#mnu1").click(
  function(e) {
-   
    e.stopPropagation();
    
    if(useThisDate > 0) 
@@ -2254,10 +2200,8 @@ function mnySplit() {
  $(".finf").on('focus', 
  function(e) { 
    
-   //this.select();    
    e.preventDefault(); 
    e.stopPropagation();
-   // *** firefox no like:  e.stopImmediatePropagation();
    
    this.select();
  });
@@ -2283,16 +2227,15 @@ function mnySplit() {
        else 
          $('#frmInput').submit();
      }
-   
-     e.stopPropagation();   
-     e.stopImmediatePropagation();
+     
+     e.stopPropagation();
  });
     
   
  $("#frmInput").submit(
  function(e) {
-   
-     e.stopImmediatePropagation();
+     
+     if(e.defaultPrevented) return;
      e.preventDefault(); e.stopPropagation();
    
      if(editRow >= 0)        
