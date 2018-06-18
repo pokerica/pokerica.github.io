@@ -1,4 +1,4 @@
-// *** a
+// *** ab
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('pmpAppCache')
