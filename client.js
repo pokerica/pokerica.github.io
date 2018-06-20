@@ -1,8 +1,8 @@
-var appPath= 'https://p203.glitch.me';
-var versionCode= "v2.0r03d \n";
-$.ajaxSetup({dataType:'text', contentType:'text/plain',
-             cache:false, timeout:4000, processData:false});
-
+var appPath= 'https://p204.glitch.me';
+var versionCode= "v2.0r04a \n";
+$.ajaxSetup({async:true, cache:false, timeout:4900});
+//dataType:'text', contentType:'text/plain', processData:false
+             
 $(document).ready(
 function() {
   
@@ -498,7 +498,7 @@ function() {
      var mon= +(''+col[0]).substring(4,6);
      var dtStr= (''+col[0]).substring(6,8)+" " + monthStr[mon-1] + "`"+(''+col[0]).substring(2,4);
      
-     $('#htb').append('<tr><td style="font:17px bold monospace; text-align:center;">'
+     $('#htb').append('<tr tabindex="1"><td style="font:17px bold monospace; text-align:center;">'
                      +dtStr
                      +'</td><td style="padding:' + vpd + '">'+ col[1]
                      +'</td><td>'+ fCash(+col[2]*1000) // bank
@@ -1662,12 +1662,6 @@ function mnySplit() {
    if(!isImport) cchInfo();
  }
   
-   
-    function jsonpCallback(data)
-    {
-      alert('opopo: '+ data.message);
-    }
-
 
   var fileAction= 0;
   function fileJunction()
@@ -1696,49 +1690,30 @@ function mnySplit() {
     
     adminInfo.innerText+= '@fileJunction:fileAction('+ fileAction +')\n';
    
-  
-  
     switch(fileAction)
     {
       case 0:
         alert('err:fa0');
         break;
 
-
-  
       case 1: // *** SERVER LOAD
         tHi.length= 0;
         tHiFull.length= 0;
         
         $.ajax(
         {
-          url:appPath +'/db.txt',
-         // dataType:'jsonp',
-          jsonp:'callback',
-          jsonpCallback:'jsonpCallback',
-          error:function(e)
-          {
-            alert('mmErr: '+ e.statusText);
-          },
-          success: function(r, s, x){
-            var resCon= r.replace(/\n|\r/g, '');
-            importDB(resCon.split('@'));
+          url:appPath +'/lod', type:'GET',
+
+          dataType:'text',
+
+          error:function(e, f, g)
+          { //+'\n...load cache.\n';
+            adminInfo.innerText+= 'Server e: '+ JSON.stringify(e) +'\n';
+            adminInfo.innerText+= 'Server f: '+ f +'\n';
+            adminInfo.innerText+= 'Server g: '+ JSON.stringify(g) +'\n';
             
-            adminInfo.innerText+= "[*] load & import \n";
-            adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
-            nBar.innerText+= ' #server load success';
-          }
-        });
-  
-/*        
-        $.ajax(
-        {
-          url:appPath +'/db.txt', type:'get',
-          error:function(e)
-          {
-            adminInfo.innerText+= 'Server: '+ e.statusText +'\n...load cache.\n';
-            loadCache(true);
-            $("#mtb4").click();
+//            loadCache(true);
+//            $("#mtb4").click();
           },
           success:function(r, s, x)
           {
@@ -1750,7 +1725,6 @@ function mnySplit() {
             nBar.innerText+= ' #server load success';
           }
         });
-*/        
         break;
 
 
@@ -1762,7 +1736,7 @@ function mnySplit() {
         
         $.ajax(
         {
-          url:appPath +'/sv', data:upData, type:'POST',
+          url:appPath +'/sav', data:upData, type:'POST',
           error:function(e)
           {
             nBar.innerText+= ' #server save failure: '+ e.statusText;
