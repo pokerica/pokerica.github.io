@@ -1,42 +1,55 @@
-var express= require('express');
+var ex= require('express'), ap= ex();
+var ac= {'Access-Control-Allow-Origin':
+         'https://pokerica.github.io'};
 
-var app= express();
-app.use(express.static('./'));
+ap.get('/lod', function(q, a) {
+  a.header(ac).sendFile(__dirname + '/db.txt'); });
 
-app.post("/sv", function(q, a)
+ap.post("/sav", function(q, a)
 { 
-  var b= '';
+  var t, b= '';
+  a.header(ac);
+  
   q.on('data', function(d)
   {
     b+= d;
     // Too much POST data ~3MB... kill the connection!
-    if (b.length > 3012987 )
+    if(b.length > 3210123)
     {
-      a.send('fail:'+ b.length);
+      b= b.length/1024;
+      t= 'erSZ-s.save: '+ b +'KB';
+      
+      a.send(t);
       q.connection.destroy();
-      return console.log('fail: '+ b.length);
+      return console.log(t);
     }
   });
   
   q.on('end', function()
   {
+    console.log('goIN-s.save: '+ b.length +'KB');
+    
     var fs= require('fs');
-    console.log('body.length; '+ b.length);
     fs.writeFile('db.txt', b, function(e)
     { // writeFileSync?
       if(e)
       {
-        a.send('fail:'+ e);
-        return console.log('fail: '+ e);
+        t= 'erWR-s.save:'+ e;
+        
+        a.send(t);
+        return console.log(t);
       }
       else
       {
-        console.log('saved, ok!');
-        a.send('pass:'+ b.length);
+        b= b.length/1024;
+        t= 'okWR-s.save: '+ b +'KB';
+        
+        a.send(t);
+        console.log(t);
       }
     });
   });
   
 });
 
-app.listen(3000);
+ap.use(ex.static('./')).listen(3000);
