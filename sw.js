@@ -1,5 +1,4 @@
-// *** a
-
+// *** abcdef
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('pmpAppCache')
@@ -7,7 +6,7 @@ self.addEventListener('install', e => {
       return cache.addAll([ 
         '/', '/index.html', '/client.js', '/style.css', '/db', '/cchGm', 
         '/jquery-3.3.1.min.js', '/NoSleep.min.js', '/manifest.json',
-        'https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488%2Fqua.wav?1529301744850'
+        'https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav'
       ]).then(() => self.skipWaiting());
     })
   );

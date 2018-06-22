@@ -52,21 +52,21 @@
         
         <button class="mnu" id="mnu3">
           <!-- p style="font:28px monospace; position:relative; top:1px; margin:0">Ξ</p -->
-          <svg width="40px" height="35px" viewbox="0 -4 24 30"  fill="#505050" stroke="white" stroke-width="1.2px">
+          <svg width="40px" height="29px" viewbox="0 0 24 30"  fill="white" stroke="grey" stroke-width="1.5px">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z" /></svg>         
         </button>
         
-        <button class="mnu" id="mnu2">
+        <button class="mnu" id="mnu2" style="padding:5px 0 0 0">
           <!-- p style="font:25px monospace; position:relative; margin:0; transform:rotate(90deg)">↹</p -->
     
-          <svg width="40px" height="35px" viewbox="0 -8 256 450" fill="#505050" stroke="white" stroke-width="15px">
+          <svg width="40px" height="28px" viewbox="0 0 256 450" fill="white" stroke="grey" stroke-width="30px">
             <path d="M256 272c0 4.25-1.75 8.25-4.75 11.25l-112 112c-3 3-7 4.75-11.25 4.75s-8.25-1.75-11.25-4.75l-112-112c-3-3-4.75-7-4.75-11.25 0-8.75 7.25-16 16-16h224c8.75 0 16 7.25 16 16zM256 176c0 8.75-7.25 16-16 16h-224c-8.75 0-16-7.25-16-16 0-4.25 1.75-8.25 4.75-11.25l112-112c3-3 7-4.75 11.25-4.75s8.25 1.75 11.25 4.75l112 112c3 3 4.75 7 4.75 11.25z" /></svg>   
           
         </button> 
         
         <button class="mnu" id="mnu1">
           <!-- p style="font:30px monospace; line-height:0; position:relative; padding-top:3px; margin:0">☆</p -->
-           <svg width="40px" height="35px" viewbox="0 -70 512 652" fill="#505050" stroke="white" stroke-width="20px">
+           <svg width="40px" height="29px" viewbox="0 0 512 652" fill="white" stroke="grey" stroke-width="40px">
             <path d="M512 198.525l-176.89-25.704-79.11-160.291-79.108 160.291-176.892 25.704 128 124.769-30.216 176.176 158.216-83.179 158.216 83.179-30.217-176.176 128.001-124.769z" /></svg>
         </button> 
           
@@ -84,9 +84,9 @@
          <input id="in0" class="finf" type="tel" disabled placeholder="ID" autocomplete="off" style="text-align:right; margin-left:-10px; width:2.5em" >
          <input id="in1" class="finf" type="text" placeholder="NAME" autocomplete="off" style="text-align:left; width:9em" >               
       
-         <input id="in2" class="finf" type="tel" placeholder="#nG" autocomplete="off" style="text-align:right; width:3em" >         
-         <input id="in3" class="finf" type="tel" placeholder="$BUY ÷1000" autocomplete="off" style="text-align:right; width:7em">         
-         <input id="in4" class="finf" type="tel" placeholder="$WON ÷100" autocopmplete="off" style="text-align:right; width:7em"> 
+         <input id="in2" class="finf" type="tel" placeholder="$BUY ÷1000" autocomplete="off" style="text-align:right; width:7em">         
+         <input id="in3" class="finf" type="tel" placeholder="$WON ÷100" autocopmplete="off" style="text-align:right; width:7em">
+         <input id="in4" class="finf" type="tel" placeholder="#nG" autocomplete="off" style="text-align:right; width:3em" >
          <!--input id="in5" class="finf" type="tel" placeholder="RNK% ×100" style="text-align:right; width:25%" autocomplete="off" --> 
                 
          <input class="ord" id="subBut" type="submit" value="New" style="vertical-align:bottom; margin:0 0 3px 7px; width:95px">      
@@ -127,15 +127,12 @@
         <button class="ord" id="rng2But">Create Random Game</button>
       </div>
       
-      <p id="lblBank" style="font: 34px monospace; text-align:left;
-                             padding:5px 30px;
-                             margin:15px -10px 5px -10px;
-                             border-bottom:1px solid black ">Bank: $</p>
+      <p id="lblBank" style="font: 34px monospace; text-align:left; padding:5px 20px;
+                             margin:15px -10px -40px -10px ">Bank: $</p>
       
-      <p id="lblDate" style="font:normal 15px monospace; 
-                              float:right; margin:0; z-level:-1;
-                              position:relative; top:-30px; right:5px">date</p>
       
+      <pre id="lblDate" style="font:normal 15px monospace; text-align:right;
+                               margin-bottom:30px; border-bottom:1px solid black; width:100%">date</pre>
 
       
       <!-- id  plid  $buy  $won  rnk  -->      
@@ -186,7 +183,7 @@
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
         <path d="M0 0h24v24H0z" fill="none"/></svg>
       
-      <div id="sumSg" style="border:0px solid red; padding:0; margin-bottom:30px">___selected games balance___</div>
+      <div id="sumSg" style="border:1px solid grey; padding:0; margin-bottom:30px">___selected games balance___</div>
       
       <div class="adminEdit" style="display:none; text-align:right; margin:10px 0">
         
@@ -237,7 +234,7 @@
         <input class="ord" id="wlk4But" type="button" value="Wake Lock" style="width:135px; margin-right:0" >
       </div>
       
-      <pre id="dbFrame" style="width:100%; height:590px; padding:5px;
+      <pre id="dbFrame" style="width:100%; height:500px; padding:5px;
                                border:1px solid grey; margin:0; overflow:scroll;
                                font:normal 17px monospace"> \r\n .. former frame element</pre>
 
@@ -246,7 +243,7 @@
       <div>
         <button class="ord2" id="med4But">Memory Data</button>
         <button class="ord2" id="sld4But">Server Load</button>
-        <button class="ord2" id="ssv4But"> *** Server Save</button>
+        <input class="ord2" id="ssv4But" type="button" value=">> Server Save" >
         <br>
         <button class="ord2" id="gms4But">Game State</button>
         <button class="ord2" id="aps4But">Apply State</button>
