@@ -1,16 +1,15 @@
-var appPath= 'https://p204.glitch.me';
-var versionCode= "v2.0r04a \n";
-$.ajaxSetup({async:true, cache:false, timeout:4900});
-//dataType:'text', contentType:'text/plain', processData:false
-             
 $(document).ready(
 function() {
+
+  var versionCode= "v2.0r04f \n";
+  var appPath= 'https://p204.glitch.me';
+  $.ajaxSetup({async:true, cache:false, timeout:4900,
+               dataType:'text', contentType:'text/plain', processData:false});
   
  // ☆☆☆ load from cache blob? 
- var audQuack= new Audio("https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488%2Fqua.wav?1529301744850");
-
+ var audQuack= new Audio("https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav");
   
- var dbUrl= "https://api.github.com/repos/pokerica/pokerica.github.io/"; 
+  
  var adminInfo= document.getElementById("dbFrame");
  var nBar= document.getElementById("notif");
   
@@ -110,9 +109,9 @@ function() {
   
    
    var stb= '';
-   stb+= ' NAME      $BUY    $WON      >$BAL<            #(gms)  %(buy)   %(won)  \n'
-       + '----------------------------------------------------------------------- \n';
-   
+   stb+= ' NAME      $BUY    $WON      >$BAL<          #(gms)  %(buy)   %(won) \n'
+       + '–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––\n';
+      
    tSelSum.forEach(function(row) {
      
      row[5]= row[4] - row[3]*10;
@@ -141,19 +140,20 @@ function() {
              + ('     '+ (buy +'k')).slice(-5)
              + ('         '+ fCash(won *100)).slice(-9)
              + ('           '+ fCash(bal *100)).slice(-11)
-             + '              '+ ('    '+ gms).slice(-4)
+             + '            '+ ('    '+ gms).slice(-4)
              + ('         '+ fCash(av6 *100)).slice(-9)
              + ('         '+ fCash(av7 *10)).slice(-9) +' \n';
      }
    }
  
   if(selHgm.length < 1)
-     document.getElementById('sumSg').innerText= "___selected games balance___";
-   else
-     document.getElementById('sumSg')
-       .innerHTML= ('<pre id="selSum" style="font:bold 15px monospace; '
-                  + 'padding:0 10px; margin-bottom:20px; text-align:left;">'+ stb +'</pre>');
+    stb= "___selected games balance___";
+     
+   document.getElementById('sumSg')
+     .innerHTML= ('<pre id="selSum" style="font:bold 15px monospace; '
+                  + 'padding:1px 12px; margin-bottom:20px; text-align:left;">'+ stb +'</pre>');
    
+//   pl= tPl.length;
    $('#selSum').css({height:(pl +2)*18 +'px'});
  }
   
@@ -161,17 +161,17 @@ function() {
  var keepMsgBar= false;
  function rowAnim(tbrow, turnOn) {
 
-           if(!turnOn) {
-             $(tbrow).removeClass('already').removeClass('clean');
-             if(listMode <= 1) $(tbrow).removeClass('selected');
-               else $(tbrow).addClass('clean').removeClass('selected');
-             
-             if(curTab === 3) reclcSelHrows();
-           }
-           else {             
-             $(tbrow).removeClass('clean').addClass('selected');
-             if(curTab === 3) reclcSelHrows();
-           }
+     if(!turnOn) {
+       $(tbrow).removeClass('already').removeClass('clean');
+       if(listMode <= 1) $(tbrow).removeClass('selected');
+         else $(tbrow).addClass('clean').removeClass('selected');
+
+       if(curTab === 3) reclcSelHrows();
+     }
+     else {             
+       $(tbrow).removeClass('clean').addClass('selected');
+       if(curTab === 3) reclcSelHrows();
+     }
  }
   
    
@@ -386,28 +386,22 @@ function() {
  var reInit= false;
  function freshTab2() {   
    
-   var vss= '';   
-   var vpd= '15px 5px 12px 5px';
-   if(vSpace > 10) {
-     vss= 'style="bottom:17px"'; 
-     vpd= '25px 5px 22px 5px'; 
-   } 
-   
+   var vpd= (vSpace > 10)? '25px 5px 22px 5px':'15px 5px 12px 5px';
    var cnt= 0;
    $('#gtb').empty();
    tGm.forEach(function(col) {
      var showStr= 'style="display:none"';
      if(reInit) { col[2]= '-'; col[3]= '-'; }
      if(editMode || col[0] === "T" || col[0] === "A") showStr= ''; //'style="display:table-row"';
-     $('#gtb').append('<tr tabindex="1" '+ showStr +'><td class="admin" style="text-align:center">'+ col[0] 
+     $('#gtb').append('<tr '+ showStr +'><td class="admin" style="text-align:center">'+ col[0] 
                       +'</td><td class="admin" style="padding-right:20px">'+ col[1]
                       +'</td><td tabindex="1" style="text-align:left; padding:' + vpd + '">'+ sortedPl[ +col[1] -1 ]
                       +'</td><td style="text-align:center">'+ col[2]
                       +'</td><td>'+ fCash(+col[3]) 
                       +'</td><td tabindex="1" style="text-align:right">'+ fCash(+col[4] *1000) 
-                      +'</td><td tabindex="1" style="position:relative; overflow:visible">'
+                      +'</td><td tabindex="1" style="padding:0; overflow:visible">'
                       +'<pre class="mnyInfo"' +'> </pre>'
-                      +'<pre class="money"' + vss +'>  $  </pre></td></tr>');  
+                      +'<pre class="money">  $  </pre></td></tr>');  
      
      
      if(!reInit && +col[2] > 0) {
@@ -415,18 +409,17 @@ function() {
          var mny= $('.money')[cnt];       
          $(mny).css({right:'430px', font:'bold 15px monospace',
                      background:'lightgrey', color:'black',
-                     bottom:'12px', width:'50px', height:'25px'}); 
+                     width:'50px', height:'25px'}); 
 
          mny.innerText= 'OUT'; 
 
-         if(vSpace > 10) 
-          $(mny).css({bottom:'21px'});
-
          if(+col[2] === 2) { 
-           $(mny).css({right:'390px'}); mny.innerText= '2nd'; } 
+           $(mny).css({right:'380px'});
+           mny.innerText= '2nd';
+         } 
          else
          if(+col[2] === 1) { 
-           $(mny).css({right:'390px'}); 
+           $(mny).css({right:'380px'}); 
            mny.innerText= '1st';        
          }
      }
@@ -1078,9 +1071,8 @@ function mnySplit() {
    mny.innerText= '  $  ';
    mny.parentNode.parentNode.cells[3].innerText= (tGm[rx][2]= '-');
    
-   $(mny).css({right:'5px',color:'white',background:'darkgreen'});
-   $(mny).css({font:'bold 24px monospace',height:'35px',width:''});
-   (vSpace > 10)? $(mny).css({bottom:'17px'}):$(mny).css({bottom:'7px'});
+   $(mny).css({right:'',width:'',height:'35px'
+               ,color:'white',background:'darkgreen',font:'bold 24px monospace'});
  }
     
   
@@ -1101,7 +1093,7 @@ function mnySplit() {
      rc.innerText= (tGm[rx][2]= curRank--);
      var rp= (tGm[rx][2] === 1 || tGm[rx][2] === 2) ? '380px' : '430px';
 
-     $(mny).css({right:rp, bottom:'12px', width:'50px', height:'25px', 
+     $(mny).css({right:rp, width:'50px', height:'25px', 
                  font:'bold 15px monospace', 'text-align':'center', 
                  background:'lightgrey', color:'black'});
 
@@ -1263,8 +1255,8 @@ function mnySplit() {
  $('#playerTable').click(   
  function(e) {
    
-//   if(!e || e.defaultPrevented) return;        
-//   e.preventDefault(); e.stopPropagation();
+   if(!e || e.defaultPrevented) return;        
+   e.preventDefault(); e.stopPropagation();
    
    if(!gameOver && nBar.innerText.length > 1) clrNotif();
    
@@ -1283,49 +1275,51 @@ function mnySplit() {
      reFresh();
    }
    else {
+     var rtg= e.target.parentNode;
+     if(trx === undefined)
+       rtg= e.target;
      
+     trx= rtg.rowIndex;     
      var pid= parseInt($('#ptb>tr')[trx-1].firstChild.innerText, 10)-1
    
      //alert("row: "+ e.target.parentNode.rowIndex +"  col: "+ e.target.cellIndex);     
-     if($(e.target.parentNode).hasClass('selected')) {
+     if($(rtg).hasClass('selected')) {
        
-       if(tGm[pid][0] === 'A' 
-          || tGm[pid][0] === 'B') tGm[pid][0]= 'B'; else tGm[pid][0]= 'F';
+       if(tGm[pid][0] === 'A' || tGm[pid][0] === 'B')
+         tGm[pid][0]= 'B';
+       else
+         tGm[pid][0]= 'F';
               
        if(editMode)
          resetEdit(true);
        else
-         rowAnim(e.target.parentNode, false);       
+         rowAnim(rtg, false);       
      }
      else {
-              
-     
-       if(editMode) resetEdit(false);          
-       rowAnim(e.target.parentNode, true);
-       
-       if(tGm[pid][0] === 'B')
-         $(e.target.parentNode).addClass('already'); 
-       
-       
-       if(editMode) {         
+
+       if(editMode) {
+         
+         resetEdit(false);
          document.getElementById("subBut").value= "Edit";
          
-         //$('.initDis').prop("disabled", false);
-         
-         editRow= e.target.parentNode.rowIndex -1;
+         editRow= trx -1;
          $('input#in0').val( tPl[editRow][0] );
          $('input#in1').val( tPl[editRow][1] );
-         $('input#in2').val( tPl[editRow][2] );
-         $('input#in3').val( tPl[editRow][3] );
-         $('input#in4').val( tPl[editRow][4] );
-         $('input#in5').val( tPl[editRow][7] );  
+         $('input#in2').val( tPl[editRow][3] );
+         $('input#in3').val( tPl[editRow][4] );
+         $('input#in4').val( tPl[editRow][2] );
          
-         $('input#in1').focus();       
-       }        
+//         $('input#in1').focus();       
+       }
+
+       rowAnim(rtg, true);
+       if(tGm[pid][0] === 'B')
+         $(rtg).addClass('already');
      }  
    }
  
  });
+ 
  
  
  
@@ -1350,7 +1344,7 @@ function mnySplit() {
    }
    
    rowAnim(etpn.previousSibling, false);
-   etpn.remove();
+   $(etpn).remove();
    
    firefoxFix();
  }
@@ -1359,20 +1353,13 @@ function mnySplit() {
  //hit.onclick= 
  $('#historyTable').click(
  function(e) {
-
-//     if(!e || e.defaultPrevented) return; 
-//     e.preventDefault(); e.stopPropagation();
    
+     if(!e || e.defaultPrevented) return; 
+     e.preventDefault(); e.stopPropagation();
 
      if(!gameOver && nBar.innerText.length > 1) clrNotif();
    
-   
      var etpn= e.target.parentNode;
-     if($(etpn).hasClass('already') && !($(etpn).hasClass('selected'))) { return; }
-     if($(etpn).hasClass('extra')) { subrowDelete( etpn ); return; }
-     if($(etpn.parentNode).hasClass('extra')) { subrowDelete(etpn.parentNode); return; }
-     if($(etpn).hasClass('selected')) { subrowDelete(etpn.nextSibling); return; }
-
      if(etpn.rowIndex === 0) {
        
        if(sortColH === e.target.cellIndex) 
@@ -1390,12 +1377,20 @@ function mnySplit() {
      }
    
    
+     if($(etpn).hasClass('already') && !($(etpn).hasClass('selected'))) { return; }
+     if($(etpn).hasClass('extra')) { subrowDelete( etpn ); return; }
+     if($(etpn.parentNode).hasClass('extra')) { subrowDelete(etpn.parentNode); return; }
+     if($(etpn).hasClass('selected')) { subrowDelete(etpn.nextSibling); return; }
+
+   
+     if(etpn.rowIndex === undefined)
+       etpn= e.target;
+   
+   
 // ☆☆☆ subRow-content - CREATE ***********************   
      var cx, ri= +$(etpn).children()[8].innerText;
      var selRows= $('#htb')[0].getElementsByClassName('selected');
    
-   nBar.innerText= ' #ri= '+ ri +' >>selRow.len= '+ selRows.length;
-
      if(editMode) { 
        $(selRows).children().eq(3).click();
        $('#dtEdit').val( tHiFull[ri][0] );
@@ -1410,8 +1405,8 @@ function mnySplit() {
    
      var scd= '';
      scd+= ' RANK  NAME     $BUY    $WON     \n'
-        +  '-----------------------------              '+ dtStr +' \n';
-    
+         + '–––––––––––––––––––––––––––––              '+ dtStr +'\n';
+   
      var miniGm= tHiFull[ri][7].split(':');
      for(var i= 5; i < miniGm.length; i+= 5) {
        
@@ -1446,10 +1441,11 @@ function mnySplit() {
        else if(editMode && vSpace > 10) ctes= '';
 
     $(etpn).after('<tr tabindex="1" class="extra"'+ ctes +'><td colspan='
-                   + (editMode?8:7) +'><pre style="height:'+ (+tHiFull[ri][1] +4)*18 + 'px; padding:5px 10px; '
+                   + (editMode?8:7) +'><pre style="height:'+ ((+tHiFull[ri][1] +4)*18) + 'px; padding:5px 10px; '
                    + 'margin:0; text-align:left; font:bold 15px monospace">'+ scd +'</pre></td></tr>'); 
-
-   // firefoxFix();
+   
+    rowAnim(etpn, true);
+    firefoxFix();
    
     if(editMode) {
            editRow= etpn.rowIndex -1;
@@ -1457,8 +1453,6 @@ function mnySplit() {
     }
 
     $(etpn.nextSibling).focus();
-   
-    rowAnim(etpn, true);
  });
 
   
@@ -1688,7 +1682,7 @@ function mnySplit() {
       upData+= upHistory;
     }
     
-    adminInfo.innerText+= '@fileJunction:fileAction('+ fileAction +')\n';
+    adminInfo.innerText+= '@fileJunction: #'+ fileAction;
    
     switch(fileAction)
     {
@@ -1697,32 +1691,31 @@ function mnySplit() {
         break;
 
       case 1: // *** SERVER LOAD
+        adminInfo.innerText+= ' server load & import\n';
+        
         tHi.length= 0;
         tHiFull.length= 0;
         
         $.ajax(
         {
           url:appPath +'/lod', type:'GET',
-
-          dataType:'text',
-
-          error:function(e, f, g)
-          { //+'\n...load cache.\n';
-            adminInfo.innerText+= 'Server e: '+ JSON.stringify(e) +'\n';
-            adminInfo.innerText+= 'Server f: '+ f +'\n';
-            adminInfo.innerText+= 'Server g: '+ JSON.stringify(g) +'\n';
+          error:function(e, f)
+          {
+            adminInfo.innerText+= '*** FAIL: '+ f +'\n...load cache.\n';
+            nBar.innerText+= ' #serverLoadFAIL';
             
-//            loadCache(true);
-//            $("#mtb4").click();
+            loadCache(true);
+            $("#mtb4").click();
           },
           success:function(r, s, x)
           {
             var resCon= r.replace(/\n|\r/g, '');
             importDB(resCon.split('@'));
             
-            adminInfo.innerText+= "[*] load & import \n";
+            nBar.innerText+= ' #serverLoadDONE';
+            
+            adminInfo.innerText+= '*** DONE:\n';
             adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
-            nBar.innerText+= ' #server load success';
           }
         });
         break;
@@ -1780,24 +1773,38 @@ function mnySplit() {
   
   
   
-  function getSha()
+  function logMe()
   {
-    var logYet= isLogged;
-    if(dbPass.length < 5) dbPass= '';
-    adminInfo.innerText= versionCode;
+    nBar.innerText= '';
     
-    if(!logYet && isLogged)
+    $.ajax(
     {
-      nBar.innerText+= ' #login OK';
-//      adminInfo.innerText+= 'sha:'+ filesha +'\n';
+      url:appPath +'/lgn', type:'GET',
+      headers:{'secret':dbPass},
+      error:function(e)
+      {
+        nBar.innerText+= ' #server logme failure: '+ e.statusText;
+      },
+      success:function(r, s, x)
+      {
+//        alert('logmemsg: >'+ r +'<');
+        if(r !== 'yoKk')
+        {
+          nBar.innerText+= ' #server says: wrong password';
+          return;
+        }
 
-      $('#log4But').css({background:'none', 'box-shadow':'none'});
-      $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
-    }
-    else       
-    if(fileAction === 1)
-      fileJunction();
+        adminInfo.innerText+= "[*] logme \n";               
+        adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
+        nBar.innerText+= ' #server log success?';
+        
+    isLogged= true;
+        $('#log4But').css({background:'none', 'box-shadow':'none'});
+        $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
+      }
+    });
   }
+  
   
   function loadDB()
   {
@@ -1812,10 +1819,7 @@ function mnySplit() {
     }
    
     fileAction= 1;
-    if(filesha === '#')
-      getSha();
-    else
-      fileJunction();
+    fileJunction();
   }
   
   
@@ -1828,7 +1832,7 @@ function mnySplit() {
 
     
     // ================
-    isLogged= true;
+    //isLogged= true;
     
     fileAction= 3;
     if(!navigator.onLine)
@@ -1849,7 +1853,10 @@ function mnySplit() {
   
     
 // *** action starts here *********************************
- loadDB();
+  adminInfo.innerText= versionCode;
+  loadDB();
+  
+  
   
    
    if(navigator.storage)
@@ -2248,12 +2255,13 @@ function mnySplit() {
      if(editRow >= 0)        
        tPl.splice(editRow, 1); //delete, then add normaly = edit
         
+   
      var col0 = $('input#in0').val();
      var col1 = $('input#in1').val();
-     var col2 = +$('input#in2').val();
-     var col3 = +$('input#in3').val();
-     var col4 = +$('input#in4').val();
-     var col5 = +$('input#in5').val();
+   
+     var col3 = +$('input#in2').val();
+     var col4 = +$('input#in3').val();
+     var col2 = +$('input#in4').val();
    
 // ***  id  name  gms  $buy  $won  rnk%    
 // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
@@ -2464,7 +2472,8 @@ function delHrow() {
  $("#log4But").click( //>Log In<
  function() {  
    if(isLogged) return;   
-   dbPass= $('input#pasIn').val(); getSha();   
+   dbPass= $('input#pasIn').val();
+   logMe();   
  }); 
   
 // *** class="ord2" : DARK BOTTOM BUTTON
