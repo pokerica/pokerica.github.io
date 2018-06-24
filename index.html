@@ -23,6 +23,9 @@
   
     <title>Pokerica</title>
   
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet" >
+  
+  
     <link  rel="stylesheet" type="text/css" href="style.css" > 
   
     <script> 
@@ -37,9 +40,12 @@
   <body oncontextmenu="return false"
         style="background-color:#777777; width:700px; height:100%; margin:auto">
     
+    <audio id="audQuack" type="audio/wav" 
+           src="http://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav"></audio>
+     
   <div id="appFrame" style="background:white; width:100%">
     
-      <pre id="notif" style="font:15px monospace; height:auto; padding:7px 10px 5px 10px;
+      <pre id="notif" style="font-sizee:15px; height:auto; padding:7px 10px 5px 10px;
                            margin:0 0 -5px 0; border:none; white-space:nowrap; overflow:auto;
                            color:lightgrey; background:black" >notification bar #</pre>
     
@@ -51,25 +57,20 @@
         
         
         <button class="mnu" id="mnu3">
-          <!-- p style="font:28px monospace; position:relative; top:1px; margin:0">Ξ</p -->
           <svg width="40px" height="29px" viewbox="0 0 24 30"  fill="white" stroke="grey" stroke-width="1.5px">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z" /></svg>         
         </button>
         
         <button class="mnu" id="mnu2" style="padding:5px 0 0 0">
-          <!-- p style="font:25px monospace; position:relative; margin:0; transform:rotate(90deg)">↹</p -->
-    
           <svg width="40px" height="28px" viewbox="0 0 256 450" fill="white" stroke="grey" stroke-width="30px">
             <path d="M256 272c0 4.25-1.75 8.25-4.75 11.25l-112 112c-3 3-7 4.75-11.25 4.75s-8.25-1.75-11.25-4.75l-112-112c-3-3-4.75-7-4.75-11.25 0-8.75 7.25-16 16-16h224c8.75 0 16 7.25 16 16zM256 176c0 8.75-7.25 16-16 16h-224c-8.75 0-16-7.25-16-16 0-4.25 1.75-8.25 4.75-11.25l112-112c3-3 7-4.75 11.25-4.75s8.25 1.75 11.25 4.75l112 112c3 3 4.75 7 4.75 11.25z" /></svg>   
           
         </button> 
         
         <button class="mnu" id="mnu1">
-          <!-- p style="font:30px monospace; line-height:0; position:relative; padding-top:3px; margin:0">☆</p -->
            <svg width="40px" height="29px" viewbox="0 0 512 652" fill="white" stroke="grey" stroke-width="40px">
             <path d="M512 198.525l-176.89-25.704-79.11-160.291-79.108 160.291-176.892 25.704 128 124.769-30.216 176.176 158.216-83.179 158.216 83.179-30.217-176.176 128.001-124.769z" /></svg>
-        </button> 
-          
+        </button>
       </div>
     
     
@@ -127,11 +128,11 @@
         <button class="ord" id="rng2But">Create Random Game</button>
       </div>
       
-      <p id="lblBank" style="font: 34px monospace; text-align:left; padding:5px 20px;
+      <p id="lblBank" style="font-size:34px; text-align:left; padding:5px 20px;
                              margin:15px -10px -40px -10px ">Bank: $</p>
       
       
-      <pre id="lblDate" style="font:normal 15px monospace; text-align:right;
+      <pre id="lblDate" style="font-size:15p; text-align:right;
                                margin-bottom:30px; border-bottom:1px solid black; width:100%">date</pre>
 
       
@@ -149,7 +150,7 @@
       </table>
       <br>
       <p id="blindTimer" 
-         style="font:bold 58px monospace; width:450px; height:90px;
+         style="font-size:58px; width:450px; height:90px;
                 text-align:right; margin:0; padding:10px 30px; 
                 display:inline-block; border:1px solid grey; border-radius:8px"
          >00:00<b id="timeTxt">Click to START<br>Game time 00:00</b></p>
@@ -236,7 +237,7 @@
       
       <pre id="dbFrame" style="width:100%; height:500px; padding:5px;
                                border:1px solid grey; margin:0; overflow:scroll;
-                               font:normal 17px monospace"> \r\n .. former frame element</pre>
+                               font-size:17px"> \r\n .. former frame element</pre>
 
       
       <!-- div class="adminEdit" style="display:none" -->        
@@ -259,7 +260,7 @@
     </div>
     
     
-    <p style="text-align:right; font:7px monospace; margin:0; color:grey">zele-chelik! </p> 
+    <p style="text-align:right; font-size:7px; margin:0; color:grey">zele-chelik! </p> 
   </div>  
     
     <script>

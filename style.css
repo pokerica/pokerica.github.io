@@ -1,16 +1,28 @@
+
+/*
+
+  font-size:18px;
+  font-family:Inconsolata, monospace;
+
+  font: normal 18px sans-serif;
+
+  letter-spacing:-0.5px;
+  font-variant-numeric: tabular-nums;
+  
+  border:0; ☆☆☆ saves bandwidth, heh! 
+  
+*/
+
 * {
   
-/*
-  letter-spacing:-0.01em;
-  border:0; ☆☆☆ saves bandwidth, heh! 
-
-*/
   
   border:none;
   line-height:15px;
-  letter-spacing:0.02ch;
   
-  font: normal 18px sans-serif;
+  letter-spacing:-0.2px;
+  
+  font-family: 'IBM Plex Mono', monospace;
+  
   border-collapse:collapse; 
   
   cursor:default;  
@@ -35,7 +47,7 @@
   
   background:darkgreen; color:white;
   height:35px; width:80px; padding:4px 0 0 0;
-  font:bold 24px monospace; text-align:center;
+  font-size:24px; text-align:center;
 
   position:relative;
   margin:0; float:right;
@@ -49,7 +61,7 @@
   
   background:none; color:grey;
   height:25px; width:70px; padding:0; 
-  font:bold 15px monospace; text-align:right;
+  font-size:15px; text-align:right;
   
   margin:0; float:left;
 /*  top:5px; left:15px;*/
@@ -142,7 +154,7 @@ select {
 
 .mnu { 
   float:right;  
-  width:59px; height:40px;
+  width:50px; height:40px;
   
   border-radius:3px;
   border:2px solid grey;
@@ -167,11 +179,12 @@ select {
   
   height: 45px;
   font-size: 20px;
-  margin-right: -7px;
   
   vertical-align: bottom;
   border-bottom: 3px solid white;
-  margin-bottom: -4px;  
+  margin-bottom: -4px;
+  
+  margin-right: -12px;
 }
 
 .mtb.dea { 
@@ -188,7 +201,7 @@ select {
   
   height: 38px;
   font-size: 17px;
-  margin-right: -7px;
+  margin-right: -12px;
 }
 
 .ptab.pde {
@@ -248,4 +261,3 @@ th {
 #ptb tr:nth-child(odd):not(.clean):not(.selected) { 
   background:#f0f0f0;
 }
-

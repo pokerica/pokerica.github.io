@@ -1,13 +1,15 @@
 $(document).ready(
 function() {
 
-  var versionCode= "v2.0r04f \n";
+  var versionCode= "v2.0r04g \n";
   var appPath= 'https://p204.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:4900,
                dataType:'text', contentType:'text/plain', processData:false});
   
  // ☆☆☆ load from cache blob? 
- var audQuack= new Audio("https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav");
+ //var audQuack= new Audio('https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav');
+  
+ var audQuack= document.getElementById("audQuack");
   
   
  var adminInfo= document.getElementById("dbFrame");
@@ -54,8 +56,13 @@ function() {
    // *** clear commas: .replace(/,/g, '')
    
    if(isNaN(num)) return '-';
-   else
-     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");   
+   
+   var ret= (num < 0);
+   num= Math.abs(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+ 
+   if(ret) num= '−' +num;
+   
+   return num;
  }
    
  function numCTD() {
@@ -109,8 +116,8 @@ function() {
   
    
    var stb= '';
-   stb+= ' NAME      $BUY    $WON      >$BAL<          #(gms)  %(buy)   %(won) \n'
-       + '–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––\n';
+   stb+= ' NAME      $BUY    $WON      >$BAL<           #(gms)  %(buy)   %(won) \n'
+       + '––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––\n';
       
    tSelSum.forEach(function(row) {
      
@@ -140,7 +147,7 @@ function() {
              + ('     '+ (buy +'k')).slice(-5)
              + ('         '+ fCash(won *100)).slice(-9)
              + ('           '+ fCash(bal *100)).slice(-11)
-             + '            '+ ('    '+ gms).slice(-4)
+             + '             '+ ('    '+ gms).slice(-4)
              + ('         '+ fCash(av6 *100)).slice(-9)
              + ('         '+ fCash(av7 *10)).slice(-9) +' \n';
      }
@@ -150,7 +157,7 @@ function() {
     stb= "___selected games balance___";
      
    document.getElementById('sumSg')
-     .innerHTML= ('<pre id="selSum" style="font:bold 15px monospace; '
+     .innerHTML= ('<pre id="selSum" style="font-size:15px; '
                   + 'padding:1px 12px; margin-bottom:20px; text-align:left;">'+ stb +'</pre>');
    
 //   pl= tPl.length;
@@ -407,7 +414,7 @@ function() {
      if(!reInit && +col[2] > 0) {
 
          var mny= $('.money')[cnt];       
-         $(mny).css({right:'430px', font:'bold 15px monospace',
+         $(mny).css({right:'430px', 'font-size':'15px',
                      background:'lightgrey', color:'black',
                      width:'50px', height:'25px'}); 
 
@@ -485,13 +492,13 @@ function() {
    var cnt= 0;
    $('#htb').empty();
    tHiFull.forEach(function(col) {
-     var showAdmin= ''; //'style="font:7px monospace; white-space:pre-wrap"';  
+     var showAdmin= '';
      if(!editMode) showAdmin= 'style="display:none"';
     
      var mon= +(''+col[0]).substring(4,6);
      var dtStr= (''+col[0]).substring(6,8)+" " + monthStr[mon-1] + "`"+(''+col[0]).substring(2,4);
      
-     $('#htb').append('<tr tabindex="1"><td style="font:17px bold monospace; text-align:center;">'
+     $('#htb').append('<tr tabindex="1"><td style="font-size:17px; text-align:center;">'
                      +dtStr
                      +'</td><td style="padding:' + vpd + '">'+ col[1]
                      +'</td><td>'+ fCash(+col[2]*1000) // bank
@@ -1072,7 +1079,7 @@ function mnySplit() {
    mny.parentNode.parentNode.cells[3].innerText= (tGm[rx][2]= '-');
    
    $(mny).css({right:'',width:'',height:'35px'
-               ,color:'white',background:'darkgreen',font:'bold 24px monospace'});
+               ,color:'white',background:'darkgreen','font-size':'24px'});
  }
     
   
@@ -1094,7 +1101,7 @@ function mnySplit() {
      var rp= (tGm[rx][2] === 1 || tGm[rx][2] === 2) ? '380px' : '430px';
 
      $(mny).css({right:rp, width:'50px', height:'25px', 
-                 font:'bold 15px monospace', 'text-align':'center', 
+                 'font-size':'15px', 'text-align':'center', 
                  background:'lightgrey', color:'black'});
 
      $(mny.previousSibling).innerText= '';
@@ -1146,7 +1153,7 @@ function mnySplit() {
      for(var i= 0; i < lmy.length; i++) {
        if(i !== rx) {
          //lmy[i].previousSibling.innerText= '';
-         $(lmy[i].previousSibling).css({font:'15px monospace', color:'grey'}); }
+         $(lmy[i].previousSibling).css({'font-size':'15px', color:'grey'}); }
      }
      
      var mif= mny.previousSibling;
@@ -1160,9 +1167,9 @@ function mnySplit() {
      
 
      if(listMode !== 3)
-       $(mif).css({font:'bold 19px monospace', color:'black'});
+       $(mif).css({'font-size':'19px', color:'black'});
      else
-       $(mif).css({font:'bold 19px monospace', color:'white'});
+       $(mif).css({'font-size':'19px', color:'white'});
 
      mny.parentNode.previousSibling
        .innerText= fCash(1000* (tGm[rx][4]= +tGm[rx][4] +1));
@@ -1215,16 +1222,16 @@ function mnySplit() {
        for(var i= 0; i < lmy.length; i++) {
          if(i !== rx) {
            //lmy[i].previousSibling.innerText= '';
-           $(lmy[i].previousSibling).css({font:'15px monospace', color:'grey'}); }
+           $(lmy[i].previousSibling).css({'font-size':'15px', color:'grey'}); }
        }
 
 
        mny.previousSibling.innerText=  '-'+ (tGm[rx][4] -1) +'k';
 
        if(listMode !== 3)
-         $(mny.previousSibling).css({font:'bold 18px monospace', color:'black'});
+         $(mny.previousSibling).css({'font-size':'18px', color:'black'});
        else
-         $(mny.previousSibling).css({font:'bold 18px monospace', color:'white'});
+         $(mny.previousSibling).css({'font-size':'18px', color:'white'});
 
 
        bankTotal-= tGm[rx][4] -1;
@@ -1442,7 +1449,7 @@ function mnySplit() {
 
     $(etpn).after('<tr tabindex="1" class="extra"'+ ctes +'><td colspan='
                    + (editMode?8:7) +'><pre style="height:'+ ((+tHiFull[ri][1] +4)*18) + 'px; padding:5px 10px; '
-                   + 'margin:0; text-align:left; font:bold 15px monospace">'+ scd +'</pre></td></tr>'); 
+                   + 'margin:0; text-align:left; font-size:15px">'+ scd +'</pre></td></tr>'); 
    
     rowAnim(etpn, true);
     firefoxFix();
