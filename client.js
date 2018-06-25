@@ -1,13 +1,15 @@
 $(document).ready(
 function() {
 
-  var versionCode= "v2.0r04g \n";
-  var appPath= 'https://p204.glitch.me';
-  $.ajaxSetup({async:true, cache:false, timeout:4900,
+  var versionCode= "v2.0r07b \n";
+  var appPath= 'https://pok.glitch.me';
+  $.ajaxSetup({async:true, cache:false, timeout:5000,
                dataType:'text', contentType:'text/plain', processData:false});
   
  // ☆☆☆ load from cache blob? 
  //var audQuack= new Audio('https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav');
+   //'http://p205.glitch.me/icons/quack.wav');
+                         //'https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav');
   
  var audQuack= document.getElementById("audQuack");
   
@@ -64,7 +66,7 @@ function() {
    
    return num;
  }
-   
+  
  function numCTD() {
    
    var dt= new Date(); 
@@ -116,7 +118,7 @@ function() {
   
    
    var stb= '';
-   stb+= ' NAME      $BUY    $WON      >$BAL<           #(gms)  %(buy)   %(won) \n'
+   stb+= '  NAME     $BUY    $WON      >$BAL<           #(gms)  %(buy)   %(won) \n'
        + '––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––\n';
       
    tSelSum.forEach(function(row) {
@@ -153,15 +155,16 @@ function() {
      }
    }
  
-  if(selHgm.length < 1)
-    stb= "___selected games balance___";
+ 
+   if(selHgm.length < 1)
+     stb= "  [selected games balance]";
      
    document.getElementById('sumSg')
      .innerHTML= ('<pre id="selSum" style="font-size:15px; '
-                  + 'padding:1px 12px; margin-bottom:20px; text-align:left;">'+ stb +'</pre>');
+                  + 'padding:1px 12px">'+ stb +'</pre>');
    
-//   pl= tPl.length;
-   $('#selSum').css({height:(pl +2)*18 +'px'});
+   pl= 7+ (pl +1)*15
+   $('#selSum').css({height:pl+'px'});
  }
   
   
@@ -498,8 +501,7 @@ function() {
      var mon= +(''+col[0]).substring(4,6);
      var dtStr= (''+col[0]).substring(6,8)+" " + monthStr[mon-1] + "`"+(''+col[0]).substring(2,4);
      
-     $('#htb').append('<tr tabindex="1"><td style="font-size:17px; text-align:center;">'
-                     +dtStr
+     $('#htb').append('<tr tabindex="1"><td style="font-size:17px; text-align:center">'+ dtStr
                      +'</td><td style="padding:' + vpd + '">'+ col[1]
                      +'</td><td>'+ fCash(+col[2]*1000) // bank
                      +'</td><td>'+ fCash(+col[3]*100) // $:1
@@ -810,7 +812,9 @@ function mnySplit() {
   var wfT= $('#gtb>tr')[rx1].cells[4];
   
   wfT.innerText= "";
-  wfT.innerHTML= '<input type="tel" autocomplete="off" style="text-align:right; padding:5px 10px">';       
+  wfT.innerHTML= '<input type="tel" autocomplete="off" '
+    +'style="text-align:right; padding:2px 9px; margin:-5px">';       
+  
   var wf= wfT.firstChild;
   
   $(wf).css({border:'1px solid gold', width:'90%'});
@@ -1135,7 +1139,7 @@ function mnySplit() {
      saveState(false); ssPend= false;
      for(var i= 0; i < lmy.length; i++) {
          $(lmy[i].previousSibling).css({'font-size':'15px'}); } 
-   }, 4000);
+   }, 3000);
   
    
    if(e.target.className === "money" || e.target.cellIndex > 5) {
@@ -1412,7 +1416,7 @@ function mnySplit() {
    
      var scd= '';
      scd+= ' RANK  NAME     $BUY    $WON     \n'
-         + '–––––––––––––––––––––––––––––              '+ dtStr +'\n';
+         + '–––––––––––––––––––––––––––––                  '+ dtStr +'\n';
    
      var miniGm= tHiFull[ri][7].split(':');
      for(var i= 5; i < miniGm.length; i+= 5) {
@@ -1440,16 +1444,14 @@ function mnySplit() {
 
      } //end for
      
-
-
     var ctes= 'style="color:white; background:black"';
     if(listMode === 2) ctes= 'style="color:black; background:white"';
      else if(listMode === 3) ctes= 'style="color:black; background:#f0f0f0"';
        else if(editMode && vSpace > 10) ctes= '';
 
-    $(etpn).after('<tr tabindex="1" class="extra"'+ ctes +'><td colspan='
-                   + (editMode?8:7) +'><pre style="height:'+ ((+tHiFull[ri][1] +4)*18) + 'px; padding:5px 10px; '
-                   + 'margin:0; text-align:left; font-size:15px">'+ scd +'</pre></td></tr>'); 
+    $(etpn).after('<tr class="extra"'+ ctes +'><td colspan='
+                   + (editMode?8:7) +'><pre style="height:'+ ((+tHiFull[ri][1] +4)*15) +'px; ' 
+                   + 'padding:9px 10px; margin:0; text-align:left; font-size:14px">'+ scd +'</pre></td></tr>'); 
    
     rowAnim(etpn, true);
     firefoxFix();
@@ -1459,7 +1461,7 @@ function mnySplit() {
            $('.initDis').prop("disabled", false);
     }
 
-    $(etpn.nextSibling).focus();
+    //$(etpn.nextSibling).focus();
  });
 
   
@@ -1709,7 +1711,7 @@ function mnySplit() {
           error:function(e, f)
           {
             adminInfo.innerText+= '*** FAIL: '+ f +'\n...load cache.\n';
-            nBar.innerText+= ' #serverLoadFAIL';
+            nBar.innerText+= ' #server load fail: '+ f;
             
             loadCache(true);
             $("#mtb4").click();
@@ -1719,7 +1721,7 @@ function mnySplit() {
             var resCon= r.replace(/\n|\r/g, '');
             importDB(resCon.split('@'));
             
-            nBar.innerText+= ' #serverLoadDONE';
+            nBar.innerText+= ' #server load done';
             
             adminInfo.innerText+= '*** DONE:\n';
             adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
@@ -1728,61 +1730,63 @@ function mnySplit() {
         break;
 
 
-       case 2: // *** CACHE LOAD
-       break;
+      case 2: // *** CACHE LOAD
+        break;
 
-
+    
       case 3: // *** SERVER SAVE
         
         $.ajax(
         {
           url:appPath +'/sav', data:upData, type:'POST',
-          error:function(e)
+          headers:{'secret':dbPass},
+          error:function(e, f)
           {
-            nBar.innerText+= ' #server save failure: '+ e.statusText;
+            nBar.innerText+= ' #server save fail: '+ f;
           },
           success:function(r, s, x)
-          {
-            alert('rsp: >'+ r +'<');
-                  
+          { 
+//            alert('ee: >'+r.substring(0,4)+'<');
+
+            if(r.substring(0,4) !== 'size')
+            {
+              nBar.innerText+= ' #server says '+ r;
+              return;
+            }
+            
             adminInfo.innerText+= "[*] export & save \n";               
             adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
-            nBar.innerText+= ' #server save success';
+            nBar.innerText+= ' #server save done '+ r.substring(5);
           }
         });
         
 //  *** NO BREAK so it falls thru and does the cache save too
-//       break;
-
-       
-       case 4: // *** CACHE SAVE                        
-         window.caches.open('pmpAppCache').then(          
-         function(cch) {
-
-//cat           cch.delete('db', {ignoreSearch:true}).then( function(res) {
-
-             cch.put('db', new Response(upData, {"status":200}));
-             
-             nBar.innerText+= ' #cache save success';
-             adminInfo.innerText+= "Cache save success, data: \n"+ upData +'\n';
-           
-//cat           });     
-           
-         });
+//        break;
+     
+      case 4: // *** CACHE SAVE
+        
+        window.caches.open('pmpAppCache').then(
+        function(cch)
+        {    
+          cch.put('db', new Response(upData, {"status":200}));
+          
+          if(fileAction === 4)
+            nBar.innerText= ' #must be logged to update server database';
+          
+          nBar.innerText+= ' #cache save done';
+          adminInfo.innerText+= "Cache save done, data: \n"+ upData +'\n';
+        });
        break;
-   
     }
-   
-  
-    fileAction= 0;
+    
+    //fileAction= 0;
   }
-  
-  
   
   
   function logMe()
   {
-    nBar.innerText= '';
+    adminInfo.innerText= '';
+    nBar.innerText= ''; clrNotif();;
     
     $.ajax(
     {
@@ -1790,22 +1794,22 @@ function mnySplit() {
       headers:{'secret':dbPass},
       error:function(e)
       {
-        nBar.innerText+= ' #server logme failure: '+ e.statusText;
+        nBar.innerText+= ' #server logme fail: '+ e.statusText;
       },
       success:function(r, s, x)
       {
 //        alert('logmemsg: >'+ r +'<');
-        if(r !== 'yoKk')
+        if(r !== 'pOkk')
         {
-          nBar.innerText+= ' #server says: wrong password';
+          nBar.innerText+= ' #server says '+ r;
           return;
         }
 
         adminInfo.innerText+= "[*] logme \n";               
         adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
-        nBar.innerText+= ' #server log success?';
+        nBar.innerText+= ' #server logme done';
         
-    isLogged= true;
+        isLogged= true;
         $('#log4But').css({background:'none', 'box-shadow':'none'});
         $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
       }
@@ -1816,12 +1820,12 @@ function mnySplit() {
   function loadDB()
   {
     adminInfo.innerText= '';
-    nBar.innerText= ''; clrNotif();
+    nBar.innerText= ''; clrNotif();;
    
     if(!navigator.onLine)
     {
       loadCache(true); $("#mtb4").click();
-      nBar.innerTex+= ' #server OFL, load cache';
+      nBar.innerTex+= ' #navigator offline, load cache';
       return;
     }
    
@@ -1835,23 +1839,20 @@ function mnySplit() {
     initOnceG= false;
 
     adminInfo.innerText= '';
-    nBar.innerText= '' ; clrNotif();
+    nBar.innerText= ''; clrNotif();
 
-    
-    // ================
-    //isLogged= true;
     
     fileAction= 3;
     if(!navigator.onLine)
     {
       fileAction= 4;
-      nBar.innerText+= ' #server OFL, save cache only';
+      nBar.innerText+= ' #navigator offline, save cache only';
     }
     else
     if(!isLogged)
     {
       fileAction= 4;
-      nBar.innerText+= ' #must be logged to update server database';
+//      nBar.innerText+= ' #must be logged to update server database';
     }
     
     fileJunction();

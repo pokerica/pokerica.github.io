@@ -1,42 +1,24 @@
-
-/*
-
-  font-size:18px;
-  font-family:Inconsolata, monospace;
-
-  font: normal 18px sans-serif;
-
-  letter-spacing:-0.5px;
-  font-variant-numeric: tabular-nums;
-  
-  border:0; ☆☆☆ saves bandwidth, heh! 
-  
-*/
-
 * {
+  font-size:19px; font-weight:normal;
+  font-family:'IBM Plex Mono', monospace;
   
-  
-  border:none;
-  line-height:15px;
-  
-  letter-spacing:-0.2px;
-  
-  font-family: 'IBM Plex Mono', monospace;
-  
-  border-collapse:collapse; 
-  
-  cursor:default;  
+  cursor:default; border:none;
        
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
   box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
   
   /*** changes nothing but arrow on dropdown? */
-  -webkit-appearance: none; 
-  -moz-appearance: none; 
   appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+    
+/*
+  line-height:15px;
+  letter-spacing:-0.5px;
+  font-variant-numeric:tabular-nums;
+  border:0; ☆☆☆ saves bandwidth, heh! */
 }
-
 
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
@@ -46,10 +28,12 @@
   pointer-events:none;
   
   background:darkgreen; color:white;
-  height:35px; width:80px; padding:4px 0 0 0;
+  
+  position:relative;
+  height:34px; width:75px;
   font-size:24px; text-align:center;
 
-  position:relative;
+  padding-top:9px;
   margin:0; float:right;
 }
 
@@ -60,7 +44,7 @@
   /*border:1px solid lightgrey;*/
   
   background:none; color:grey;
-  height:25px; width:70px; padding:0; 
+  height:25px; width:75px; padding:0; 
   font-size:15px; text-align:right;
   
   margin:0; float:left;
@@ -73,19 +57,18 @@
 
 .finf {  
   border:1px solid grey;
-  margin:3px 2px 5px 3px;
-  padding:2px 5px 1px 5px;    
+  margin:0; padding:2px 5px;    
+  font-size:17px; text-align:center;
 }
 
 select {
   border:1px solid black; 
   float:right; position:relative;
 
-  color:black; 
-  background-color:white;
+  color:black; background-color:white;
   
-  background-repeat: no-repeat;
-  background-position: 165px 12px;
+  background-repeat:no-repeat;
+  background-position:165px 12px;
   
   /*width: 14px; height: 10px;*/
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAKCAAAAAChsjAbAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAABiSURBVAjXY7g9YyIczLrPsFSAFQ6E1zK8CGGAAcboNwz/L+nCuMbX/zP8/79WFMKT3PofxP3VyAbicXT+BnP/vwkFaYx9/x/C/X/ZgIHB7MZ/GPf/egnpHf8R3F9LV/8GMwCB7ki6QhNZYQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wMi0wN1QwMToyOTo0MiswMTowMJjxtHMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDItMDdUMDE6Mjk6NDIrMDE6MDDprAzPAAAAAElFTkSuQmCC);
@@ -94,14 +77,13 @@ select {
   width:190px; text-align-last:center; 
   padding:4px 22px 4px 4px; margin:0;
 
-  /* text-indent: 0.01px; Removes default arrow from firefox
-  text-overflow: "";  /*Removes default arrow from firefox*/
+  /*** Removes default arrow from firefox */
+  text-indent:1px; text-overflow:"";
 }
 
 #timeTxt {
-    
   position:relative;
-  float:left; top:10px; 
+  float:left; top:12px; 
   
   padding-left:5px;
   text-align:center; font-size:19px;   
@@ -113,7 +95,6 @@ select {
   border:1px solid black;
   
   padding:10px 15px;
-  margin-right:5px; 
   margin-bottom:10px;
   
   font-size:17px;
@@ -136,7 +117,8 @@ select {
   border:1px solid black;
   
   padding:5px 15px;
-  margin:9px 5px 3px 2px;
+  
+  margin-top:9px;
   
   font-size:15px;
   
@@ -171,37 +153,32 @@ select {
 }
 
 .mtb.act { 
-  color:         black;
-  background:    white; 
-  border:        3px solid lightgrey;
-  border-radius: 3px;
-  padding:       1px 20px; 
+  color:black; background:white; 
+  border-radius:3px; border:3px solid lightgrey;
   
-  height: 45px;
-  font-size: 20px;
+  height:43px;
+  padding:1px 15px;
   
   vertical-align: bottom;
   border-bottom: 3px solid white;
-  margin-bottom: -4px;
   
-  margin-right: -12px;
+  margin-bottom:-4px; 
+  margin-right: -13px;
 }
 
 .mtb.dea { 
-  color:         #444444;
-  background:    #eeeeee; 
-  border:        3px solid lightgrey;
-  border-radius: 3px;
-  padding:       1px 15px; 
+  color:#444444; background:#eeeeee;
+  border-radius:3px; border:3px solid lightgrey;
+  
+  height:38px;
+  padding:1px 15px; 
  
   vertical-align: bottom;
-  border-bottom: 3px solid lightgrey;
-  margin-bottom: -3px;
-  margin-top: 10px;
+  border-bottom:3px solid lightgrey;
   
-  height: 38px;
-  font-size: 17px;
-  margin-right: -12px;
+  margin-bottom:-3px;
+  margin-right:-14px;
+  margin-top:10px;
 }
 
 .ptab.pde {
@@ -213,33 +190,27 @@ table {
   position:relative;
   table-layout: fixed;
   
+  line-height:15px;
   
-  user-select: none;
-}
-
-
-#ptb td,
-#htb td {
-  border:none;
-  font-size:18px; 
-  font-weight:normal; /* 100-900: 400 normal, 700 bold*/
-  
-  padding:10px 5px 7px 5px; 
-
+/*
   overflow:hidden;
-  white-space:nowrap; 
   text-overflow:ellipsis;
-  
+
+  white-space:nowrap; 
   word-break:break-all;
-  
+*/  
+  user-select: none;
+  border-collapse:collapse;
 }
 
-th { 
-  padding:10px 5px 8px 5px;  
-  font-size:14px; font-weight:bold;  
-  text-align:center;
+th {
+  padding:9px 5px;
+  text-align:center; font-size:15px; font-weight:bold;
 }
 
+td {
+  padding:5px;
+}
 
 #htb tr.selected,
 #ptb tr.selected { /*:not(.already){ orange */
@@ -247,9 +218,7 @@ th {
 }
 
 #ptb tr.already {
-  color:white; background:#555555; 
- 
-  /* brown teal navy maroon silver */
+  color:white; background:#555555;
 }
 
 #htb tr.clean,
