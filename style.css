@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/icons/ibm.ttf') format('truetype');
+}
+
 * {
   font-size:19px; font-weight:normal;
   font-family:'IBM Plex Mono', monospace;
