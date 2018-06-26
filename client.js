@@ -1,16 +1,13 @@
 $(document).ready(
 function() {
 
-  var versionCode= "v2.0r08e \n";
+  var versionCode= "v2.0r09g \n";
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:5000,
                dataType:'text', contentType:'text/plain', processData:false});
   
  // ☆☆☆ load from cache blob? 
- //var audQuack= new Audio('https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav');
-   //'http://p205.glitch.me/icons/quack.wav');
-                         //'https://cdn.glitch.com/3d55ae24-1d9b-4f07-a031-020eb383a488/qua.wav');
-  
+ //var audQuack= new Audio('');
  var audQuack= document.getElementById("audQuack");
   
   
@@ -286,30 +283,7 @@ function() {
                                    + 'Game time '+ timeText(true) +'</b>';
  }
   
- var rotStrT= 'rot-T';
- $("#blindTimer").on("transitionend",
- function(e) {
 
-    if (!e || e.defaultPrevented) return;
-    e.preventDefault(); e.stopPropagation();
-        
-    if(this.style.transform === rotStrT +"90deg)") {
-      
-      if(btState === 0)
-        timerPaint(false, 'Click to START');
-      else
-        timerPaint(true, 'Click to PAUSE');
-      
-      
-      $(this).css({"transform":rotStrT +"0deg)"});         
-    }
-    else            
-    if(this.style.transform === rotStrT +"0deg)") {
-      
-      $(this).css({"transition":"", "transform":""}); 
-    }
- });
-  
   
  var revSort= false;
  var initGanim= false;
@@ -389,7 +363,51 @@ function() {
        $('#ptb>tr').eq(i).addClass('already');
    }
    
+   
+   var dt = new Date();
+   document.getElementById("lblDate1")
+     .innerText= dt.toLocaleDateString('en-NZ',
+     {weekday:'long', year:'numeric', month:'long', day:'numeric'});
  }
+  
+  
+
+  function yeMny(cnt)
+  {   
+    var mny= $('.money')[cnt];
+    var nc=$('#gtb>tr').eq(cnt).children()[2];
+    
+    $(mny).css({border:'', background:'darkgreen', color:'',
+                height:'', width:'', 'font-size':'', padding:''});
+
+    nc.innerText= sortedPl[ +tGm[cnt][1] -1 ];
+    $(nc).css({'text-align':'left', 'font-size':'', 'color':''});
+    
+    mny.parentNode.parentNode.cells[3].innerText= (tGm[cnt][2]= '-');
+    mny.parentNode.parentNode.cells[4].innerText= (tGm[cnt][3]= '-');
+  }
+  
+  function naMny(cnt)
+  {
+    var dd= '[OUT]';
+    var mny= $('.money')[cnt];
+    var nc=$('#gtb>tr').eq(cnt).children()[2];
+
+    $(mny).css({border:'1px dashed grey',
+                height:'24px', width:'50px',
+                'font-size':'15px', 'padding-top':'4px',
+                background:'none', color:'#909090'});
+
+    if(+tGm[cnt][2] === 1) dd= '[1st]';
+    else if(+tGm[cnt][2] === 2) dd= '[2nd]';
+
+    nc.innerText+= ' ' +dd;
+    if(+tGm[cnt][2] > 2)
+      $(nc).css({'text-align':'center', 'font-size':'17px', 'color':'#909090'});
+    else
+      $(nc).css({'text-align':'right', 'font-size':'', 'color':''});
+    
+  }
   
   
  var curRank= 0;
@@ -411,29 +429,9 @@ function() {
                       +'</td><td tabindex="1" style="text-align:right">'+ fCash(+col[4] *1000) 
                       +'</td><td tabindex="1" style="padding:0; overflow:visible">'
                       +'<pre class="mnyInfo"' +'> </pre>'
-                      +'<pre class="money">  $  </pre></td></tr>');  
+                      +'<pre class="money">  $  </pre></td></tr>');
      
-     
-     if(!reInit && +col[2] > 0) {
-
-         var mny= $('.money')[cnt];       
-         $(mny).css({right:'430px', 'font-size':'15px',
-                     background:'lightgrey', color:'black',
-                     width:'50px', height:'25px'}); 
-
-         mny.innerText= 'OUT'; 
-
-         if(+col[2] === 2) { 
-           $(mny).css({right:'380px'});
-           mny.innerText= '2nd';
-         } 
-         else
-         if(+col[2] === 1) { 
-           $(mny).css({right:'380px'}); 
-           mny.innerText= '1st';        
-         }
-     }
-     
+     if(!reInit && +col[2] > 0) naMny(cnt);
      cnt++;
    });
     
@@ -455,11 +453,6 @@ function() {
       break;
   }
    
-/*   
-  $(".money").off();   
-  $(".money").on("transitionend", //// webkitTransitionEnd oTransitionEnd MSTransitionEnd
-  function(e) {
-*/
  }  
 
   
@@ -731,10 +724,7 @@ function actSavG() {
 
 
      sortedMini.sort(function(a, b) { return a[0] - b[0] });
-     if(useThisDate > 0 && sortedMini.length !== disMini.length) {
-       alert('err:min'); 
-       return;
-     }
+//     if(useThisDate > 0 && sortedMini.length !== disMini.length) { alert('err:min'); return; }
 
      cnt= 0;
      var upGm= "0:0:0:0:0"; 
@@ -906,11 +896,12 @@ function mnySplit() {
    if(!navigator.onLine) ttxt= "OFFLINE"; 
    document.getElementById("mtb1").value = ttxt;
   
-   
+/*   
    if(useThisDate > 0 && curTab === 1) {
      nBar.innerText= ' #cannot now, save first';
      $('#mtb2').click(); return;
    }
+*/
    
    if(!initOnceG || (!dontInit && editMode && curTab !== 2)) {
      
@@ -981,7 +972,6 @@ function mnySplit() {
    $('#appFrame, #tab2') //, #gameTable tr
      .css({"color":"black", "background":"white"});
    
-   
    if(lastTab === 2 && curTab !== 2) {
      if(--listMode < 1) listMode= 3; }
    else
@@ -1008,7 +998,7 @@ function mnySplit() {
      $(".admin").css("display", "none");
    
    if(useThisDate < 1) editRow= -1;
-     else nBar.innerText+= ' #game modification in progress';
+//     else nBar.innerText+= ' #game modification in progress';
    
   
    if(reInit) gameOver= false;
@@ -1023,101 +1013,49 @@ function mnySplit() {
  }     
   
   
- function backAnim(rx) {  
-      
-   var iRnk= +tGm[rx][2];
-   var mny= $('.money')[rx];
-   
-   if(!editMode && useThisDate === 0 && iRnk > curRank+1) {
-        audQuack.currentTime= 0; audQuack.play();
-        return;
-   }
-
-   var cx= 0;
-   tGm.forEach(
-   function(col) {
-                  
-      var cr= 0;
-      if(col[2] !== '-') 
-        cr= parseInt(col[2], 10);
-
-      var rp= '430px';
-      var tm= $('.money')[cx];
-      if(cr === 1 || (cr === 2 && iRnk === 1)) {
-        
-        rx1= 0; 
-        rp= '390px';
-        tm.innerText= '2nd';
-        if(cr === 2 || (cr === 1 && iRnk > 1)){ rx2= cx; }                            
-      }
-
-      if(cr === 1 || cr === 2) {
-
-         if(gameOver) {                   
-           gameOver= false;
-           timerPaint(false, 'Click to START');
-         }
-
-         var wf= $('#gtb>tr')[cx].cells[4];
-
-         $(wf.firstChild).off(); 
-
-         wf.innerHTML= "";
-         wf.innerText= '-'; 
-         tGm[cx][3]= '0';                                            
-      }
-
-      if(cr > 0 && cr < iRnk) {
-        audQuack.currentTime= 0; audQuack.play();
-        tm.parentNode.parentNode.cells[3].innerText=  (col[2]= cr+1);
-        if(col[2] === 3) tm.innerText= 'OUT';
-      }
-     
-      cx++;
-   });
-
-
-   curRank++;
-
-   mny.innerText= '  $  ';
-   mny.parentNode.parentNode.cells[3].innerText= (tGm[rx][2]= '-');
-   
-   $(mny).css({right:'',width:'',height:'35px'
-               ,color:'white',background:'darkgreen','font-size':'24px'});
- }
-    
   
- function outAnim(rx, rc) {
-     
-     if(!rc) return;
+  function backAnim(rx)
+  {
+    var iRnk= +tGm[rx][2];
+    if(!editMode && useThisDate === 0 && iRnk > curRank+1)
+    {
+      audQuack.currentTime= 0; audQuack.play();
+      return;
+    }
+    
+    if(gameOver)
+    {
+      gameOver= false;
+      timerPaint(false, 'Click to START');
+      
+      var wf= $('#gtb>tr')[rx].cells[4];
+      $(wf.firstChild).off();
+    }
    
-     var mny= $('.money')[rx];
+    curRank++;
+    yeMny(rx);
+  }
+
+  function outAnim(rx)
+  {
+    if(curRank === 2) rx2= rx;
+    else if(curRank === 1) rx1= rx;
+
+    var mny= $('.money')[rx];
+//    mny.previousSibling.innerText= '';
+    mny.parentNode.parentNode.cells[3].innerText= (tGm[rx][2]= curRank--);
+    
+    naMny(rx);
    
-     if(curRank === 2) {
-       rx2= rx; mny.innerText= '2nd'; }
-     else
-     if(curRank === 1) {
-       rx1= rx; mny.innerText= '1st'; }
-     else
-       mny.innerText= 'OUT';
-
-     rc.innerText= (tGm[rx][2]= curRank--);
-     var rp= (tGm[rx][2] === 1 || tGm[rx][2] === 2) ? '380px' : '430px';
-
-     $(mny).css({right:rp, width:'50px', height:'25px', 
-                 'font-size':'15px', 'text-align':'center', 
-                 background:'lightgrey', color:'black'});
-
-     $(mny.previousSibling).innerText= '';
-
-     // *** GAME OVER
-     if(curRank === 0)
-       mnySplit();
- }
+    // *** GAME OVER
+    if(curRank === 0)
+      mnySplit();
+  }
   
   
  $('#gameTable').click(
  function(e) {
+   
   
    if(!e || e.defaultPrevented) return;  
    e.preventDefault(); e.stopPropagation();
@@ -1139,7 +1077,7 @@ function mnySplit() {
      saveState(false); ssPend= false;
      for(var i= 0; i < lmy.length; i++) {
          $(lmy[i].previousSibling).css({'font-size':'15px'}); } 
-   }, 3000);
+   }, 4000);
   
    
    if(e.target.className === "money" || e.target.cellIndex > 5) {
@@ -1562,7 +1500,8 @@ function mnySplit() {
      adminInfo.innerText+= "No storage in navigator! \n"; 
    
    
-   if(window.caches) {   //cat
+   if(window.caches)
+   { //cat
           
      caches.keys().then(
      function(cacheNames) { cacheNames.forEach(
@@ -1785,7 +1724,7 @@ function mnySplit() {
   
   function logMe()
   {
-    adminInfo.innerText= '';
+    adminInfo.innerText= versionCode;
     nBar.innerText= ''; clrNotif();;
     
     $.ajax(
@@ -1819,7 +1758,7 @@ function mnySplit() {
   
   function loadDB()
   {
-    adminInfo.innerText= '';
+    adminInfo.innerText= versionCode;
     nBar.innerText= ''; clrNotif();;
    
     if(!navigator.onLine)
@@ -1838,7 +1777,7 @@ function mnySplit() {
   {
     initOnceG= false;
 
-    adminInfo.innerText= '';
+    adminInfo.innerText= versionCode;
     nBar.innerText= ''; clrNotif();
 
     
@@ -1861,7 +1800,6 @@ function mnySplit() {
   
     
 // *** action starts here *********************************
-  adminInfo.innerText= versionCode;
   loadDB();
   
   
@@ -1918,7 +1856,8 @@ function mnySplit() {
        initOnceA= true;
        // *** .load() no effect?? ..in reFresh(), so...
        // move to event listener & init audio upon actual user input event
-       audQuack.load();
+       //audQuack.load();
+       audQuack.play();
      } 
 
      $(".mtb").removeClass("act dea").addClass("dea");
@@ -1927,6 +1866,7 @@ function mnySplit() {
      $(".ptab").removeClass("pac pde").addClass("pde");   
      var tid= "#tab"+ (this.id).substring(3,4);      
      $(tid).removeClass("pde").addClass("pac");
+   
    
    
      curTab= 0;
@@ -1944,10 +1884,11 @@ function mnySplit() {
        gamePlayers= 0;
        sortedRnk.sort(function(a, b) { return b[0] - a[0] }); 
        
-       
        var dt = new Date();
        document.getElementById("lblDate")
-         .innerText= (useThisDate) ? useThisDate: dt.toDateString();
+         .innerText= (useThisDate) ? useThisDate :
+         dt.toLocaleDateString('en-NZ', {weekday:'long', year:'numeric',
+                                       month:'long', day:'numeric'});
        
        curRank= 0; bankTotal= 0;
        document.getElementById('lblBank').innerText= 'Bank: $'+ fCash(bankTotal*1000);
@@ -1974,7 +1915,7 @@ function mnySplit() {
        sortColP= 4; revSort= false; curTab= 1; }
      else   
      if(tid === "#tab3") {
-      sortColH= 0; revSort= false; curTab= 3; }
+       sortColH= 0; revSort= false; curTab= 3; }
      else
      if(tid === "#tab4") { curTab= 4; }
    
@@ -2049,28 +1990,22 @@ function mnySplit() {
  $('#blindTimer').click(
  function(e) {
 
-   if(gameOver) { finalSave(); return; }
+   if(gameOver) { 
+     finalSave(); return; }
          
    if(btState === 0)      
      btState= 1;
    else
    if(btState === 1)      
      btState= 0;
-
    
    switch(btState) {
      case 0:
      case 9:
        
-       if(btState === 9) {
-         
-         btState= 0;
-         sirenState= 0;
-         
-         rotStrT= "rotate3d(1, 0, 0, -"; 
-         $('#blindTimer').css({"transition":"transform 0.2s ease-out",//ease-out linear
-                               "transform-style":"preserve-3d", "transform":rotStrT +"90deg)"});
-       
+       if(btState === 9)
+       { 
+         btState= 0; sirenState= 0;
          if($('#wlBut').val() === "WL enabled")
            document.body.style.backgroundColor = "#333333";
          else
@@ -2078,9 +2013,8 @@ function mnySplit() {
          
          btInit();
        }
-       else
-         timerPaint(false, 'Click to START');       
        
+       timerPaint(false, 'Click to START');
        break;
        
      case 8:
@@ -2088,8 +2022,9 @@ function mnySplit() {
        
        if(btState === 8) { 
          btState= 1; btInit(); }
-      
-       (listMode === 2) ? tsAdmin= 90 : tsAdmin= 700;
+       
+       (listMode === 2) ?
+         tsAdmin= 90 : tsAdmin= 700;
        
        timerPaint(true, 'Click to PAUSE');
        setTimeout( minuteUp, editMode ? tsAdmin:1000);      
@@ -2097,50 +2032,9 @@ function mnySplit() {
        
      case 2:
        
-       btState= 9; 
-       sirenState= 1;
-       
-       if(curTab === 2) {
-         
-         rotStrT= "rotate3d(1, 0, 0, "; 
-         $('#blindTimer').css({"transition":"transform 0.2s ease-in",//ease-out linear
-                               "transform-style":"preserve-3d", "transform":rotStrT +"90deg)"}); 
-       }
-       else {
+       btState= 9; sirenState= 1;
+       if(curTab != 2) $('#mtb2').click();
 
-         lastTab= curTab= 2;
-         
-         if(++listMode > 3) listMode= 1;
-         
-         // ☆☆☆ this all over the place, sort out later
-         $('#appFrame, #tab2') //, #gameTable tr
-           .css({"color":"black", "background":"white"});
-
-
-         $('#timeSelect, #blindSelect')
-           .css({filter:'', color:'black', 'background-color':'white'});  
-         $('#lblBank, #timeSelect, #blindSelect').css({'border-color':'black'});
-
-         switch(listMode) {
-
-            case 1: // empty, default defined in .css
-              break;
-            case 2: $('#gtb>tr').css("border-top", "1px solid lightgrey");
-              break;      
-            case 3: $('#lblBank').css({'border-color':'white'});
-                    $('#gtb>tr').css("border-top", "1px solid grey");
-                    $('#timeSelect, #blindSelect').css({"filter":"invert(100%)"});
-                    $('#appFrame, #tab2').css({"color":"white", "background":"black"});
-              break;
-         }
-         
-         $(".mtb").removeClass("act dea").addClass("dea");
-         $('#mtb2').removeClass("dea").addClass("act");
-
-         $(".ptab").removeClass("pac pde").addClass("pde"); 
-         $('#tab2').removeClass("pde").addClass("pac");
-       }
-       
        setTimeout(bkgSiren, 950);
        break;
    }
@@ -2159,10 +2053,8 @@ function mnySplit() {
    
    timerPaint(false, 'Click to START');            
  });
-  
-  
 
-  
+
    
 // *** BUTTONS #######################################################
 // *** ...............................................................
@@ -2595,3 +2487,4 @@ function delHrow() {
   
 // THE END : $(document).ready  
 });
+

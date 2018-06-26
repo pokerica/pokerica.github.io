@@ -1,7 +1,5 @@
 @font-face {
   font-family: 'IBM Plex Mono';
-  font-style: normal;
-  font-weight: 400;
   src: url('/icons/ibm.ttf') format('truetype');
 }
 
@@ -34,9 +32,10 @@
   user-select: none;
   pointer-events:none;
   
+  border:1px solid lime; 
   background:darkgreen; color:white;
   
-  position:relative;
+
   height:34px; width:75px;
   font-size:24px; text-align:center;
 
