@@ -23,9 +23,6 @@
   
     <title>Pokerica</title>
   
-    <!-- link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
-rel="stylesheet" -->
-  
   
     <link  rel="stylesheet" type="text/css" href="style.css" > 
   
@@ -45,8 +42,8 @@ rel="stylesheet" -->
   <div id="appFrame" style="background:white; width:100%">
     
     
-      <pre id="notif" style="font-size:15px; height:auto; padding:5px 10px;
-                           margin:0 0 -5px 0; border:none; white-space:nowrap; overflow:auto;
+      <pre id="notif" style="font-size:15px; height:auto; padding:0 10px;
+                           margin:0 0 -1px 0; border:none; white-space:nowrap; overflow:auto;
                            color:lightgrey; background:#4f4f4f" >notification bar #</pre>
     
       <div id="headbar" style="border-bottom:3px solid lightgrey; background:black; padding: 10px 10px 0 20px" >    
@@ -73,15 +70,16 @@ rel="stylesheet" -->
         </button>
       </div>
     
-    
-    <audio id="audQuack" type="audio/wav" 
-           src="https://cdn.glitch.com/4ff3f5e8-d90e-4a0f-baad-bfa9d7216b55/quack.wav"></audio>
-    
-    
+      <audio id="audQuack" type="audio/wav"
+             src="/icons/quack.wav"></audio>
+
 <!-- *** tabs stsrt here 
 ****************************************************-->
       
-    <div id="tab1" class="ptab pac" style="font-family:'IBM Plex Mono'; padding:20px 20px"> 
+    <div id="tab1" class="ptab pac" style="padding:20px 20px"> 
+      
+      <pre id="lblDate1" style="font-size:15px; text-align:right; font-style:italic;
+                                border-bottom:0px solid black; padding:0 5px; margin-top:-9px; margin-bottom:9px; width:100%">date</pre>
              
       <form id="frmInput" class="adminEdit" onsubmit="return false" style="display:none; padding:0; margin:10px 0 20px 0; text-align:right">        
         
@@ -133,7 +131,7 @@ rel="stylesheet" -->
                               border-bottom:1px solid black; margin:15px 0 -35px 0 ">Bank: $</p>
       
       
-      <pre id="lblDate" style="font-size:15px; text-align:right;
+      <pre id="lblDate" style="font-size:15px; text-align:right; font-style:italic;
                                 padding:0 5px; margin-bottom:30px; width:100%">date</pre>
 
       
