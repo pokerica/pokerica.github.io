@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= "v2.0r11e \n";
+  var versionCode= "v2.0r12b \n";
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:5000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -1313,7 +1313,27 @@ $(document).ready(function()
 //    $(etpn.nextSibling).focus();
   });
 
+  
+  function zipN(s)
+  {
+    var i, t, r= '', a= s.toString(10);
+    for(i= 0; i < a.length-2; i+= 2) {
+      t= +a.substr(i, 2); r+= (t).toString(36); }
+    t= ~~(+a.substr(i, 2) /2); r+= (t).toString(36);
+//    t= ~~(+a.substr(i +2, 2) /2); r+= (t).toString(36);
+    return r;
+  }
 
+  function uzpN(a)
+  {
+    var i, r= '';
+    for(i= 0; i < a.length-1; i++) {
+      r+= ('00'+ parseInt(a.charAt(i), 36)).slice(-2); }
+    r+= ('00'+ (2*parseInt(a.charAt(i +0), 36))).slice(-2);
+//    r+= ('00'+ (2*parseInt(a.charAt(i +1), 36))).slice(-2);
+    return +r;
+  }
+  
   // *** import... **************************************************
   function importDB(data)
   {
@@ -1360,17 +1380,23 @@ $(document).ready(function()
     data= gmHistory.split('|');
 
     tHi.length= 0;
-    for (var i = 0; i < data.length / nCol; i++)
+    for(var i = 0; i < data.length / nCol; i++)
     {
       if(+data[i*nCol +2] > 0)
       {
+        var x= uzpN(data[i*nCol +0]);
+//        var x= parseInt(data[i*nCol +0], 36);
+        
         tHi.push([
-          +data[i*nCol +0], +data[i*nCol +1],
-          +data[i*nCol +2], +data[i*nCol +3],
-          data[i*nCol +4] ]);
+          x, +data[i*nCol +1], +data[i*nCol +2], 
+          +data[i*nCol +3], data[i*nCol +4] ]);
       }
     }
 
+    var d= localStorage.getItem('dataBase');
+    if(!d || d.length < 9)
+      saveDB(true);
+    
     reFresh();
     loadState(true);
   }
@@ -1493,13 +1519,15 @@ $(document).ready(function()
 
     d= t.split('|');
     adminInfo.innerText+=
-        'DATE           NAME         $BUY     $WON \n'
+        'TIMESTAMP     NAME         $BUY     $WON \n'
       + '––––––––––––––––––––––––––––––––––––––––––\n';
 
     var n= 5;
-    for(var i = 0; i < d.length/n; i++)
+    for(var i = 0; i < d.length/5; i++)
     {
-      var r= [ +d[i*n +0], +d[i*n +1], +d[i*n +2], +d[i*n +3], ''+ d[i*n +4] ];
+      var x= uzpN(d[i*n +0]);
+      var r= [ x, +d[i*n +1], +d[i*n +2], +d[i*n +3], d[i*n +4] ];
+//      adminInfo.innerText+= i+'. >'+r.toString()+'<\n';
       if(r[2] <= 0) continue;
 
       var g= '';
@@ -1519,7 +1547,7 @@ $(document).ready(function()
         g+= (dat +'               ').substring(0, 14) +' '
           + (nam +'            ').substring(0, 9)
           + ('         '+ buy*1000 ).slice(-8)
-          + ('         '+ won*100 ).slice(-9) +' \n';
+          + ('         '+ won*100 ).slice(-9) +'\n';
       }
 
       adminInfo.innerText+= g +'\n';
@@ -1547,12 +1575,12 @@ $(document).ready(function()
           },
           success:function(r, s, x)
           {
-            var d= r.replace(/\n|\r/g, '');
-            importDB(d.split('@'));
-            
+            var d= r;//r.replace(/\n|\r/g, '');
             nBar.innerText+= ' #server load done';
             adminInfo.innerText+= 'DONE:server load '+ (d.length/1024).toFixed(2) +' KB \n';
             adminInfo.innerText+= x.getAllResponseHeaders() +'\n';
+
+            importDB(d.split('@'));
           }
         });
   }
@@ -1587,36 +1615,22 @@ $(document).ready(function()
     });
   }
 
-  function loadDB()
-  {
-    nBar.innerText= ''; clrNotif();
-    adminInfo.innerText= versionCode;
-   
-    if(!navigator.onLine)
-    {
-      nBar.innerTex+= ' #navigator offline, load cache';
-      loadCache(true);
-      $("#mtb4").click();
-      return;
-    }
-
-    loadServer();
-  }
   
-  function saveDB()
+  function saveDB(cchOnly)
   {
     initOnceG= false;
-    nBar.innerText= ''; clrNotif();
+//    nBar.innerText= ''; clrNotif();
     adminInfo.innerText= versionCode;
 
     var upData= "0|export-init|0|0|0|0";
-    var upHistory= "@12345678|2|0|0|0:0:0:0:0:1:1:1:1:1:2:2:2:2:2";
+    var upHistory= "@99|2|0|0|0:0:0:0:0:1:1:1:1:1:2:2:2:2:2";
 
     tPl.forEach(function(col) {
         upData+= '|'+ col[0] +'|'+ col[1]+'|'+ col[2]+'|'+ col[3] +'|'+ col[4] +'|'+ '#'; });
 
     tHi.forEach(function(col) {
-      upHistory+= '|'+ col[0] +'|'+ col[1] +'|'+ col[2] +'|'+ col[3] +'|'+ col[4]; });
+      var x= zipN(+col[0]);
+      upHistory+= '|'+ x +'|'+ col[1] +'|'+ col[2] +'|'+ col[3] +'|'+ col[4]; });
 
     upData+= upHistory;
 
@@ -1633,7 +1647,9 @@ $(document).ready(function()
     nBar.innerText+= ' #cache save done';
     adminInfo.innerText+= 'DONE:cache save '+ (upData.length/1024).toFixed(2) +' KB \n';
 
-    
+
+    if(cchOnly) return;
+      
     if(!navigator.onLine) {
       nBar.innerText+= ' #navigator offline, save cache only'; return; }
     else
@@ -1666,10 +1682,40 @@ $(document).ready(function()
     });
   }
 
- 
+  function loadDB()
+  {
+    nBar.innerText= ''; clrNotif();
+    adminInfo.innerText= versionCode;
+/*
+    var br= 20180628011633;
+    adminInfo.innerText+= br+'\n';
+    
+    var q1= zipN(br);
+    adminInfo.innerText+= q1+'\n';
+    
+    var q2= uzpN(q1);
+    adminInfo.innerText+= q2+'\n';
+  
+    return;
+*/    
+
+    if(!navigator.onLine)
+    {
+      nBar.innerTex+= ' #navigator offline, load cache';
+      loadCache(true);
+      $("#mtb4").click();
+      return;
+    }
+
+    loadServer();
+  }
+
+
+
   // *** action starts here *********************************
   loadDB();
   
+                            
   if(navigator.storage)
   {
     navigator.storage.persisted().then(function(getP)
