@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= "v2.0r14k \n";
+  var versionCode= "v2.0r14n \n";
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -46,7 +46,7 @@ $(document).ready(function()
   function fCash(num)
   { // *** clear commas: .replace(/,/g, '');
     if(isNaN(num)) return '-';
-    
+  
     var x= (num < 0);
     num= Math.abs(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     
@@ -67,6 +67,7 @@ $(document).ready(function()
   }
 
   var lastNotif= '';
+  var keepMsgBar= false;
   function clrNotif()
   {
     lastNotif= nBar.innerText;
@@ -157,7 +158,6 @@ $(document).ready(function()
     $('#selSum').css({height:pl+'px'});
   }
 
-  var keepMsgBar= false;
   function rowAnim(tbrow, turnOn)
   {
     if(!turnOn)
@@ -353,7 +353,7 @@ $(document).ready(function()
         $('#ptb>tr').eq(i).addClass('already');
     }
 
-    var dt = new Date();
+    var dt= new Date();
     document.getElementById("lblDate1")
       .innerText= dt.toLocaleDateString('en-NZ',
                     {weekday:'long', year:'numeric', month:'long', day:'numeric'});
@@ -424,6 +424,8 @@ $(document).ready(function()
       cnt++;
     });
 
+    timerPaint((btState === 1), '***'); 
+    
     $('#timeSelect, #blindSelect')
       .css({filter:'', color:'black', 'background-color':'white'});
     $('#lblBank, #timeSelect, #blindSelect').css({'border-color':'black'});
@@ -913,8 +915,6 @@ $(document).ready(function()
     if(lastTab !== 2 && curTab === 2) {
       if(++listMode > 3) listMode= 1; }
 
-    if(curTab === 2)
-      timerPaint((btState === 1), '***');
 
     // *** tab switch
     switch(curTab)
@@ -1591,20 +1591,20 @@ $(document).ready(function()
 
   function logMe()
   {
+    clrAdmin();
     adminInfo.innerText+= 'SERVER:logme \n';
     
     $.ajax(
     {
-      url:appPath +'/lgn', type:'GET',
-      headers:{'secret':dbPass},
-      error:function(e)
+      url:appPath +'/lgn:'+dbPass, type:'GET',
+      error:function(e, f)
       {
-        adminInfo.innerText+= 'FAIL@client:'+ e.statusText;
+        adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
       },
       success:function(r, s, x)
       {
         if(r !== 'pOkk') {
-          adminInfo.innerText+= 'FAIL@server:'+ r; return; }
+          adminInfo.innerText+= 'FAIL@server:'+ r +'\n'; return; }
   
         adminInfo.innerText+= 
           x.getAllResponseHeaders() +'\n'+ 'PASS:logme logged \n';
@@ -1652,7 +1652,7 @@ $(document).ready(function()
     
     // *** SERVER SAVE
     adminInfo.innerText+= 'SERVER:export & save \n';
-      
+
     if(!navigator.onLine) {
       adminInfo.innerText+= 'FAIL:navigator.online \n'; return; }
     else
@@ -1662,17 +1662,16 @@ $(document).ready(function()
 
     $.ajax(
     {
-      url:appPath +'/sav', data:upData, type:'POST',
-      headers:{'secret':dbPass},
+      url:appPath +'/sav:'+dbPass, data:upData, type:'POST',
       error:function(e, f)
       {
-        adminInfo.innerText+= 'FAIL@client:'+ f;
+        adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
       },
       success:function(r, s, x)
       {
         if(r.substring(0,4) !== 'size')
         {
-        adminInfo.innerText+= 'FAIL@server:'+ r;
+        adminInfo.innerText+= 'FAIL@server:'+ r +'\n';
           return;
         }
 
@@ -1898,11 +1897,12 @@ $(document).ready(function()
   $('#timeSelect').on('focus change',function()
   {
     if(btState !== 0) return;
+
     var ni= (this.options[this.selectedIndex].text).indexOf('min');
     var ts= (this.options[this.selectedIndex].text).substring(0, ni);
 
+    btSec= 60; btMin= +ts -1;
     timerPaint(false, 'Click to START');
-    btSec= 60; btMin= parseInt(ts, 10) -1;
   });
 
 
