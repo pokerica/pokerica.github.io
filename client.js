@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= "v2.0r14h \n";
+  var versionCode= "v2.0r14k \n";
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -1915,8 +1915,9 @@ $(document).ready(function()
      alert('Game modification in progress, sooo?');
 
     if(curTab === 4) {
-      adminInfo.innerText= 
-        'Made by zele-chelik!, Jun 2018.'; return; }
+      clrAdmin();
+      adminInfo.innerText+= 
+        'Made by zele-chelik!, Jun 2018. \n'; return; }
 
     revSort= false;
     if(editMode= !editMode)
@@ -1958,8 +1959,9 @@ $(document).ready(function()
     e.stopPropagation();
     
     if(curTab === 4) {
+      clrAdmin();
       adminInfo.innerText= 
-        'What?! Why did you do that just now?'; return; }
+        'What?! Why did you do that just now? \n'; return; }
     
     if(++listMode > 3) listMode= 1;    
     dontInit= true; reFresh();
@@ -2254,7 +2256,7 @@ $(document).ready(function()
   $("#imc4But").click( function() { // >Import Cache<
     loadCache(true); });
   $("#stc4But").click( function() { // >Store Cache<
-    saveDB(); });
+    saveDB(true); });
 
   $("#gpc4But").click(function()
   {
