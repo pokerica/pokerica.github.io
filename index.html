@@ -30,7 +30,7 @@
     </script> 
   
     <script type="text/javascript" src="jquery-3.3.1.min.js"></script>     
-    <script type="text/javascript" src="NoSleep.min.js"></script>      
+    <script type="text/javascript" src="NoSleep.min.js"></script> 
     <script type="text/javascript" src="client.js"></script> 
 </head>
   
@@ -46,7 +46,7 @@
                            margin:0 0 -1px 0; border:none; white-space:nowrap; overflow:auto;
                            color:lightgrey; background:#5a5a5a" >notification bar #</pre>
     
-      <div id="headbar" style="background:black; padding: 10px 5px 0 20px" >    
+      <div id="headbar" style="border-bottom:1px solid grey; background:black; padding: 10px 5px 0 20px" >    
         <input class="mtb act" id="mtb1" style="margin-left:-20px" type="button" value="Loading..." > 
         <input class="mtb dea" id="mtb2" type="button" value="Game" >
         <input class="mtb dea" id="mtb3" type="button" value="History" >
@@ -124,6 +124,7 @@
           
       <div class="adminEdit" style="display:none; text-align:right; margin:15px 0 -10px 0">
         <button class="ord" id="rng2But" style="width:220px">Create Random Game</button>
+        <button class="ord" id="crg2But" style="width:210px">Check Remote Game</button>
       </div>
       
       <p id="lblBank" style="font-size:32px; text-align:left; padding:0 5px;
@@ -149,7 +150,7 @@
       <br>
       <p id="blindTimer" 
          style="font-size:54px; width:450px; height:90px;
-                text-align:right; margin:0; padding:10px 30px; 
+                text-align:right; margin:0; padding:10px 30px;
                 display:inline-block; border:1px solid grey; border-radius:8px"
          >00:00<b id="timeTxt">Click to START<br>Game time 00:00</b></p>
       
@@ -176,7 +177,7 @@
     </div>
     
     
-    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:20px 20px">
+    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:15px 20px">
       
       <svg style="border:0px solid black; position:absolute" width="27px" height="27px" viewbox="0 0 24 24" fill="#000000" >
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
