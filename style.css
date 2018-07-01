@@ -136,14 +136,14 @@ select {
   border:none;
   height:45px; padding:1px 15px;
   color:black; background:white;
-  margin-bottom:-1px; margin-right:-11px;
+  margin-bottom:-1px; margin-right:-10px;
 }
 
 .mtb.dea {
-  border:0.5px solid grey;
+  border:none;
   height:38px; padding:1px 15px;
   color:#444444; background:#eeeeee;
-  vertical-align:bottom; margin-right:-11px;
+  vertical-align:bottom; margin-right:-10px;
 }
 
 .ptab.pde {

@@ -1,4 +1,4 @@
-// *** abcd
+// *** abcdefgh
 self.addEventListener('install', e =>                       
 {
   caches.delete('pmpAppCache').then(cache =>
