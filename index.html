@@ -44,24 +44,23 @@
     
       <pre id="notif" style="font-size:15px; height:auto; padding:0 10px;
                            margin:0 0 -1px 0; border:none; white-space:nowrap; overflow:auto;
-                           color:lightgrey; background:#4f4f4f" >notification bar #</pre>
+                           color:lightgrey; background:#5a5a5a" >notification bar #</pre>
     
-      <div id="headbar" style="border-bottom:3px solid lightgrey; background:black; padding: 10px 10px 0 20px" >    
-        <input class="mtb act" id="mtb1" type="button" value="Loading..." > 
+      <div id="headbar" style="background:black; padding: 10px 5px 0 20px" >    
+        <input class="mtb act" id="mtb1" style="margin-left:-20px" type="button" value="Loading..." > 
         <input class="mtb dea" id="mtb2" type="button" value="Game" >
         <input class="mtb dea" id="mtb3" type="button" value="History" >
         <input class="mtb dea" id="mtb4" type="button" value="System" >
         
         
         <button class="mnu" id="mnu3">
-          <svg width="40px" height="29px" viewbox="0 0 24 30"  fill="white" stroke="grey" stroke-width="1.5px">
+          <svg width="40px" height="29px" viewbox="0 0 24 30" fill="white" stroke="grey" stroke-width="1.5px">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z" /></svg>         
         </button>
         
-        <button class="mnu" id="mnu2" style="padding:5px 0 0 0">
+        <button class="mnu" id="mnu2" style="padding:7px 0 0 0">
           <svg width="40px" height="28px" viewbox="0 0 256 450" fill="white" stroke="grey" stroke-width="30px">
             <path d="M256 272c0 4.25-1.75 8.25-4.75 11.25l-112 112c-3 3-7 4.75-11.25 4.75s-8.25-1.75-11.25-4.75l-112-112c-3-3-4.75-7-4.75-11.25 0-8.75 7.25-16 16-16h224c8.75 0 16 7.25 16 16zM256 176c0 8.75-7.25 16-16 16h-224c-8.75 0-16-7.25-16-16 0-4.25 1.75-8.25 4.75-11.25l112-112c3-3 7-4.75 11.25-4.75s8.25 1.75 11.25 4.75l112 112c3 3 4.75 7 4.75 11.25z" /></svg>   
-          
         </button> 
         
         <button class="mnu" id="mnu1">
@@ -114,17 +113,17 @@
       </table>
       
       <div class="adminEdit" style="display:none; margin-top:20px">
-        <button class="ord2" id="raz1But">Reset All to Zero</button>
-        <button class="ord2" id="rli1But">Remove Last ID</button>
+        <button class="ord2" id="raz1But" style="width:200px" >Reset All to Zero</button>
+        <button class="ord2" id="rli1But" style="width:200px" >Remove Last ID</button>
         <button class="ord2" id="rma1But">Remove All</button>
       </div>  
     </div> 
     
 
-    <div id="tab2" class="ptab pde" style="padding:10px 20px">                    
+    <div id="tab2" class="ptab pde" style="padding:5px 20px">                    
           
-      <div class="adminEdit" style="display:none; text-align:right; margin:20px 0 -10px 0">
-        <button class="ord" id="rng2But">Create Random Game</button>
+      <div class="adminEdit" style="display:none; text-align:right; margin:15px 0 -10px 0">
+        <button class="ord" id="rng2But" style="width:220px">Create Random Game</button>
       </div>
       
       <p id="lblBank" style="font-size:32px; text-align:left; padding:0 5px;
@@ -177,7 +176,7 @@
     </div>
     
     
-    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:10px 20px">
+    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:20px 20px">
       
       <svg style="border:0px solid black; position:absolute" width="27px" height="27px" viewbox="0 0 24 24" fill="#000000" >
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
@@ -204,7 +203,7 @@
       <thead id="hth"><!--/thead-->
         <tr><th tabindex="1" style="width:90px">DATE</th>
           <th tabindex="1" style="width:30px">#nP</th>
-          <th tabindex="1" style="width:70px; text-align:right">$BANK</th>
+          <th tabindex="1" style="width:80px; text-align:right">$BANK</th>
           <th tabindex="1" style="width:90px; text-align:right">1st $</th>
           <th tabindex="1" style="text-align:left; width:80px">:NAME</th>
           <th tabindex="1" style="width:70px; text-align:right">2nd $</th>
@@ -216,13 +215,13 @@
       </table>
       
       <div class="adminEdit" style="display:none; margin-top:20px">
-        <button class="ord2" id="rcl3But">Recalculate All</button>
+        <button class="ord2" id="rcl3But" style="width:200px" >Recalculate All</button>
         <button class="ord2" id="rma3But">Remove All</button>
       </div>  
     </div>
     
     
-    <div id="tab4" class="ptab pde" style="padding:20px 20px">      
+    <div id="tab4" class="ptab pde" style="padding:10px 20px">      
       
       <div style="text-align:right; margin-top:10px">
 
@@ -242,17 +241,17 @@
       <div>
         <button class="ord2" id="med4But">Memory Data</button>
         <button class="ord2" id="sld4But">Server Load</button>
-        <input class="ord2" id="ssv4But" type="button" value="! Server Save" >
+        <input class="ord2" id="ssv4But" type="button" value="!Server Save" >
         <br>
         <button class="ord2" id="gms4But">Game State</button>
         <button class="ord2" id="aps4But">Apply State</button>
         <button class="ord2" id="kps4But">Keep State</button>
-        <button class="ord2" id="ems4But">Empty State</button>
+        <button class="ord2" style="width:205px" id="ems4But">Empty State</button>
         <br>
         <button class="ord2" id="cad4But">Cache Data</button>
         <button class="ord2" id="imc4But">Import Cache</button>
         <button class="ord2" id="stc4But">Store Cache</button>
-        <input class="ord2" id="gpc4But" type="button" value="Grant Persistance" >
+        <input class="ord2" style="width:205px" id="gpc4But" type="button" value="Grant Persistance" >
         <br>    
       </div>
     </div>
