@@ -1,8 +1,8 @@
 $(document).ready(function()
 {
-  var versionCode= "v2.0r12b \n";
-  var appPath= 'https://pok.glitch.me';
-  $.ajaxSetup({async:true, cache:false, timeout:5000,
+  var versionCode= "v2.0r14dd \n";
+  var appPath= 'https://pok-d.glitch.me';
+  $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
 
   // ☆☆☆ load from cache blob?
@@ -61,8 +61,8 @@ $(document).ready(function()
                + ("00"+(dt.getMonth()+1)).slice(-2)
                + ("00"+dt.getDate()).slice(-2)
                + ("00"+dt.getHours()).slice(-2)
-               + ("00"+dt.getMinutes()).slice(-2)
-               + ("00"+dt.getSeconds()).slice(-2);
+               + ("00"+dt.getMinutes()).slice(-2);
+//               + ("00"+dt.getSeconds()).slice(-2);
     return parseInt(retStr, 10);
   }
 
@@ -513,7 +513,6 @@ $(document).ready(function()
     //freshCanvas();
     reclcSelHrows();
   }
-
 
   // *** clear state timeout
   var clrST, ssPend= false;
@@ -993,7 +992,7 @@ $(document).ready(function()
       saveState(false); ssPend= false;
       for(var i= 0; i < lmy.length; i++) {
         $(lmy[i].previousSibling).css({'font-size':'15px'}); } 
-    }, 4000);
+    }, 3000);
 
     if(e.target.className === "money" || e.target.cellIndex > 5)
     {
@@ -1519,15 +1518,14 @@ $(document).ready(function()
 
     d= t.split('|');
     adminInfo.innerText+=
-        'TIMESTAMP     NAME         $BUY     $WON \n'
+        'TIMESTAMP      NAME         $BUY     $WON \n'
       + '––––––––––––––––––––––––––––––––––––––––––\n';
 
     var n= 5;
     for(var i = 0; i < d.length/5; i++)
     {
-      var x= uzpN(d[i*n +0]);
+      var x= ''+uzpN(d[i*n +0]);
       var r= [ x, +d[i*n +1], +d[i*n +2], +d[i*n +3], d[i*n +4] ];
-//      adminInfo.innerText+= i+'. >'+r.toString()+'<\n';
       if(r[2] <= 0) continue;
 
       var g= '';
@@ -1926,6 +1924,10 @@ $(document).ready(function()
     if(useThisDate > 0)
      alert('Game modification in progress, sooo?');
 
+    if(curTab === 4) {
+      adminInfo.innerText= 
+        'Made by zele-chelik!, Jun 2018.'; return; }
+
     revSort= false;
     if(editMode= !editMode)
     {
@@ -1946,13 +1948,29 @@ $(document).ready(function()
   $("#mnu2").click(function(e)
   { // arrow B.
     e.stopPropagation();
-    vSpace= (vSpace > 10) ? 10:20;    
-    dontInit= true; reFresh();
+
+    if(curTab === 4)
+    {
+      if($('#dbFrame').css('height') !== '300px')
+        $('#dbFrame').css({'height':'300px'});
+      else
+        $('#dbFrame').css({'height':'auto'});
+    }
+    else {
+      vSpace= (vSpace > 10) ? 10:20; }
+
+    dontInit= true;
+    reFresh();
   });
    
   $("#mnu3").click(function(e)
   { // line C.
-    e.stopPropagation();   
+    e.stopPropagation();
+    
+    if(curTab === 4) {
+      adminInfo.innerText= 
+        'What?! Why did you do that just now?'; return; }
+    
     if(++listMode > 3) listMode= 1;    
     dontInit= true; reFresh();
   });
