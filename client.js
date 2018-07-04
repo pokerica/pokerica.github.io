@@ -1,18 +1,19 @@
 $(document).ready(function()
 {
-  var versionCode= "v2.0r14n \n";
+  var versionCode= 'v2.0r17b \n';
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
 
   // ☆☆☆ load from cache blob?
-  var audQuack= document.getElementById("audQuack"); //var audQuack= new Audio('');
+  var audQuack= document.getElementById('audQuack'); //var audQuack= new Audio('');
   
-  var nBar= document.getElementById("notif");
-  var adminInfo= document.getElementById("dbFrame");
+  var tEvt= document.getElementById('tev');
+  var nBar= document.getElementById('notif');
+  var adminInfo= document.getElementById('dbFrame');
   
-  var dbPass= "*";
-  var filesha= "#";
+  var dbPass= '*';
+  var filesha= '#';
   var isLogged= false;
 
   var listMode= 1;
@@ -23,24 +24,21 @@ $(document).ready(function()
   var nextID= 0;
   var curTab= 1;
   var vSpace= 10;
-  var sortColP= 4;
-  var sortColH= 0;
   var bankTotal= 0;
   
-  // ***         id1.rx, id2.rx, id3.rx...
+// *** PLAYER TAB   0    1    2    3    4    5    6    7
+// ***             píd  nme  buy  won  bal  ngm  av6  av7
+  var plTab= [];
+// *** HISYORY TAB TABLE
+// ***           0    1    2     3     4     5     6    7
+// *** hiTab   datm  npl  bnk  $1st  nam1  $2nd  nam2  gid
+  var hiTab= [];
+  
+// ***         id1.rx, id2.rx, id3.rx...
   var rvsPLindex= [ 0, 1, 2, 3 ];
   var sortedPl= [ 'name1', 'name2', 'name3' ];
 
-  /*                                          v-1st..       v-2nd..
-  *** tHi:       date | #nP | $bank | $1st | plid : $buy : plid...    */
-  var tHi= [ [ '20010101005959', '2', '0', '0', '0:0:1:1:2:1' ] ];
-
-  // ***                 0     1     2     3     4    5     6     7       8
-  // *** tPl:           id    name  gms  $buy  $won  $bal  csh%  rnk%  total
-  // *** tHiFull:       date  np    bnk  $1    1st   $2    2nd   m-tGm   gid
-  // *** tGm:           isIn  pid   rnk  $won  $buy
-  var tPl = [ ["0", "declaration-init", "0", "0", "0", "0", "0", "0", "0"] ];
-  var tHiFull= [ [ 20180101005959, 0, 0, 0, 'name1', 0, 'name2', '0:0:1:1', 0 ] ];
+// *** tGm:  0.in?  1.pid  2.rnk  3.won  4.buy
   var tGm = [ ['F', 0, '-', '-', 0] ];
 
   function fCash(num)
@@ -80,60 +78,131 @@ $(document).ready(function()
     adminInfo.innerText= versionCode;
   }
   
+  
+  var oldSrt= [0, 4, 0, 0];
+  function sortem(tab, col, forceRev)
+  {
+    var t= (tab === 1) ? plTab : hiTab;
+    if(t.length < 1) return;
+    
+    if(isNaN(t[0][col]))
+    {
+      t.sort(function(a, b)
+      {
+        if(b[col] > a[col]) return -1;
+        else if(b[col] < a[col]) return 1;
+        else return 0;
+      });
+    }
+    else
+    {
+      t.sort(function(a, b) {
+        return +b[col] - (+a[col]); });
+    }
+    
+    oldSrt[tab]= col;
+    if(forceRev === 1) t.reverse();
+  }
+
+  function reclcAll()
+  {
+    plTab= [];
+    sortedPl.forEach(function(x, c)
+    {
+// ***               0   1    2    3    4    5    6    7
+//    pltab        píd  nme  buy  won  bal  ngm  av6  av7
+      plTab.push( [c+1, x,     0,   0,   0,   0,   0,   0] );
+    });
+
+    var as= '';
+    hiTab.forEach(function(x,n)
+    {
+      var wn1= +x[3];
+      var wn2= +x[5];
+  
+      var mg= x[8].split('#');
+   
+      mg.forEach(function(y,c)
+      {
+
+        var b= y.split('&');
+        var pid= +b[0]
+        var buy= +b[1];
+
+        var won= 0;
+        if(c === 0) won= wn1;
+        else if(c === 1) won= wn2;
+        
+        var z= plTab[pid];
+        z[2]= +z[2] + buy;
+        z[3]= +z[3] + won;
+        z[5]= +z[5] + 1;
+        z[4]= z[3] - z[2]*10; // bal
+        z[6]= c6Avg(z[2], z[5]);
+        z[7]= c7Avg(z[3], z[5]);
+      });
+    });
+
+    initOnceG= true;        
+  }
+
   // *** recalc. selected history-table rows
   function reclcSelHrows()
   {
-    var tSelSum = JSON.parse(JSON.stringify(tPl));
+    var tSelSum = JSON.parse(JSON.stringify(plTab));
     tSelSum.sort(function(a, b) { return a[0] - b[0] });
     tSelSum.forEach(function(row) {
-      row[2]= row[3]= row[4]= row[5]= row[6]= row[7]= row[8]= 0; });
+      row[2]= row[3]= row[4]= row[5]= row[6]= row[7]= 0; });
 
     var selHgm= $('#htb')[0].getElementsByClassName('selected');
 
     for(var j= 0; j < selHgm.length; j++)
     {
-      var fSiz= 5, ri= +$(selHgm[j]).children()[8].innerText;
-      var miniGm= tHiFull[ri][7].split(':');
+      var ri= +$(selHgm[j]).children()[7].innerText;
+      var mg= hiTab[ri][8].split('#');
 
-      for(var i= fSiz; i < miniGm.length; i+= fSiz)
+      mg.forEach(function(x, cx)
       {
-        var pid= +miniGm[i+0]-1;
-        var buy= +miniGm[i+1];
-       
-        var won= 0;
-        if(i/fSiz === 1) won= +tHiFull[ri][3]; // $:1
-        else if(i/fSiz === 2) won= +tHiFull[ri][5]; // $:2
-        
-        tSelSum[pid][2]++;
-        tSelSum[pid][3]+= buy;
-        tSelSum[pid][4]+= won;
-      } //end for i
-    } //end for j
+        var a= x.split('&');
+        var pid= +a[0];
+        var buy= +a[1];
 
+        var won= 0;
+        if(++cx === 1)
+          won= hiTab[ri][3]; // $:1
+        else
+        if(cx === 2)
+          won= hiTab[ri][5]; // $:2
+        
+        tSelSum[pid][5]++;
+        tSelSum[pid][2]+= buy;
+        tSelSum[pid][3]+= won;
+      });
+    } //end for j
+    
     var stb= '';
     stb+= '  NAME    $BUY     $WON      >$BAL<           #(gms)  %(buy)   %(won) \n'
         + '––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––\n';
 
     tSelSum.forEach(function(row)
     {
-      row[5]= row[4] - row[3]*10;
-      row[6]= c6Avg(row[3], row[2]);
-      row[7]= c6Avg(row[4], row[2]);
+      row[4]= row[3] - row[2]*10;
+      row[6]= c6Avg(row[2], row[5]);
+      row[7]= c6Avg(row[3], row[5]);
     });
 
-    tSelSum.sort(function(a, b) { return b[5] - a[5] });
+    tSelSum.sort(function(a, b) { return b[4] - a[4] });
 
     var pl= 0;
     for(var pid= 0; pid < tSelSum.length; pid++)
     {
-      if(tSelSum[pid][2] > 0)
+      if(tSelSum[pid][5] > 0)
       {
         pl++;
-        var gms= tSelSum[pid][2];
-        var buy= tSelSum[pid][3];
-        var won= tSelSum[pid][4];
-
-        var bal= tSelSum[pid][5];
+        var buy= tSelSum[pid][2];
+        var won= tSelSum[pid][3];
+        var bal= tSelSum[pid][4];
+        var gms= tSelSum[pid][5];
         var av6= tSelSum[pid][6];
         var av7= tSelSum[pid][7];
 
@@ -196,8 +265,7 @@ $(document).ready(function()
     $('input#in4').val('');
     $('input#in5').val('');
   }
-
-
+  
   // *** ---------- T I M E R  1st part----------------
   var btSec= 0;
   var btMin= 0;
@@ -207,38 +275,38 @@ $(document).ready(function()
 
   function timeText(istt)
   {
-    if(gameOver && !istt) return "ENTER";
+    if(gameOver && !istt) return 'ENTER';
  
     if(!istt)
     {
       var m= btMin, s= btSec;
       if(btSec >= 60) { m++; s= 0; }
-      return ("00" +m).slice(-2) +":"+ ("00" +s).slice(-2);
+      return ('00' +m).slice(-2) +':'+ ('00' +s).slice(-2);
     }
     else
     {
       var m= ttMin % 60, h= (ttMin -m) / 60;
-      return ("00"+h).slice(-2) +":"+ ("00"+m).slice(-2);
+      return ('00'+h).slice(-2) +':'+ ('00'+m).slice(-2);
     }
 
-    return "??:!!";
+    return '??:!!';
   }
 
   function timerPaint(isBlack, inf)
   {
-    var bt= document.getElementById("blindTimer");
+    var bt= document.getElementById('blindTimer');
     if(sirenState > 0 && inf === "!!!")
     {
       if( (sirenState === 1 && listMode !== 3)
          ||(sirenState === 2 && listMode === 3) )
       {
         inf= 'Alarm !!!';
-        document.body.style.backgroundColor= "white";
+        document.body.style.backgroundColor= 'white';
       }
       else
       {
         inf= '!!! Alarm';
-        document.body.style.backgroundColor = "black";
+        document.body.style.backgroundColor = 'black';
       }
       isBlack= (sirenState === 2);
     }
@@ -250,21 +318,20 @@ $(document).ready(function()
     {
       case false:
         if(listMode === 3)
-          $(bt).css({"border-color":"white"});
+          $(bt).css({'border-color':'white'});
         else
-          $(bt).css({"border-color":"lightgrey"});
+          $(bt).css({'border-color':'lightgrey'});
         
-        $(bt).css({"background":"black", "color":"white"});
+        $(bt).css({background:'black', color:'white'});
         
         break;
 
       case true:
-        if(listMode === 3)
-          $(bt).css({"border-color":"white"});
+        if(listMode === 3) $(bt).css({'border-color':'white'});
         else
-          $(bt).css({"border-color":"grey"});
+          $(bt).css({'border-color':'grey'});
 
-         $(bt).css({"background":"white", "color":"black"});
+         $(bt).css({background:'white', color:'black'});
 
         break;
     }
@@ -272,38 +339,15 @@ $(document).ready(function()
     if(inf !== "***")
       bt.innerHTML= timeText(false) +'<b id="timeTxt">'
                   + inf +'<br>'+ 'Game time '+ timeText(true) +'</b>';
- }
+  }
 
-  var revSort= false;
-  var initGanim= false;
 
-  // *** tabs# redraw... *********************************************************
+  // *** tabs# redraw... ************************************************
+  var doTabs= [0, 0,0,0,0];
  
   function freshTab1()
   {
-    var tscp= sortColP;
-
-    if(tscp === 5) tscp= 2;
-    else if(tscp > 1 && tscp < 5) tscp++;
-     
-    if(revSort)
-      tPl.reverse();
-    else
-    if(tscp !== 1)
-    {
-      tPl.sort(function(a, b) { 
-        if(tscp === 0) return a[tscp] - b[tscp]; else return b[tscp] - a[tscp]; });
-    }
-    else
-    {
-      tPl.sort(function(a, b)
-      {
-        if(b[tscp] > a[tscp]) return -1;
-        else if(b[tscp] < a[tscp]) return 1; else return 0;
-      });
-    }
-
-    rvsPLindex.length= tPl.length;
+    rvsPLindex.length= plTab.length;
 
     var vpd= '15px 5px 12px 5px';
     if(vSpace > 10) vpd= '25px 5px 22px 5px';
@@ -311,7 +355,7 @@ $(document).ready(function()
     var cx= 0;
     nextID= 0;
     $("#ptb").empty();
-    tPl.forEach(function(col)
+    plTab.forEach(function(col)
     {
       rvsPLindex[ (+col[0]) ]= cx++;
       // ***  id  name  gms  $buy  $won  $bal  csh%  rnk%  total
@@ -320,10 +364,10 @@ $(document).ready(function()
          '<tr tabindex="1"><td class="admin">'+ col[0]
         +'</td><td style="padding:' + vpd
         +'; text-align:left">'+ col[1]
-        +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[3]*1000))
+        +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[2]*1000))
+        +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[3]*100))
         +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[4]*100))
-        +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[5]*100))
-        +'</td><td>'+ ((col[2] === 0) ? ' ' : col[2])
+        +'</td><td>'+ ((col[2] === 0) ? ' ' : col[5])
         +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[6]*100))
         +'</td><td>'+ ((col[2] === 0) ? ' ' : fCash(col[7]*100))
         +'</td></tr>');
@@ -341,11 +385,11 @@ $(document).ready(function()
 
     // *** header
     $('#pth>tr').children().css({border:'none'});
-    $("#pth>tr").children().eq(sortColP).css({border:'2px solid grey'});
+    $("#pth>tr").children().eq(oldSrt[1]).css({border:'2px solid grey'});
 
-    for(var i= 0; i < tPl.length; i++)
+    for(var i= 0; i < plTab.length; i++)
     {
-      var pid= (+tPl[i][0]) - 1;
+      var pid= (+plTab[i][0]) - 1;
       if(tGm[pid][0] !== 'F')
         $('#ptb>tr').eq(i).removeClass('clean').addClass('selected'); 
      
@@ -396,18 +440,15 @@ $(document).ready(function()
     
   }
 
-
   var curRank= 0;
-  var reInit= false;
+//  var reInit= false;
   function freshTab2()
   {
     var vpd= (vSpace > 10)? '25px 5px 22px 5px':'15px 5px 12px 5px';
-    var cnt= 0;
     $('#gtb').empty();
-    tGm.forEach(function(col)
+    tGm.forEach(function(col, cnt)
     {
       var showStr= 'style="display:none"';
-      if(reInit) { col[2]= '-'; col[3]= '-'; }
       if(editMode || col[0] === "T" || col[0] === "A") showStr= '';
       $('#gtb').append(
          '<tr '+ showStr +'><td class="admin" style="text-align:center">'+ col[0]
@@ -419,12 +460,10 @@ $(document).ready(function()
         +'</td><td tabindex="1" style="padding:0; overflow:visible">'
         +'<pre class="mnyInfo"' +'> </pre>'
         +'<pre class="money">  $  </pre></td></tr>' );
-
-      if(!reInit && +col[2] > 0) naMny(cnt);
-      cnt++;
     });
 
-    timerPaint((btState === 1), '***'); 
+    timerPaint((btState === 1), '***');
+    $('#tab2').css({color:'black', background:'white'});
     
     $('#timeSelect, #blindSelect')
       .css({filter:'', color:'black', 'background-color':'white'});
@@ -436,14 +475,14 @@ $(document).ready(function()
       break;
 
       case 2:
-        $('#gtb>tr').css("border-top", "1px solid lightgrey");
+        $('#gtb>tr').css('border-top', '1px solid lightgrey');
       break;
 
       case 3:
         $('#lblBank').css({'border-color':'white'});
-        $('#gtb>tr').css("border-top", "1px solid grey");
-        $('#timeSelect, #blindSelect').css({"filter":"invert(100%)"});
-        $('#appFrame, #tab2').css({"color":"white", "background":"black"});
+        $('#gtb>tr').css('border-top', '1px solid grey');
+        $('#timeSelect, #blindSelect').css({filter:'invert(100%)'});
+        $('#tab2').css({color:'white', background:'black'});
       break;
     }
   }
@@ -452,41 +491,17 @@ $(document).ready(function()
   var monthStr= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+
   function freshTab3()
-  {
-    var srtCH= sortColH;
-    if(sortColH === 7) srtCH= 8;
-
-    if(revSort)
-      tHiFull.reverse();
-    else
-    if(srtCH !== 4 && srtCH !== 6)
-    {
-      tHiFull.sort(function(a, b) {
-        return b[srtCH] - a[srtCH]; });
-    }
-    else
-    {
-      tHiFull.sort(function(a, b)
-      {
-        if(b[srtCH] > a[srtCH]) return -1;
-        else
-          if(b[srtCH] < a[srtCH]) return 1;
-        else
-          return 0;
-      });
-    }
-
-
+  {    
     var vpd= '15px 5px 12px 5px';
     if(vSpace > 10) vpd= '25px 5px 22px 5px';
 
-    var cnt= 0;
     $('#htb').empty();
-    tHiFull.forEach(function(col)
+    hiTab.forEach(function(col, cnt)
     {
       var showAdmin= '';
-      if(!editMode) showAdmin= 'style="display:none"';
+      if(true || !editMode) showAdmin= 'style="display:none"';
     
       var mon= +(''+col[0]).substring(4,6);
       var dtStr= (''+col[0]).substring(6,8)+" " 
@@ -500,11 +515,8 @@ $(document).ready(function()
         +'</td><td  style="text-align:left">'+ col[4]
         +'</td><td>'+ fCash(+col[5]*100) // $:2
         +'</td><td style="text-align:left">'+ col[6]
-        +'</td><td '+ showAdmin+'>'+ col[8]
-        +'</td><td style="display:none">'+ cnt
+        +'</td><td '+ showAdmin+'>'+ (col[7]= cnt)
         +'</td></tr>');
-      
-      cnt++;
     });
 
     $('#htb>tr').addClass("clean");
@@ -517,7 +529,7 @@ $(document).ready(function()
 
     // *** header
     $('#hth>tr').children().css({border:'none'});
-    $('#hth>tr').children().eq(sortColH).css({'border':'2px solid grey'});
+    $('#hth>tr').children().eq(oldSrt[3]).css({'border':'2px solid grey'});
 
     if(editMode)
     {
@@ -531,16 +543,16 @@ $(document).ready(function()
 
   // *** clear state timeout
   var clrST, ssPend= false;
-
   // ***  SAVE STATE - - - - - - - - - -  
-  function prtGm()
+  function prtGm(x)
   {
+    if(!x) x= tGm;
     adminInfo.innerText+= '\n'
       + '[tGm]: 0    1   2      3      4 \n'
       + '      in?  id  rnk   $won   $buy \n'
       + '--------------------------------- \n';
    
-    tGm.forEach(function(col)
+    x.forEach(function(col)
     {
       adminInfo.innerText+=
           ('        '+ col[0]).slice(-8)
@@ -551,13 +563,11 @@ $(document).ready(function()
     });
   }
 
-
   function loadState(isImport)
   { 
     if(!window.localStorage) {
       adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
    
-    //nBar.innerText= ''; clrNotif();
     var loDat= localStorage.getItem('gameState');
     
     if(!loDat)
@@ -565,30 +575,36 @@ $(document).ready(function()
       adminInfo.innerText+= 'Game state empty, skip import \n';
       return;
     }
-    else
-      adminInfo.innerText+= 'Game state acquired: '+ loDat +'\n';
 
-    if(isImport)
+    adminInfo.innerText+= 'Game state acquired, ';
+    
+    if(!isImport)
     {
-      tGm.length= 0;
+
+      var t= [];
       loDat= loDat.split('|');
       loDat.forEach(function(row) {
-        tGm.push( row.split(':') ); });
-
-      tGm.forEach(function(col)
-      {
-        col[1]= +col[1]; col[4]= +col[4];
-        col[2]= +col[2]; col[3]= +col[3];
-      });
-
-      nBar.innerText+= ' #game state imported';
-      adminInfo.innerText+= 'Imported rows#: '+ tGm.length +'\n';
-      prtGm();
-
-      resetEdit(false);
-      keepMsgBar= true;
-      $('#mtb1').click();
+        t.push( row.split(':') ); });
+      
+      adminInfo.innerText+= 'show only rows#: '+ t.length +'\n';
+      prtGm(t);
+      return;
     }
+
+    tGm.length= 0;
+    loDat= loDat.split('|');
+    loDat.forEach(function(row) {
+      tGm.push( row.split(':') ); });
+
+    nBar.innerText+= ' #game state applied';
+    adminInfo.innerText+= 'applied rows#: '+ tGm.length +'\n';
+    prtGm();
+
+    resetEdit(false);
+    keepMsgBar= true;
+
+    doTabs[1]= 1;
+    $('#mtb1').click();
   }
 
   function saveState(isClear)
@@ -596,16 +612,14 @@ $(document).ready(function()
     if(!window.localStorage) {
       adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
 
-    // nBar.innerText= ''; clrNotif();
     if(isClear)
     {
       localStorage.removeItem('gameState');
-      adminInfo.innerText+= "Game state cleared! \n";
+      adminInfo.innerText+= "Game state cleared \n";
       return;
     }
-
+    
     var upDat= [];
-//    upDat.length= 0;
     tGm.forEach(function(row)
     {
       if(row[0] !== 'F') row[0]= 'A';
@@ -614,11 +628,10 @@ $(document).ready(function()
 
     localStorage.setItem('gameState', upDat.join('|'));
 
-    nBar.innerText+= ' #game state recorded';           
-    adminInfo.innerText+= "Game state recorded, rows#: "+ tGm.length +'\n';
-    prtGm();
+    nBar.innerText+= ' #game state stored';           
+    adminInfo.innerText+= "Game state stored, rows#: "+ tGm.length +'\n';
+    prtGm(tGm);
   }
-
 
   // *** GAME OVER *** *** *** *** *** *** *** *** *** *** *** *** ***
   function c6Avg(buy, nG)
@@ -640,63 +653,63 @@ $(document).ready(function()
   var gamePlayers= 0;
   var sortedRnk= [ [1, 2] ];
 
-  var disMini= [ [ 0, 0, 0 ] ];
-  var rx1= 0, rx2= 0; // table row for 1st & 2nd place
+  var rx1= 0, rx2= 0; // tGm rows: 1st & 2nd
 
   function actSavG()
   {
     var cf1= +tGm[rx1][3], cf2= +tGm[rx2][3];
     $('#gtb>tr')[rx1].cells[4].innerText= fCash(cf1*100);
 
+    tGm.forEach(function(x)
+    {
+      if(isNaN(x[2])) x[2]= 0;
+    });
+    
+    tGm.sort(function(a, b)
+    {
+      return a[2] - b[2];
+    });
+
+    var aux8= '';
+    tGm.forEach(function(x, c)
+    { // *** tGm:  0.in?  1.pid  2.rnk  3.won  4.buy
+      var z= plTab[c];
+      if(z[5] < 1) {
+        z[2]= z[3]= z[4]= z[5]= z[6]= z[7]= 0; }
+
+      var buy= +x[4];
+      
+      if(buy > 0)
+      {
+        var pid= +x[1]-1;
+        var ngm= z[5] +1;
+        var won= isNaN(x[3]) ? 0 : x[3];
+        var bal= x[3] - x[2]*10;
+
+        aux8+= '#'+pid+'&'+buy;
+/*        
+        z[2]+= buy; z[3]+= won;
+        z[4]= bal; z[5]= ngm;
+
+        z[6]= c6Avg(z[2], z[5]);
+        z[7]= c7Avg(z[3], z[5]);
+*/
+      }
+    });.
+
     var gdat= numCTD();
     if(useThisDate > 0) gdat= useThisDate;
 
-    tPl.sort(function(a, b) { return a[0] - b[0] });
-    var sortedMini= [ [0, 0, 0, 0, 0, 0] ]; 
-    sortedMini.length= 0;
+    hiTab.push([ gdat, gamePlayers, bankTotal,
+          cf1, sortedPl[rx1], cf2, sortedPl[rx2], 0, aux8.substr(1) ]);
 
-    var cnt= 0;
-    tGm.forEach(function(col)
-    {
-      if(tPl[cnt][2] <= 0) {
-        tPl[cnt][2]= tPl[cnt][3]= tPl[cnt][4]=
-          tPl[cnt][5]= tPl[cnt][6]= tPl[cnt][7]= tPl[cnt][8]= 0; }
+// ***               0   1    2    3    4    5    6    7
+//    pltab        píd  nme  buy  won  bal  ngm  av6  av7
+// ***           0    1    2     3     4     5     6    7
+// *** hiTab   datm  npl  bnk  $1st  nam1  $2nd  nam2  gid
 
-      if(+col[4] > 0)
-      {
-        sortedMini.push([ +col[2], +col[1], +col[4],
-                         tPl[cnt][2], tPl[cnt][3], tPl[cnt][4] ]);
-
-        tPl[cnt][2]+= 1; //gms
-        tPl[cnt][3]+= col[4]; //buy;
-        tPl[cnt][4]+= isNaN(col[3]) ? 0 : col[3]; //won
-
-        tPl[cnt][5]= tPl[cnt][4] - tPl[cnt][3]*10; //bal                      
-        tPl[cnt][6]= c6Avg(tPl[cnt][3], tPl[cnt][2]); 
-
-        tPl[cnt][7]= c7Avg(tPl[cnt][4], tPl[cnt][2]);
-        tPl[cnt][8]= tPl[cnt][6] + tPl[cnt][7]; //totl
-      }
-      cnt++;
-    });
-
-    sortedMini.sort(function(a, b) { return a[0] - b[0] });
-
-    cnt= 0;
-    var upGm= "0:0:0:0:0";
-    sortedMini.forEach(function(col)
-    {
-      if(useThisDate > 0)
-        upGm+= ':'+ col[1] +':'+ col[2] +':'
-          + disMini[cnt][0]+':'+ disMini[cnt][1] +':'+ disMini[cnt][2];
-      else
-         upGm+= ':'+ col[1] +':'+ col[2] +':'+ col[3] +':'+ col[4] +':'+ col[5];
-
-      cnt++;
-    });
-
-    tHi.push([ gdat, gamePlayers, bankTotal, cf1, upGm ]);
-
+    reclcAll();
+    
 //    clrAdmin(); saveDB();
     $("#ssv4But").click();
     saveState(true);
@@ -704,13 +717,14 @@ $(document).ready(function()
     btSec= btMin= ttMin= 0; btState= 8;
     timerPaint(false, 'Click to START');
     
-//    keepMsgBar= true;
+    doTabs[3]= 1;
     $('#mtb3').click();
 
     if(useThisDate > 0 && editRow >= 0)
       $('#htb>tr').eq(editRow).children().eq(1).click();
     else
       $('#htb>tr').eq(0).children().eq(1).click();
+
 
     useThisDate= 0;
     gamePlayers= 0;
@@ -763,8 +777,8 @@ $(document).ready(function()
     $(wf).off();
     $(wf).on('focus', function(e)
     {
-      if(!e || e.defaultPrevented) return;
-      e.preventDefault();e.stopPropagation();
+//      if(!e || e.defaultPrevented) return;
+//      e.preventDefault();e.stopPropagation();
   
       tGm[rx1][3]= 0;
       tGm[rx2][3]= 0;
@@ -776,20 +790,20 @@ $(document).ready(function()
 
     $(wf).on("keydown", function(e)
     {
-      if(!e || !e.which || e.defaultPrevented) return;
-      e.stopPropagation();
+//      if(!e || !e.which || e.defaultPrevented) return;
+//      e.stopPropagation();
 
       if(e.which === 13 || e.which === 9)
       {
-        e.preventDefault();
+//        e.preventDefault();
         finalSave();
       }
     });
 
     $(wf).on("keyup", function(e)
     {
-      if(!e || !e.which || e.defaultPrevented) return;
-      e.preventDefault(); e.stopPropagation();
+//      if(!e || !e.which || e.defaultPrevented) return;
+//      e.preventDefault(); e.stopPropagation();
 
       var w1Typ= e.target;
       var w2Typ= $('#gtb>tr')[rx2].cells[4];
@@ -831,53 +845,39 @@ $(document).ready(function()
     wf.focus();
   }
 
-
+//                  0    1    2    3    4    5    6    7
+//    pltab        píd  nme  buy  won  bal  ngm  av6  av7
   // *** main redraw function ***************************************
   var lastTab= 0;
   var dontInit= false;
-  var initOnceG= false;
+  var initOnceG= true;
   
   function reFresh()
   {
+    
     var ttxt= "Party Mix";
     if(!navigator.onLine) ttxt= "OFFLINE";
     document.getElementById("mtb1").value = ttxt;
 
- 
-    if(!initOnceG || (!dontInit && editMode && curTab !== 2))
+    if((initOnceG || editMode) && !dontInit) // && lastTab !== 2
     {
-      initGanim= !initOnceG && !editMode;
-      initOnceG= true; resetEdit( false );
+      initOnceG= false; resetEdit(false);
 
       tGm.length= 0;
       sortedPl.length= 0;
-
-      tPl.sort(function(a, b) { return a[0] - b[0] }); 
-      tPl.forEach(function(col)
+      plTab.sort(function(a, b) { return a[0] - b[0] }); 
+      plTab.forEach(function(col)
       {
-        if(col[2] < 1) {
-          col[5]= col[6]= col[7]= col[8]= -900 - col[0]; }
+        if(col[5] < 1) {
+          col[2]= col[3]= col[5]= col[6]= col[7]= 0; col[4]= (-900 - col[0]); }
 
         tGm.push([ 'F', +col[0], '-', '-', 0 ]);
         sortedPl.push( col[1] );
       });
 
-      var cnt= 0;
-      tHiFull.length= 0;
-      tHi.sort(function(a, b) { return b[0] - a[0] });
-
-      tHi.forEach(function(col)
-      {
-        var miniGm= col[4].split(':');
-        tHiFull.push([
-          +col[0], +col[1], +col[2],
-          +col[3],
-          sortedPl[ +miniGm[5]-1 ],
-          (+col[2]*10) - (+col[3]),
-          sortedPl[ +miniGm[10]-1 ],
-          col[4], cnt++
-        ]);
-      });
+      sortem(1, 4);
+      sortem(3, 0);
+      freshTab3();
     }
     else
     if(!keepMsgBar && nBar.innerText.length > 1) {
@@ -888,26 +888,24 @@ $(document).ready(function()
     for(var i= 0; i < selRows.length; i++)
     {
       var pid= +(selRows[i].firstChild.innerText) -1;
-      if(parseInt(tGm[pid][4], 10) < 1) {
-        tGm[pid][4]= 0; tGm[pid][0]= "T"; }
-      else
+      if(+tGm[pid][4] > 0)
         tGm[pid][0]= "A";
+      else {
+        tGm[pid][4]= 0; tGm[pid][0]= "T"; }
     }
 
+    
     sortedRnk.length= 0;
     tGm.forEach(function(col)
     {
       if(col[0] !== "T" && col[0] !== "A") {
         col[0]= "F"; col[2]= '-'; col[3]= '-'; col[4]= 0; }
       else
-      if(!isNaN(col[2]))
+      if(+col[2] > 0)
         sortedRnk.push([ +col[2], +col[1] ]);
     });
 
 
-    // ☆☆☆ this all over the place, sort out later
-    $('#appFrame, #tab2') //, #gameTable tr
-      .css({"color":"black", "background":"white"});
 
     if(lastTab === 2 && curTab !== 2) {
       if(--listMode < 1) listMode= 3; }
@@ -934,20 +932,19 @@ $(document).ready(function()
   
     if(useThisDate < 1) editRow= -1;
 
-    if(reInit) gameOver= false;
     if(curTab === 2 && gameOver) mnySplit();
 
     dontInit= keepMsgBar= false;
    
-    if(lastTab === 2 && ssPend) {
-      clearTimeout(clrST); saveState(false); ssPend= false; }
-
+//    if(lastTab === 2 && ssPend) {
+//      clearTimeout(clrST); saveState(false); ssPend= false; }
+    
     lastTab= curTab;
   }
 
   // *** END REFRESH *****************************************
 
-
+  
   function backAnim(rx)
   {
     var iRnk= +tGm[rx][2];
@@ -988,8 +985,8 @@ $(document).ready(function()
 
   $('#gameTable').click(function(e)
   {
-    if(!e || e.defaultPrevented) return;
-    e.preventDefault(); e.stopPropagation();
+//    if(!e || e.defaultPrevented) return;
+//    e.preventDefault(); e.stopPropagation();
 
     if(e.target.parentNode.rowIndex === 0) return;
 
@@ -1107,25 +1104,15 @@ $(document).ready(function()
       e.target.innerText= fCash(1000* (tGm[rx][4]= 1));
     }
     else {
-/*     
-    alert("v.0.3" 
-          + "\n this: " + this
-          + "\n this.className: " + this.className
-          + "\n e.type: " + e.type
-          + "\n e.eventPhase: " + e.eventPhase
-          + "\n e.bubbles: " + e.bubbles
-          + "\n e.defaultPrevented: " + e.defaultPrevented
-          + "\n e.target: " + e.target
-          + "\n e.currentTarget: " + e.currentTarget
-          );
-*/
+// ***
     }
   });
 
+
   $('#playerTable').click(function(e)
   {
-    if(!e || e.defaultPrevented) return;
-    e.preventDefault(); e.stopPropagation();
+//    if(!e || e.defaultPrevented) return;
+//    e.preventDefault(); e.stopPropagation();
 
     if(!gameOver && nBar.innerText.length > 1) clrNotif();
 
@@ -1133,14 +1120,12 @@ $(document).ready(function()
 
     if(trx === 0)
     {
-      if(sortColP === e.target.cellIndex)
-        revSort= !revSort;
-      else 
-        revSort= false;
+      var s= e.target.cellIndex;
+      if(oldSrt[1] !== s) sortem(1, s);
+      else plTab.reverse();
 
-      sortColP= e.target.cellIndex;
-      dontInit= true;
-      reFresh();
+      dontInit= true; reFresh();
+      return;
     }
     else
     {
@@ -1168,11 +1153,11 @@ $(document).ready(function()
           document.getElementById("subBut").value= "Edit";
 
           editRow= trx -1;
-          $('input#in0').val( tPl[editRow][0] );
-          $('input#in1').val( tPl[editRow][1] );
-          $('input#in2').val( tPl[editRow][3] );
-          $('input#in3').val( tPl[editRow][4] );
-          $('input#in4').val( tPl[editRow][2] );
+          $('input#in0').val( plTab[editRow][0] );
+          $('input#in1').val( plTab[editRow][1] );
+          $('input#in2').val( plTab[editRow][2] );
+          $('input#in3').val( plTab[editRow][3] );
+          $('input#in4').val( plTab[editRow][5] );
         }
         rowAnim(rtg, true);
         if(tGm[pid][0] === 'B')
@@ -1187,10 +1172,10 @@ $(document).ready(function()
   //firefox fix
   function firefoxFix()
   {
-    if($('#hth>tr').children()[sortColH].style.borderColor === 'grey')
-      $('#hth>tr').children().eq(sortColH).css({'border-color':'rgb(128, 128, 127)'});
+    if($('#hth>tr').children()[oldSrt[3]].style.borderColor === 'grey')
+      $('#hth>tr').children().eq(oldSrt[3]).css({'border-color':'rgb(128, 128, 127)'});
     else
-      $('#hth>tr').children().eq(sortColH).css({'border-color':'grey'});
+      $('#hth>tr').children().eq(oldSrt[3]).css({'border-color':'grey'});
   }
 
   // ☆☆☆ subRow-content - REMOVE
@@ -1202,63 +1187,70 @@ $(document).ready(function()
       $('.initDis').prop("disabled", true);
     }    
     rowAnim(etpn.previousSibling, false);
-    $(etpn).remove(); firefoxFix();
+    $(etpn).remove();
+//    firefoxFix();
   }
 
   //hit.onclick= 
   $('#historyTable').click(function(e)
   {
-    if(!e || e.defaultPrevented) return;
-    e.preventDefault(); e.stopPropagation();
+//    if(!e || e.defaultPrevented) return;
+//    e.preventDefault(); e.stopPropagation();
+
+
+    tEvt.innerText= '\n'+ 'event info v0.4 \n' 
+          + '\n this: ' + this
+          + '\n this.className: ' + this.className
+          + '\n e.type: ' + e.type
+          + '\n e.target.firstChild: ' +  e.target.firstChild
+          + '\n e.target.parentNode: ' + e.target.parentNode
+          + '\n e.target: ' + e.target
+          + '\n e.target.parentNode.rowIndex: ' + e.target.parentNode.rowIndex
+          + '\n e.target.cellIndex: ' + e.target.cellIndex
+          + '\n e.currentTarget: ' + e.currentTarget;
 
     if(!gameOver && nBar.innerText.length > 1) clrNotif();
 
     var etpn= e.target.parentNode;
+    if(etpn.rowIndex === undefined)
+      etpn= e.target;
+    
     if(etpn.rowIndex === 0)
     {
-      if(sortColH === e.target.cellIndex)
-        revSort= !revSort;
-      else
-        revSort= false;
+      var s= e.target.cellIndex;
+      if(oldSrt[3] !== s) sortem(3, s);
+      else hiTab.reverse();
 
-      sortColH= e.target.cellIndex;
-      if(sortColH > 7) sortColH= 7;
-
-      dontInit= true;
-      reFresh();
-
+      dontInit= true; reFresh();
       return;
     }
-
-    if($(etpn).hasClass('already')
-       && !($(etpn).hasClass('selected'))) return;
     
     if($(etpn).hasClass('extra')) {
       subrowDelete( etpn ); return; }
     
-    if($(etpn.parentNode).hasClass('extra')) {
-      subrowDelete(etpn.parentNode); return; }
-    
     if($(etpn).hasClass('selected')) {
       subrowDelete(etpn.nextSibling); return; }
 
-    if(etpn.rowIndex === undefined)
-      etpn= e.target;
-
+//    if($(etpn.parentNode).hasClass('extra')) {
+  //    subrowDelete(etpn.parentNode); return; }
+    
+//    if($(etpn).hasClass('already')
+  //     && !($(etpn).hasClass('selected'))) return;
+    
 
     // ☆☆☆ subRow-content - CREATE ***********************   
-    var cx, ri= +$(etpn).children()[8].innerText;
+    var ri= +$(etpn).children()[7].innerText;
     var selRows= $('#htb')[0].getElementsByClassName('selected');
 
     if(editMode)
     {
       $(selRows).children().eq(3).click();
-      $('#dtEdit').val( tHiFull[ri][0] );
+      $('#dtEdit').val( hiTab[ri][0] );
     }
 
     $(etpn).addClass('already');
 
-    var dtCode= tHiFull[ri][0].toString();
+    var dtCode= hiTab[ri][0].toString();
     var mon= +dtCode.substring(4,6);
     var dtStr= dtCode.substring(6,8)
               +' '+ monthStr[mon-1]
@@ -1268,32 +1260,32 @@ $(document).ready(function()
 
     var scd= '';
     scd+= ' RANK  NAME       $BUY     $WON \n'
-        + '––––––––––––––––––––––––––––––––                  '+ dtStr +'\n';
-   
-    var miniGm= tHiFull[ri][7].split(':');
-    for(var i= 5; i < miniGm.length; i+= 5)
-    {
-      cx= i/5;
+        + '––––––––––––––––––––––––––––––––              '+ dtStr +'\n';
 
-      var mnyw= 0;
-      if(cx === 1)
-        mnyw= +tHiFull[ri][3]; // $:1
+    var mg= hiTab[ri][8].split('#');
+    
+    mg.forEach(function(x, cx)
+    {
+      var a= x.split('&');
+      var pid= +a[0];
+      var buy= +a[1];
+
+      var won= 0;
+      if(++cx === 1)
+        won= hiTab[ri][3]; // $:1
       else
       if(cx === 2)
-        mnyw= +tHiFull[ri][5]; // $:2
+        won= hiTab[ri][5]; // $:2
       else
         if(cx === 3) scd+= '\n';
-
-      var wons= (mnyw === 0) ? '   ' : fCash(+mnyw*100);
-
-      var pid= +miniGm[i+0]-1;
-      var buy= +miniGm[i+1];
-
-      scd+= '  '+ ('  ' + cx).slice(-2) +'.  '
+      
+      var wons= (won === 0)? ' ':fCash(+won*100);
+      
+      scd+= ('    ' + cx).slice(-4) +'.  '
           + (sortedPl[ pid ] +'        ').substring(0, 8)
           + ('       '+ (buy+'k')).slice(-7) 
           + ('          '+ wons).slice(-9) +' \n';
-    } //end for
+    });
 
     var ctes= 'style="color:white; background:black"';
     if(listMode === 2)
@@ -1305,15 +1297,16 @@ $(document).ready(function()
     if(editMode && vSpace > 10)
       ctes= '';
 
-    $(etpn).after('<tr class="extra"'+ ctes +'><td colspan='
-                  + (editMode?8:7) +'><pre style="height:'
-                  + ((+tHiFull[ri][1] +4)*15) +'px; '
+    $(etpn).after('<tr class="extra"'+ ctes +'><td colspan=7>'
+                  + '<pre style="height:'
+                  + ((+hiTab[ri][1] +4)*15) +'px; '
                   + 'padding:9px 10px; margin:0; '
-                  + 'text-align:left; font-size:14px">'
+                  + 'text-align:left; user-select: none; '
+                  + 'pointer-events:none; font-size:14px">'
                   + scd +'</pre></td></tr>');
 
     rowAnim(etpn, true);
-    firefoxFix();
+    //firefoxFix();
    
     if(editMode)
     {
@@ -1348,62 +1341,70 @@ $(document).ready(function()
   // *** import... **************************************************
   function importDB(data)
   {
-    initOnceG= false;
+    initOnceG= true;
+    
+    
+// *** UNPACK & IMPORT
+    var rd= data.split('@');
 
-    // *** 1st part - players data
-    var gmHistory= data[1];
-    data= data[0].split('|');
-
-    if(!data) {
-      nBar.innerText+= ' #no cache data X'; return; }
-
-    var nCol= 6;
-//    tPl.length = 0;
-    tPl= [];
-    for(var i = 0; i < data.length / nCol; i++)
+    var yr= rd[0];
+    sortedPl= rd[1].split('|');
+    var hiLoad= rd[2].split('|');
+  
+    plTab= [];
+    sortedPl.forEach(function(x, c)
     {
-      var nbrs= [ parseInt(data[i*nCol +0], 10), 0,
-                 parseInt(data[i*nCol +2], 10), parseInt(data[i*nCol +3], 10),
-                 parseInt(data[i*nCol +4], 10), parseInt(data[i*nCol +5], 10) ];
-       
-      var bal= nbrs[4] - nbrs[3]*10;
-      var col6= c6Avg(nbrs[3], nbrs[2]);
-      var col7= c7Avg(nbrs[4], nbrs[2]);     
-      var totl= col6 + col7;
-
-      if(parseInt(data[i*nCol +0], 10) > 0)
-      {
-        if(nbrs[2] === 0) 
-          bal= col6= col7= totl= -900 -nbrs[0];
-
-        tPl.push( [ +data[i*nCol +0], data[i*nCol +1], nbrs[2], 
-                     nbrs[3], nbrs[4], bal, col6, col7, totl ] );
-      }
-    }
-          
-
-    // *** 2nd part - games history data
-
-    if(!gmHistory) {
-      nBar.innerText+= ' #no cache data Y'; return; }
-
-    nCol= 5;
-    data= gmHistory.split('|');
-
-    tHi.length= 0;
-    for(var i = 0; i < data.length / nCol; i++)
+// ***               0   1    2    3    4    5    6    7
+//    pltab        píd  nme  buy  won  bal  ngm  av6  av7
+      plTab.push( [c+1, x,     0,   0,   0,   0,   0,   0] );
+    });
+    
+    hiTab= [];
+    hiLoad.forEach(function(x, gid)
     {
-      if(+data[i*nCol +2] > 0)
+// ***           0    1    2     3     4     5     6    7    8
+// *** hiTab   datm  npl  bnk  $1st  nam1  $2nd  nam2  gid  rkb
+      var a= x.split(':');
+      hiTab.push( [ uzpN(a[0]), 0, 0, 0, '', 0, '', 0, '' ] );
+    });
+    
+  
+    var npl, bnk, as= '';
+    hiLoad.forEach(function(x,n)
+    {
+      var a= x.split(':');
+      var wn1= +a[1];
+      var wn2= +a[2];
+  
+      var g= hiTab[n];
+      var mg= a[3].substr(1).split('#');
+   
+      npl= bnk= 0;
+      mg.forEach(function(y,c)
       {
-        var x= uzpN(data[i*nCol +0]);
-//        var x= parseInt(data[i*nCol +0], 36);
+        var b= y.split('&');
+        var pid= +b[0];
+        var buy= +b[1];
+
+        npl++;
+        bnk+= buy;
         
-        tHi.push([
-          x, +data[i*nCol +1], +data[i*nCol +2], 
-          +data[i*nCol +3], data[i*nCol +4] ]);
-      }
-    }
+        var won= 0;
+        if(c === 0) { won= wn1; g[4]= sortedPl[pid] }
+        else if(c === 1) { won= wn2;  g[6]= sortedPl[pid] }
+        
+        var z= plTab[pid];
+        z[2]+= buy; z[3]+= won; 
+        z[5]++; // #ng
+        z[4]= z[3] - z[2]*10; // bal
+        z[6]= c6Avg(z[2], z[5]);
+        z[7]= c7Avg(z[3], z[5]);
+      });
 
+      g[1]= npl; g[2]= bnk; g[3]= wn1;
+      g[5]= wn2; g[8]= a[3].substr(1);
+    });
+    
     var d= localStorage.getItem('dataBase');
     if(!d || d.length < 9)
       saveDB(true);
@@ -1513,63 +1514,51 @@ $(document).ready(function()
 
     if(isImport)
     {
-      importDB(d.split('@'));
+      importDB(d);
       adminInfo.innerText+=  'import@loadCache: \n';
     }
     else
       adminInfo.innerText+=  'info@loadCache: \n';
 
-    d= d.split('@');
-    t= d[1];
-    if(!(d= d[0])) {
-      nBar.innerText+= ' #no cache data B'; return; }
+    adminInfo.innerText+= '\n'
+      +'timestamp\t name\t $buy\t $won \n';
 
-    d= d.split('|');
-    if(!t) { nBar.innerText+= ' #no cache data C'; return; }
+    var rd= d.split('@');
 
-    d= t.split('|');
-    adminInfo.innerText+=
-        'TIMESTAMP      NAME         $BUY     $WON \n'
-      + '––––––––––––––––––––––––––––––––––––––––––\n';
+    var yr= rd[0];
+    sortedPl= rd[1].split('|');
+    var hiLoad= rd[2].split('|');
 
-    var n= 5;
-    for(var i = 0; i < d.length/5; i++)
+    var as= '';
+    hiLoad.forEach(function(x)
     {
-      var x= ''+uzpN(d[i*n +0]);
-      var r= [ x, +d[i*n +1], +d[i*n +2], +d[i*n +3], d[i*n +4] ];
-      if(r[2] <= 0) continue;
-
-      var g= '';
-      var dat= r[0];
-      var miniGm= r[4].split(':');
-
-      for(var j= 5; j < miniGm.length; j+= 5)
+      var a= x.split(':');
+      var wn1= +a[1];
+      var wn2= +a[2];
+  
+      var mg= a[3].substr(1).split('#');
+   
+      mg.forEach(function(y,c)
       {
-        var nam= sortedPl[+miniGm[j +0]-1];
-        var buy= +miniGm[j +1];
+        var b= y.split('&');
+        var pid= +b[0];
+        var buy= +b[1];
 
         var won= 0;
-        if(j/5 === 1) won= r[3]; // $:1
-        else if(j/5 === 2) won= r[2]*10 - r[3]; // $:2
+        if(c === 0) won= wn1;
+        else if(c === 1) won= wn2;
 
-
-        g+= (dat +'               ').substring(0, 14) +' '
-          + (nam +'            ').substring(0, 9)
-          + ('         '+ buy*1000 ).slice(-8)
-          + ('         '+ won*100 ).slice(-9) +'\n';
-      }
-
-      adminInfo.innerText+= g +'\n';
-    }
+        as+= ''+uzpN(a[0])+'\t '+sortedPl[pid]
+          +'\t '+buy*1000+'\t '+won*100+'\n';
+      });
+    });
+  
+    adminInfo.innerText+= as+'\n';
   }
-
 
   function loadServer()
   {
     adminInfo.innerText+= 'SERVER:load & import \n';
-
-    tHi.length= 0;
-    tHiFull.length= 0;
 
     $.ajax(
     {
@@ -1584,7 +1573,7 @@ $(document).ready(function()
         var d= r.replace(/\n|\r/g, '');
         adminInfo.innerText+= x.getAllResponseHeaders() +'\n'
           + 'PASS:server load '+ (d.length/1024).toFixed(2) +' KB \n';
-        importDB(d.split('@'));
+        importDB(d);
       }
     });
   }
@@ -1619,20 +1608,7 @@ $(document).ready(function()
   
   function saveDB(cchOnly)
   {
-    initOnceG= false;
-  
-    var upData= "0|export-init|0|0|0|0";
-    var upHistory= "@99|2|0|0|0:0:0:0:0:1:1:1:1:1:2:2:2:2:2";
-
-    tPl.forEach(function(col) {
-        upData+= '|'+ col[0] +'|'+ col[1]+'|'+ col[2]+'|'+ col[3] +'|'+ col[4] +'|'+ '#'; });
-
-    tHi.forEach(function(col) {
-      var x= zipN(+col[0]);
-      upHistory+= '|'+ x +'|'+ col[1] +'|'+ col[2] +'|'+ col[3] +'|'+ col[4]; });
-
-    upData+= upHistory;
-
+    initOnceG= true;
 
     // *** CACHE SAVE
     adminInfo.innerText+= 'CACHE:export & save \n';
@@ -1641,15 +1617,33 @@ $(document).ready(function()
       adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
     else
       adminInfo.innerText+= 'USING:window.localStorage \n';
+    
+    var rawdb= '2018'
+             + '@'+ sortedPl.join('|');
+   
+    var hiSave= '';
+    hiTab.forEach(function(x)
+    {
+      var mg= x[8].split('#');
+      hiSave+= '|'+zipN(x[0])+':'+x[3]+':'+x[5]+':';
 
-    localStorage.setItem('dataBase', upData);
+      mg.forEach(function(y)
+      {
+        var a= y.split('&');
+        var pid= +a[0];
+        var buy= +a[1];
+        hiSave+= '#'+pid+'&'+buy;
+      });
+    });
 
-    nBar.innerText+= ' #cache save done';
-    adminInfo.innerText+= 'PASS:cache save '+ (upData.length/1024).toFixed(2) +' KB \n';
+    rawdb+= '@'+ hiSave.substr(1);
+    localStorage.setItem('dataBase', rawdb);
+
+    nBar.innerText+= ' #cache save OK';
+    adminInfo.innerText+= 'PASS:cache save '+ (rawdb.length/1024).toFixed(2) +' KB \n';
 
     if(cchOnly) return;
 
-    
     // *** SERVER SAVE
     adminInfo.innerText+= 'SERVER:export & save \n';
 
@@ -1662,23 +1656,19 @@ $(document).ready(function()
 
     $.ajax(
     {
-      url:appPath +'/sav:'+dbPass, data:upData, type:'POST',
+      url:appPath +'/sav:'+dbPass, data:rawdb, type:'POST',
       error:function(e, f)
       {
         adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
       },
       success:function(r, s, x)
       {
-        if(r.substring(0,4) !== 'size')
-        {
-        adminInfo.innerText+= 'FAIL@server:'+ r +'\n';
-          return;
-        }
+        if(r.substring(0,4) !== 'size') {
+          adminInfo.innerText+= 'FAIL@server:'+ r +'\n';  return; }
 
-        nBar.innerText+= ' #server save done '+ r.substring(5);
-        
+        nBar.innerText+= ' #server save '+ r.substring(5);
         adminInfo.innerText+= x.getAllResponseHeaders() +'\n'
-          + 'PASS:server save '+ (upData.length/1024).toFixed(2) +' KB \n';
+          + 'PASS:server save '+ (rawdb.length/1024).toFixed(2) +' KB \n';
       }
     });
   }
@@ -1694,27 +1684,25 @@ $(document).ready(function()
     }
 
     loadServer();
+                                
+    if(navigator.storage)
+    {
+      navigator.storage.persisted().then(function(getP)
+      {
+        if(getP)
+        {
+          $('#gpc4But').val("Persistance Granted");
+          $('#gpc4But').css({background:'none',
+                             color:'black', 'box-shadow':'none'});
+        }
+      });
+    }
   }
-
 
 
   // *** action starts here *********************************
-  clrAdmin();
-  loadDB();
+  clrAdmin(); loadDB();
   
-                            
-  if(navigator.storage)
-  {
-    navigator.storage.persisted().then(function(getP)
-    {
-      if(getP)
-      {
-        $('#gpc4But').val("Persistance Granted");
-        $('#gpc4But').css({background:'none',
-                           color:'black', 'box-shadow':'none'});
-      }
-    });
-  }
 
 
   function initBuyin(plNo)
@@ -1723,7 +1711,7 @@ $(document).ready(function()
     if(plNo < 0)
     {
       plNo= -(plNo +100);
-      bankTotal+= tGm[plNo][4];
+      bankTotal+= +tGm[plNo][4];
       document.getElementById('lblBank')
         .innerText= 'Bank: $'+ fCash(bankTotal*1000);
     }
@@ -1756,11 +1744,12 @@ $(document).ready(function()
     if(tid === "#tab2")
     {
       curTab= 2;
-       
-      reInit= true;
-        reFresh(); reInit= false;
 
       gamePlayers= 0;
+      gameOver= false;
+      
+      reFresh();
+
       sortedRnk.sort(function(a, b) { return b[0] - a[0] });
 
       var dt = new Date();
@@ -1788,52 +1777,36 @@ $(document).ready(function()
       return;
     } // *** end tab-2
 
-    if(tid === "#tab1") {
-      sortColP= 4; revSort= false; curTab= 1; }
+    if(tid === "#tab1") curTab= 1;
     else
-    if(tid === "#tab3") {
-      sortColH= 0; revSort= false; curTab= 3; }
+    if(tid === "#tab3") curTab= 3;
     else
-    if(tid === "#tab4") { curTab= 4; }
+    if(tid === "#tab4") curTab= 4;
 
-    reFresh();
+    if(doTabs[curTab] > 0) {
+      reFresh(); doTabs[curTab]= 0;
+    }
   });
 
 
   // *** ---------- T I M E R  2nd part ----------------
-  var tsAdmin= 1000;  
   function minuteUp()
   {
     if(btState !== 1) return;
    
-    // *** bigger step to save battery, update every 5sec?
     if(--btSec <= 0) {
       btSec= 60; btMin--; ttMin++; }
     
-    if(editMode)
-    {
-      if((curTab === 2 && listMode === 3) || (curTab !== 2 && listMode === 2))
-      {
-        btSec= 60; ttMin++; btMin--; 
-      }
-      else
-      if((curTab === 2 && listMode === 1) || (curTab !== 2 && listMode === 3))
-      {
-        btSec= 60; if(ttMin > 0)ttMin--; btMin--;
-      }
-    }
-
     if(btMin < 0)
     {
-      //btMin= 0;
-      var cn= 1+ parseInt($('#blindSelect').val(), 10);
+      var cn= +$('#blindSelect').val() +1;
 
       if(cn > 15) cn= 15;
       $('#blindSelect').val(cn);
       btState= 2; $('#blindTimer').click();
     }
     else
-      setTimeout( minuteUp, editMode ? tsAdmin:1000);
+      setTimeout( minuteUp, 1000);
 
     timerPaint(true, 'Click to PAUSE');
   }
@@ -1852,7 +1825,7 @@ $(document).ready(function()
   {
     var ni= ($('#timeSelect :selected').text()).indexOf('min');
     var ts= ($('#timeSelect :selected').text()).substring(0, ni);
-    btSec= 60; btMin= parseInt(ts, 10) -1;
+    btSec= 60; btMin= +ts -1;
   }
 
   $('#blindTimer').click(function(e)
@@ -1881,15 +1854,14 @@ $(document).ready(function()
       case 8:
       case 1:
         if(btState === 8) { btState= 1; btInit(); }
-        tsAdmin= (listMode === 2) ? 90:700;
         timerPaint(true, 'Click to PAUSE');
-        setTimeout( minuteUp, editMode ? tsAdmin:1000);
+        setTimeout( minuteUp, 1000);
       break;
        
       case 2:
         btState= 9; sirenState= 1;
         if(curTab != 2) $('#mtb2').click();
-        setTimeout(bkgSiren, 950);
+        setTimeout(bkgSiren, 350);
       break;
     }
   });
@@ -1910,7 +1882,6 @@ $(document).ready(function()
   // *** .........................................................
   $("#mnu1").click(function(e)
   { // star A.
-    e.stopPropagation();
     if(useThisDate > 0)
      alert('Game modification in progress, sooo?');
 
@@ -1919,27 +1890,24 @@ $(document).ready(function()
       adminInfo.innerText+= 
         'Made by zele-chelik!, Jun 2018. \n'; return; }
 
-    revSort= false;
     if(editMode= !editMode)
     {
-      if(curTab === 1) sortColP= 0;
-      else if(curTab === 3) sortColH= 7;     
+      if(curTab === 1) sortem(1, 0, 1);
+      else if(curTab === 3) sortem(3, 0, 1);
       $('.adminEdit').css('display', 'block');
     }
     else
     {
-      //initOnceG= false;
-      if(curTab === 1) sortColP= 4;
-      else if(curTab === 3) sortColH= 0;
+      if(curTab === 1) sortem(1, 4);
+      else if(curTab === 3) sortem(3, 0);
       $('.adminEdit').css('display', 'none');
     }
+
     reFresh();
   });
-  
+
   $("#mnu2").click(function(e)
   { // arrow B.
-    e.stopPropagation();
-
     if(curTab === 4)
     {
       if($('#dbFrame').css('height') !== '300px')
@@ -1949,22 +1917,24 @@ $(document).ready(function()
     }
     else {
       vSpace= (vSpace > 10) ? 10:20; }
-
+    
+    doTabs[1]= doTabs[2]= doTabs[3]= 1;
     dontInit= true;
     reFresh();
   });
    
   $("#mnu3").click(function(e)
   { // line C.
-    e.stopPropagation();
-    
     if(curTab === 4) {
       clrAdmin();
       adminInfo.innerText= 
         'What?! Why did you do that just now? \n'; return; }
     
-    if(++listMode > 3) listMode= 1;    
-    dontInit= true; reFresh();
+    if(++listMode > 3) listMode= 1;
+    
+    doTabs[1]= doTabs[3]= 1;
+    dontInit= true;
+    reFresh();
   });
 
   $("#headbar").click(function() {
@@ -1972,22 +1942,21 @@ $(document).ready(function()
 
 
   // *** INPUT TEXT FIELD ...............................
+/*
   $(".finf").on('focus', function(e)
   {
-    e.preventDefault();
-    e.stopPropagation();
-
+//    e.preventDefault(); e.stopPropagation();
     this.select();
   });
-
+*/
   $(".finf").on('keydown', function(e)
   {
-    if(!e || !e.which || e.defaultPrevented) return;
-    e.stopPropagation(); // move to bottom?
+//    if(!e || !e.which || e.defaultPrevented) return;
+//    e.stopPropagation(); // move to bottom?
     
     if(e.which === 9 || e.which === 13)
     {
-      e.preventDefault();
+//      e.preventDefault();
 
       if(this.id === "dtEdit")
         $("#rdt3But").focus().click();
@@ -2004,26 +1973,27 @@ $(document).ready(function()
   
   $("#frmInput").submit(function(e)
   {
-    if(e.defaultPrevented) return;
-    e.preventDefault(); e.stopPropagation();
+//    if(e.defaultPrevented) return;
+//    e.preventDefault(); e.stopPropagation();
    
     if(editRow >= 0)
-      tPl.splice(editRow, 1); //delete, then add normaly = edit
+      plTab.splice(editRow, 1); //delete, then add normaly = edit
 
-    var col0 = $('input#in0').val();
-    var col1 = $('input#in1').val();
+    var col0 = $('input#in0').val(); // pid
+    var col1 = $('input#in1').val(); // nme
    
-    var col3 = +$('input#in2').val();
-    var col4 = +$('input#in3').val();
-    var col2 = +$('input#in4').val();
+    var col2 = +$('input#in2').val(); // buy
+    var col3 = +$('input#in3').val(); // won
    
-    var bal= col4 - col3*10;
-    var col6= c6Avg(col3, col2);
-    var col7= c7Avg(col4, col2);
-    var totl= col6 + col6;
+    var col4= col3 - col2*10; // bal
+    
+    var col5 = +$('input#in4').val(); // ngm
+    
+    var col6= c6Avg(col2, col5);
+    var col7= c7Avg(col2, col5);
 
-    if(col2 < 1) bal= col6= col7= totl= -900 -col0;
-    tPl.push([ col0, col1, col2, col3, col4, bal, col6, col7, totl ]);
+    if(col5 < 1) col2= col3= col5= col6= col7= 0;  col4= (-900 -col0);
+    plTab.push([ col0, col1, col2, col3, col4, col5, col6, col7 ]);
     reFresh();
   });
 
@@ -2036,13 +2006,13 @@ $(document).ready(function()
   // *** tab1-class="ord2" : DARK BOTTOM BUTTON
   $("#raz1But").click(function()
   { //>Reset All to Zero<
-    tPl.forEach(function(col)
+    plTab.forEach(function(col)
     {
       col[2]= col[3]= col[4]=
-        col[5]= col[6]= col[7]= col[8]= 0;
+        col[5]= col[6]= col[7]= 0;
     });
     
-    tHi.length= 0;
+    hiTab.length= 0;
     reFresh();
   });
   
@@ -2050,10 +2020,14 @@ $(document).ready(function()
   // instead, just set inactive by #nG= -1, hmm?
   // ... can delete last ID safely, sort of
   $('#rli1But').click( //>Remove Last ID<
-    function() { tPl.splice(nextID-1, 1); reFresh(); });
+    function() { plTab.splice(nextID-1, 1); reFresh(); });
   
-  $("#rma1But").click(//>Remove All<
-    function() { tPl.length= 0; tHi.length= 0; reFresh(); });
+  $("#rma1But").click(function()
+  { //>Remove All<
+    plTab.length= 0;
+    hiTab.length= 0;
+    reFresh();
+  });
 
 
   // *** TAB 2 : ADMIN BUTTONS ***************************************
@@ -2109,6 +2083,7 @@ $(document).ready(function()
   function delHrow()
   {
     //Need this?, having rvsPLindex??
+ /*
     tPl.sort(function(a, b) { return a[0] - b[0] });
 
     disMini.length= 0;
@@ -2158,6 +2133,7 @@ $(document).ready(function()
     }
     // *** delete
     tHi.splice(+tHiFull[editRow][8], 1);
+*/
   }
 
 
@@ -2165,8 +2141,8 @@ $(document).ready(function()
   // *** --------------------------------------------------------
   $("#rdt3But").click(function()
   { //>Re-Date<
-    tHi[ (+tHiFull[editRow][8]) ][0]= tHiFull[editRow][0]=
-      $('#htb>tr')[editRow].cells[0].innerText= +$('input#dtEdit').val();
+/*    tHi[ (+tHiFull[editRow][8]) ][0]= tHiFull[editRow][0]=
+      $('#htb>tr')[editRow].cells[0].innerText= +$('input#dtEdit').val(); */
   });
   
   // *** modify game: so, after all...
@@ -2180,7 +2156,7 @@ $(document).ready(function()
       alert("Row #: "+ editRow +"...Something's wrong!");
       return;
     }
-
+/*
     gameOver= false;
     var miniGm= (tHiFull[editRow][7]).split(':');
    
@@ -2203,6 +2179,7 @@ $(document).ready(function()
     useThisDate= +tHiFull[editRow][0];
     delHrow(); editRow= +tHiFull[editRow][8];
     $('#mtb2').click();
+*/
   });
 
   $('#rmr3But').click(function()
@@ -2220,13 +2197,13 @@ $(document).ready(function()
   
   // *** tab3 - class="ord2" : DARK BOTTOM BUTTON
   $("#rcl3But").click(function()
-  { //>Recalculate All< 
-    // ...for some resson?
+  { //>Recalculate All<
+    reclcAll();
   });
 
   $("#rma3But").click(function()
   { //>Remove All<
-    tHi.length= 0;
+    hiTab.length= 0;
     reFresh();
   });
   
@@ -2296,45 +2273,21 @@ $(document).ready(function()
 
   $("#med4But").click(function()
   { //>Memory Data<'
-
-    // ***                 0     1     2     3     4    5     6     7     8
-    // *** tPl:           id    name  gms  $buy  $won  $bal  csh%  rnk%  total
-    // *** tHiFull:       date  np    bnk  $1    1st   $2    2nd   m-tGm
-    // *** tGm:           isIn  pid   rnk  $won  $buy
-    adminInfo.innerText= '[tPl]: 1       2      3       4       5       6     7      8 \n'
-                      + ' id  name     #nG   $buy    $won    $bal    $(#)  %($)  total \n'
-                      + '-------------------------------------------------------------- \n';
-
-    tPl.forEach(function(col)
-    {
-      adminInfo.innerText+= ('   '+ col[0]).slice(-3) +'  '
-                         + (col[1] +'        ').substring(0, 8)
-                         + ('    '+ col[2]).slice(-4)
-                         + ('       '+ col[3]).slice(-7)
-                         + ('        '+ col[4]).slice(-8)
-                         + ('        '+ col[5]).slice(-8)
-                         + ('        '+ col[6]).slice(-8)
-                         + ('      '+ col[7]).slice(-6)
-                         + ('       '+ col[8]).slice(-7) +' \n'; });
-   
-    // *** 2nd part - games history data
-    adminInfo.innerText+= '\n'
-             + '[tHiFull]: 0     1     2     3    4      5   6       7     8 \n'
-             + '         date   #nP  $bnk  $1st:name   $2nd:name   |tGm|  gid \n'
-             + '---------------------------------------------------|-x-|------ \n';
-
-    tHiFull.forEach(function(col)
-    {
-      adminInfo.innerText+= (
-          '               '+ col[0]).slice(-15) +' '
-        + ('   '+ col[1]).slice(-3) +' '
-        + ('     '+ col[2]).slice(-5) +' '
-        + ('     '+ col[3]).slice(-5) +' '
-        + (col[4] +'       ').substring(0, 7)
-        + ('    '+ col[5]).slice(-4) +' '
-        + (col[6] +'       ').substring(0, 7)
-        + '|-x-| '+ ('    '+ col[8]).slice(-4) +' \n';
-    });
+    var as= '';
+    adminInfo.innerText+= '\n'+'[plTab: '+ plTab.length+']\n'
+      + 'pid\t name\t $buy\t $won\t $bal\t #ng\t %buy\t %won \n';
+    plTab.forEach(function(r) {
+      as+= ''+ r[0]+'\t '+r[1]+'\t '+r[2]+'\t '+r[3]
+        +'\t '+r[4]+'\t '+r[5]+'\t '+r[6]+'\t '+r[7]+'\n'; });
+    adminInfo.innerText+= as;
+    
+    as= '';
+    adminInfo.innerText+= '\n'+'[hiTab: '+ hiTab.length+']\n'
+      + 'dtm\t #npl\t $bank\t $1st\t :name\t $2nd\t :name\t #pid:buy.. \n';
+    hiTab.forEach(function(r, c) {
+      as+= ''+ zipN(r[0])+'\t '+r[1]+'\t '+r[2]+'\t '+r[3]
+        +'\t '+r[4]+'\t '+r[5]+'\t '+r[6]+'\t '+r[8]+'\n'; });
+    adminInfo.innerText+= as;
   });
 
   $("#sld4But").click( function() { loadDB(); }); //>Server Load<
