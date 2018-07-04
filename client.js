@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r17b \n';
+  var versionCode= 'v2.0r17c \n';
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -695,7 +695,7 @@ $(document).ready(function()
         z[7]= c7Avg(z[3], z[5]);
 */
       }
-    });.
+    });
 
     var gdat= numCTD();
     if(useThisDate > 0) gdat= useThisDate;
