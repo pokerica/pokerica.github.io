@@ -39,12 +39,12 @@
         style="background-color:#777777; width:700px; height:100%; margin:auto">
     
     
-  <div id="appFrame" style="background:white; width:100%">
     
-    
+    <div id="appFrame" style="background:white; width:100%">
+
       <pre id="notif" style="font-size:15px; height:auto; padding:0 10px;
                            margin:0 0 -1px 0; border:none; white-space:nowrap; overflow:auto;
-                           color:lightgrey; background:#5a5a5a" >notification bar #</pre>
+                           color:lightgrey; background:#5a5a5a" > #notification bar</pre>
     
       <div id="headbar" style="border-bottom:1px solid grey; background:black; padding: 10px 5px 0 20px" >    
         <input class="mtb act" id="mtb1" style="margin-left:-20px" type="button" value="Loading..." > 
@@ -75,7 +75,7 @@
 <!-- *** tabs stsrt here 
 ****************************************************-->
       
-    <div id="tab1" class="ptab pac" style="padding:20px 20px"> 
+    <div id="tab1" class="ptab pac" style="padding:20px 14px 40px"> 
       
       <pre id="lblDate1" style="font-size:15px; text-align:right; font-style:italic;
                                 border-bottom:0px solid black; padding:0 5px; margin-top:-9px; margin-bottom:9px; width:100%">date</pre>
@@ -120,7 +120,7 @@
     </div> 
     
 
-    <div id="tab2" class="ptab pde" style="padding:5px 20px">                    
+    <div id="tab2" class="ptab pde" style="padding:5px 14px 20px">                    
           
       <div class="adminEdit" style="display:none; text-align:right; margin:15px 0 -10px 0">
         <button class="ord" id="rng2But" style="width:220px">Create Random Game</button>
@@ -134,7 +134,6 @@
       <pre id="lblDate" style="font-size:15px; text-align:right; font-style:italic;
                                 padding:0 5px; margin-bottom:30px; width:100%">date</pre>
 
-      
       <!-- id  plid  $buy  $won  rnk  -->      
       <table id="gameTable">
       <thead id="gth"><!--/thead-->
@@ -177,11 +176,15 @@
     </div>
     
     
-    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:15px 20px">
+    <div id="tab3" class="ptab pde" style="background:white; font-size:24px; padding:15px 14px 40px">
       
       <svg style="border:0px solid black; position:absolute" width="27px" height="27px" viewbox="0 0 24 24" fill="#000000" >
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
         <path d="M0 0h24v24H0z" fill="none"/></svg>
+      
+
+      <pre id="tev" style="font-size:15px; line-height:17px">ei..</pre>
+      
       
       <div id="sumSg" style="border:1px solid lightgrey; 
                              margin-bottom:15px; line-height:15px">_sgb_</div>
@@ -209,8 +212,8 @@
           <th tabindex="1" style="text-align:left; width:80px">:NAME</th>
           <th tabindex="1" style="width:70px; text-align:right">2nd $</th>
           <th tabindex="1" style="text-align:left; width:90px">:NAME</th>
-          <th tabindex="1" class="admin" style="width:40px">gid</th>
-          <!-- th style="display:none"></th -->
+          <!-- th tabindex="1" class="admin" style="width:40px">gid</th -->
+          <!-- th style="display:none"></th --> 
         </tr></thead>
       <tbody id="htb" style="text-align:right"></tbody> 
       </table>
@@ -222,7 +225,7 @@
     </div>
     
     
-    <div id="tab4" class="ptab pde" style="padding:10px 20px">      
+    <div id="tab4" class="ptab pde" style="padding:50px 14px 20px">      
       
       <div style="text-align:right; margin-top:10px">
 
@@ -257,10 +260,8 @@
       </div>
     </div>
     
-    
-    <p style="text-align:right; font-size:7px; margin:0; color:grey">zele-chelik ! </p> 
-  </div>  
-    
+    </div>
+
     <script>
       var noSleep = new NoSleep();
       var wakeLockEnabled = false;
