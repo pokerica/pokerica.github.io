@@ -1,4 +1,4 @@
-// *** abc
+// *** abcdefgh..k
 self.addEventListener('install', e =>                       
 {
   caches.delete('pmpAppCache').then(cache =>
@@ -7,12 +7,9 @@ self.addEventListener('install', e =>
       {
         return cache.addAll(
         [ 
-          '/', '/index.html',
-          '/client.js',
-          '/style.css',
-          '/manifest.json',
-          '/jquery-3.3.1.min.js', '/NoSleep.min.js',
-          '/icons/ibm.ttf', '/icons/quack.wav'
+          '/', '/index.html', '/manifest.json',
+          '/client.js', '/icons/aux.js', '/style.css',
+          '/icons/ibm.ttf', '/icons/quack.wav' 
         ]).then(() => self.skipWaiting());
       });
   });
