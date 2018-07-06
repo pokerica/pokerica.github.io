@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r17k \n';
+  var versionCode= 'v2.0r18c\ \n';
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -15,15 +15,15 @@ $(document).ready(function()
   var dbPass= '*';
   var filesha= '#';
   var isLogged= false;
-  
+
   var nextID= 0;
   var curTab= 1;
   var editRow= -1;
   var editMode= false;
 
-  var tbSpc= [0, 45,45,45,0];
+  var tbSpc= [0, '45px','45px','45px','300px'];
   var tbLst= [0, 1,2,1,0];
-  var doTabs= [0, 1,1,1,1];
+//  var doTabs= [0, 1,1,1,1];
   
   var bankTotal= 0;
   var gameOver= false;
@@ -149,31 +149,19 @@ $(document).ready(function()
     }
   }
 
-
   function setRowSpc(ct)
   {
     if(!ct) ct= curTab;
-    if(ct === 4)
-    {
-      if($('#dbFrame').css('height') !== '400px')
-        $('#dbFrame').css({'height':'400px'});
-      else
-        $('#dbFrame').css({'height':'auto'});
-
-      return;
-    }
-
     var tt;
-    switch(curTab)
+    switch(ct)
     {
-      case 1: tt= $('#ptb tr'); break;
-      case 2: tt= $('#gtb tr'); break;
-      case 3:
-        tt= $('#htb tr');
-      break;
+      case 1: tt= $('#ptb>tr'); break;
+      case 2: tt= $('#gtb>tr'); break;
+      case 3: tt= $('#htb>tr'); break;
+      case 4: tt= $('#dbFrame'); break;
     }
-    if(tt.css('height') !== tbSpc[ct]+'px')
-      tt.css({height:tbSpc[ct]+'px'});
+    if(tt.css('height') !== tbSpc[ct])
+      tt.css({height:tbSpc[ct]});
   }
   
   var oldSrt= [0, 4, 0, 0];
@@ -192,24 +180,19 @@ $(document).ready(function()
       });
     }
     else
-    {
-      t.sort(function(a, b) {
-        return +b[col] - (+a[col]); });
-    }
+      t.sort(function(a, b) { return +b[col] - (+a[col]); });
     
     oldSrt[tab]= col;
     if(forceRev === 1) t.reverse();
     
     if(tab === 1)
-    {
-      // *** header
+    { // *** header
       $('#pth>tr').children().css({border:'none'});
       $("#pth>tr").children().eq(oldSrt[1]).css({border:'2px solid grey'});
     }
     else
     if(tab === 3)
-    {
-      // *** header
+    { // *** header
       $('#hth>tr').children().css({border:'none'});
       $('#hth>tr').children().eq(oldSrt[3]).css({'border':'2px solid grey'});
     }
@@ -218,24 +201,17 @@ $(document).ready(function()
   function reclcAll()
   {
     plTab= [];
-    sortedPl.forEach(function(x, c)
-    {
-// ***               0   1    2    3    4    5    6    7
-//    pltab        píd  nme  buy  won  bal  ngm  av6  av7
-      plTab.push( [c+1, x,     0,   0,   0,   0,   0,   0] );
-    });
+    sortedPl.forEach(function(x, c) {
+      plTab.push( [c+1, x,     0,   0,   0,   0,   0,   0] ); });
 
     var as= '';
     hiTab.forEach(function(x,n)
     {
       var wn1= +x[3];
       var wn2= +x[5];
-  
       var mg= x[8].split('#');
-   
       mg.forEach(function(y,c)
       {
-
         var b= y.split('&');
         var pid= +b[0]
         var buy= +b[1];
@@ -342,14 +318,8 @@ $(document).ready(function()
   {
     if(!turnOn)
     {
-      $(tbrow).removeClass('already').removeClass('clean');
-  
-//      $(tbrow).removeClass();
-
-      if(tbLst[curTab] <= 1) $(tbrow).removeClass('selected');
-      else
-        $(tbrow).addClass('clean').removeClass('selected');
-      
+      $(tbrow).removeClass();
+      if(tbLst[curTab] !== 1) $(tbrow).addClass("clean");
       if(curTab === 3) reclcSelHrows();
     }
     else
@@ -362,8 +332,7 @@ $(document).ready(function()
   function resetEdit(formToo)
   {
     $('#ptb>tr').removeClass();
-    if(tbLst[curTab] !== 1)
-      $('#ptb>tr').addClass("clean");
+    if(tbLst[curTab] !== 1) $('#ptb>tr').addClass("clean");
    
     if(!formToo) return;
 
@@ -458,12 +427,11 @@ $(document).ready(function()
   {
     rvsPLindex.length= plTab.length;
 
-    var cx= 0;
     nextID= 0;
     $("#ptb").empty();
-    plTab.forEach(function(col)
+    plTab.forEach(function(col, cx)
     {
-      rvsPLindex[ (+col[0]) ]= cx++;
+      rvsPLindex[ (+col[0]) ]= cx;
       if(+col[0] > nextID) nextID= +col[0];
       $('#ptb').append(
          '<tr tabindex="1"><td class="admin">'+ col[0]
@@ -487,13 +455,11 @@ $(document).ready(function()
   {   
     var mny= $('.money')[cnt];
     var nc=$('#gtb>tr').eq(cnt).children()[2];
-    
     $(mny).css({border:'', background:'darkgreen', color:'',
                 height:'', width:'', 'font-size':'', padding:''});
 
     nc.innerText= sortedPl[ +tGm[cnt][1] -1 ];
     $(nc).css({'text-align':'left', 'font-size':'', 'color':''});
-    
     mny.parentNode.parentNode.cells[3].innerText= (tGm[cnt][2]= '-');
     mny.parentNode.parentNode.cells[4].innerText= (tGm[cnt][3]= '-');
   }
@@ -646,7 +612,7 @@ $(document).ready(function()
     resetEdit(false);
     keepMsgBar= true;
 
-    doTabs[1]= 1;
+//    doTabs[1]= 1;
     $('#mtb1').click();
   }
 
@@ -744,15 +710,15 @@ $(document).ready(function()
 
     btSec= btMin= ttMin= 0; btState= 8;
     timerPaint(false, 'Click to START');
-    
-    doTabs[3]= 1;
+  
+//    doTabs[3]= 1;
     $('#mtb3').click();
+    reFresh();
 
     if(useThisDate > 0 && editRow >= 0)
       $('#htb>tr').eq(editRow).children().eq(1).click();
     else
       $('#htb>tr').eq(0).children().eq(1).click();
-
 
     useThisDate= 0;
     gamePlayers= 0;
@@ -861,18 +827,11 @@ $(document).ready(function()
   var lastTab= 0;
   var dontInit= false;
   var initOnceG= true;
-  
-  function reFresh()
+  function initG()
   {
+    initOnceG= false;
+    resetEdit(false);
     
-    var ttxt= "Party Mix";
-    if(!navigator.onLine) ttxt= "OFFLINE";
-    document.getElementById("mtb1").value = ttxt;
-
-    if((initOnceG || editMode) && !dontInit) // && lastTab !== 2
-    {
-      initOnceG= false; resetEdit(false);
-
       tGm.length= 0;
       sortedPl.length= 0;
       plTab.sort(function(a, b) { return a[0] - b[0] }); 
@@ -885,16 +844,14 @@ $(document).ready(function()
         sortedPl.push( col[1] );
       });
 
-      sortem(1, 4);
-      sortem(3, 0);
-      freshTab3();
-    }
-    else
-    if(!keepMsgBar && nBar.innerText.length > 1) {
-      setTimeout( function() { clrNotif(); }, 350); }
-
+      sortem(1, 4); sortem(3, 0); setRowSpc(4);
+      if(curTab !== 1) { freshTab1(); setRowSpc(1); setRowCol(1); }
+      if(curTab !== 3) { freshTab3(); setRowSpc(3); setRowCol(3); }
+  }
+  
+  function initS()
+  {
     var selRows= $('#ptb')[0].getElementsByClassName('selected');
-
     for(var i= 0; i < selRows.length; i++)
     {
       var pid= +(selRows[i].firstChild.innerText) -1;
@@ -910,9 +867,28 @@ $(document).ready(function()
       if(col[0] !== "T" && col[0] !== "A") {
         col[0]= "F"; col[2]= '-'; col[3]= '-'; col[4]= 0; }
       else
-      if(+col[2] > 0)
+      if(+col[2] >= 0)
         sortedRnk.push([ +col[2], +col[1] ]);
     });
+  }
+
+  function reFresh()
+  { 
+    var ttxt= "Party Mix";
+    if(!navigator.onLine) ttxt= "OFFLINE";
+    document.getElementById("mtb1").value = ttxt;
+
+    if((initOnceG || editMode) && !dontInit)
+    {
+
+      initG();
+
+    }
+    else
+    if(!keepMsgBar && nBar.innerText.length > 1) {
+      setTimeout( function() { clrNotif(); }, 350); }
+
+    initS();
 
     // *** tab switch
     switch(curTab)
@@ -922,8 +898,8 @@ $(document).ready(function()
       case 3: freshTab3(); break;
     }
 
-    setRowCol();
     setRowSpc();
+    setRowCol();
     
     if(editMode)
     {
@@ -1092,8 +1068,7 @@ $(document).ready(function()
       
       e.target.innerText= fCash(1000* (tGm[rx][4]= 1));
     }
-    else {
-      alert('Something else!!'); }
+//    else { alert('Something else!!'); }
   });
 
 
@@ -1361,8 +1336,9 @@ $(document).ready(function()
     var d= localStorage.getItem('dataBase');
     if(!d || d.length < 9) saveDB(true);
     
-    reFresh();
+    initG();
     loadState(true);
+    reFresh();
   }
 
   function cchInfo()
@@ -1532,7 +1508,6 @@ $(document).ready(function()
   {
     clrAdmin();
     adminInfo.innerText+= 'SERVER:logme \n';
-    
     $.ajax(
     {
       url:appPath +'/lgn:'+dbPass, type:'GET',
@@ -1671,7 +1646,6 @@ $(document).ready(function()
   var initOnceA= false;
   $(".mtb").click(function(e)
   {
-    e.stopPropagation();
     if(!initOnceA) { //audQuack.load();
       initOnceA= true; audQuack.play(); }
 
@@ -1684,7 +1658,7 @@ $(document).ready(function()
 
     curTab= 0;
     if(editMode) {
-      editMode= false; $('.adminEdit').css('display', 'none'); }
+      editMode= false; $('.adminEdit, .admin').css('display', 'none'); }
 
     if(tid === "#tab2")
     {
@@ -1693,7 +1667,7 @@ $(document).ready(function()
       gameOver= false;
 
       reFresh();
-
+      
       var dt = new Date();
       document.getElementById("lblDate")
         .innerText= (useThisDate) ? useThisDate :
@@ -1721,13 +1695,14 @@ $(document).ready(function()
       return;
     } // *** end tab-2
 
-    if(tid === "#tab1") curTab= 1;
+    if(tid === "#tab1") { curTab= 1; initS(); setRowCol(1); }
     else
     if(tid === "#tab3") curTab= 3;
     else
     if(tid === "#tab4") curTab= 4;
 
-    if(doTabs[curTab] > 0) { reFresh(); doTabs[curTab]= 0; }
+//    dontInit=true; reFresh();
+//    if(doTabs[curTab] > 0) { reFresh(); doTabs[curTab]= 0; }
   });
 
 
@@ -1825,7 +1800,7 @@ $(document).ready(function()
   $("#mnu1").click(function(e)
   { // star A.
     if(useThisDate > 0)
-     alert('Game modification in progress, sooo?');
+     alert('Game modification in progress... ');
 
     if(curTab === 4) {
       clrAdmin();
@@ -1834,25 +1809,30 @@ $(document).ready(function()
 
     if(editMode= !editMode)
     {
+      dontInit= true;
       if(curTab === 1) sortem(1, 0, 1);
       else if(curTab === 3) sortem(3, 0, 1);
       $('.adminEdit').css('display', 'block');
     }
     else
     {
+      initOnceG= true;
       if(curTab === 1) sortem(1, 4);
       else if(curTab === 3) sortem(3, 0);
       $('.adminEdit').css('display', 'none');
     }
 
-//    dontInit= true;
     reFresh();
   });
 
 
   $("#mnu2").click(function(e)
   { // arrow B.
-    tbSpc[curTab]= (tbSpc[curTab] > 45)? 45:70;
+    if(curTab < 4)
+      tbSpc[curTab]= (tbSpc[curTab] !== '45px')? '45px':'70px';
+    else
+      tbSpc[curTab]= (tbSpc[curTab] !== '300px')? '300px':'auto';
+      
     setRowSpc();
   });
    
@@ -1878,9 +1858,9 @@ $(document).ready(function()
     {
       if(this.id === "dtEdit")
         $("#rdt3But").focus().click();
-      else
+/*      else
       if(this.id === "pasIn")
-        $("#log4But").focus().click();
+        $("#log4But").focus().click();*/
       else
       if(this.id !== "in4") 
         $(this).next("input").focus();
@@ -1941,7 +1921,6 @@ $(document).ready(function()
     if(tGm.length < 4) {
       nBar.innerText= ' #need 4 players min.'; return; }
 
-    gameOver= false;
     var unq, plst= [ 1, 2, 3 ];
     var npx= Math.min(5,tGm.length-3);
     var nP= 4+ Math.floor( Math.random()*npx );
@@ -1959,10 +1938,10 @@ $(document).ready(function()
       plst.push([ npx ]);
     }
 
-    npx= 0; resetEdit(false);
+    npx= 0; //resetEdit(false);
     plst.forEach(function(id)
     {
-      tGm[+id][0]= "A";
+      tGm[+id][0]= 'A';
       tGm[+id][2]= npx++;
       
       $('#ptb>tr').eq(rvsPLindex[(+id)+1]).addClass('selected');
@@ -2049,7 +2028,6 @@ $(document).ready(function()
   $("#log4But").click(function()
   { //>Log In<
     if(isLogged) return;
-    
     dbPass= $('input#pasIn').val();
     logMe();
   });
@@ -2164,3 +2142,4 @@ $(document).ready(function()
       + '\n e.currentTarget: ' + e.currentTarget;
   };
 */
+
