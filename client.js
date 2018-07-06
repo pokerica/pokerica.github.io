@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r18c\ \n';
+  var versionCode= 'v2.0r18f \n';
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -514,9 +514,6 @@ $(document).ready(function()
 
   function freshTab3()
   {
-//    var vpd= '15px 5px 12px 5px';
-//    if(vSpace > 10) vpd= '25px 5px 22px 5px';
-
     $('#htb').empty();
     hiTab.forEach(function(col, cnt)
     {
@@ -544,11 +541,9 @@ $(document).ready(function()
       $('#dtEdit').val('');
       $('.initDis').prop("disabled", true);
     }
-
     //freshCanvas();
     reclcSelHrows();
   }
-
 
   // *** clear state timeout
   var clrST, ssPend= false;
@@ -702,7 +697,6 @@ $(document).ready(function()
     hiTab.push([ gdat, gamePlayers, bankTotal,
           cf1, sortedPl[rx1], cf2, sortedPl[rx2], 0, aux8.substr(1) ]);
 
-    reclcAll();
     
 //    clrAdmin(); saveDB();
     $("#ssv4But").click();
@@ -711,10 +705,11 @@ $(document).ready(function()
     btSec= btMin= ttMin= 0; btState= 8;
     timerPaint(false, 'Click to START');
   
-//    doTabs[3]= 1;
+    reclcAll();
     $('#mtb3').click();
-    reFresh();
 
+    reFresh();
+    
     if(useThisDate > 0 && editRow >= 0)
       $('#htb>tr').eq(editRow).children().eq(1).click();
     else
@@ -1244,7 +1239,6 @@ $(document).ready(function()
     firefoxFix();
 
     setRowCol();
-
 //    $(etpn.nextSibling).focus();
   });
 
@@ -1343,8 +1337,7 @@ $(document).ready(function()
 
   function cchInfo()
   {
-    adminInfo.innerText+= "Cache info.v9 -- \n";
-    
+//    adminInfo.innerText+= "Cache info.v9 -- \n";
     var t= ':window.caches \n';
     if(window.caches)
     {
@@ -1850,24 +1843,6 @@ $(document).ready(function()
   $("#headbar").click(function() {
     nBar.innerText= lastNotif; });
 
-
-  // *** INPUT TEXT FIELD ...............................
-  $(".finf").on('keydown', function(e)
-  {
-    if(e.which === 9 || e.which === 13)
-    {
-      if(this.id === "dtEdit")
-        $("#rdt3But").focus().click();
-/*      else
-      if(this.id === "pasIn")
-        $("#log4But").focus().click();*/
-      else
-      if(this.id !== "in4") 
-        $(this).next("input").focus();
-      else
-        $('#subBut').focus().click();
-    }
-  });
   
   $('#subBut').click(function(e)
   {
@@ -1889,10 +1864,34 @@ $(document).ready(function()
     reFresh();
   });
 
+  
+  // *** INPUT TEXT FIELD ...............................
+  $(".finf").on('keydown', function(e)
+  {
+//    alert('pp: '+e.which);
+//  alert('aa: '+$(this).next("input")[0].type); 
+    if(e.which === 9 || e.which === 13)
+    {
+/*
+      if(this.id === "dtEdit")
+        $("#rdt3But").focus().click();
+      else
+      if(this.id === "pasIn")
+        $("#log4But").focus().click();
+      else
+      if(this.id !== "in4")      
+*/
+//      if($(this).next("input").attr('type') === 'button')
+      var n= $(this).next()[0];
+      (n.type === 'button')? n.click():n.focus();
+
+/*      else
+        $('#subBut').focus().click();*/
+    }
+  });
 
   // *** TAB 1 : ADMIN BUTTONS ***************************************
   // *** -------------------------------------------------------------
-  
   $('.ord2').click( function() { clrAdmin(); });
   
   // *** tab1-class="ord2" : DARK BOTTOM BUTTON
@@ -2022,7 +2021,6 @@ $(document).ready(function()
     reFresh();
   });
   
-  
   // *** TAB 4 : ADMIN BUTTONS ***************************************
   // *** -------------------------------------------------------------
   $("#log4But").click(function()
@@ -2142,4 +2140,3 @@ $(document).ready(function()
       + '\n e.currentTarget: ' + e.currentTarget;
   };
 */
-

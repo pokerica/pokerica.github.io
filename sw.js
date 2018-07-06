@@ -1,10 +1,7 @@
-// *** abcc
-self.addEventListener('install', e =>                       
-{
-  caches.delete('pmpAppCache').then(cache =>
-  {
-      caches.open('pmpAppCache').then(cache =>
-      {
+// *** abcdef
+self.addEventListener('install', e => {
+  caches.delete('pmpAppCache').then(cache => {
+      caches.open('pmpAppCache').then(cache => {
         return cache.addAll(
         [ 
           '/', '/index.html', '/manifest.json',
@@ -15,13 +12,9 @@ self.addEventListener('install', e =>
   });
 });
 
-self.addEventListener('activate', event =>
-{
-  self.clients.claim();
-});
+self.addEventListener('activate', event => {self.clients.claim(); });
 
-self.addEventListener('fetch', event =>
-{
+self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request, {ignoreSearch:true})
       .then( response => {return response || fetch(event.request)} )
