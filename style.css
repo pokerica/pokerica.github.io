@@ -23,7 +23,7 @@
 ::-moz-focus-inner {border:0;}
 
 .money {
-  user-select: none;
+  user-select:none;
   pointer-events:none;
   
   border:1px solid lime; 
@@ -76,7 +76,7 @@ select {
   width:190px; text-align-last:center; 
   padding:4px 22px 4px 4px; margin:0;
 
-  /*** Removes default arrow from firefox */
+  /*** Removes default arrow from firefox ...or not?*/
   text-indent:1px; text-overflow:"";
 }
 
@@ -157,7 +157,7 @@ table {
   
   line-height:15px;
   
-  user-select: none;
+  user-select:none;
   border-collapse:collapse;
 }
 
