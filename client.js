@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r18f \n';
+  var versionCode= 'v2.0r18g \n';
   var appPath= 'https://pok-d.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:7000,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -652,7 +652,7 @@ $(document).ready(function()
     return Math.round(retVal);
   }
 
-
+  var lastDate= 0;
   var useThisDate= 0;
   var gamePlayers= 0;
   var sortedRnk= [ [1, 2] ];
@@ -692,7 +692,11 @@ $(document).ready(function()
     });
 
     var gdat= numCTD();
-    if(useThisDate > 0) gdat= useThisDate;
+    if(useThisDate > 0)
+      gdat= useThisDate;
+    else
+    if(hiTab.length > 0 && gdat <= lastDate)
+      gdat= lastDate +1;
 
     hiTab.push([ gdat, gamePlayers, bankTotal,
           cf1, sortedPl[rx1], cf2, sortedPl[rx2], 0, aux8.substr(1) ]);
@@ -842,6 +846,8 @@ $(document).ready(function()
       sortem(1, 4); sortem(3, 0); setRowSpc(4);
       if(curTab !== 1) { freshTab1(); setRowSpc(1); setRowCol(1); }
       if(curTab !== 3) { freshTab3(); setRowSpc(3); setRowCol(3); }
+    
+    if(hiTab.length > 0) lastDate= hiTab[0][0];
   }
   
   function initS()
@@ -1685,15 +1691,17 @@ $(document).ready(function()
         outAnim(trx, rf);
       }
 
+      initS();
       return;
     } // *** end tab-2
 
-    if(tid === "#tab1") { curTab= 1; initS(); setRowCol(1); }
+    if(tid === "#tab1") { curTab= 1; setRowCol(); }
     else
     if(tid === "#tab3") curTab= 3;
     else
     if(tid === "#tab4") curTab= 4;
 
+    
 //    dontInit=true; reFresh();
 //    if(doTabs[curTab] > 0) { reFresh(); doTabs[curTab]= 0; }
   });
