@@ -78,11 +78,8 @@
       
         <div id="frmInput" class="adminEdit" onsubmit="return false" style="display:none; padding:0; margin-top:10px; text-align:right">
         
-          <input id="in0" class="finf" type="tel" disabled placeholder="ID" autocomplete="off" style="width:2em" >
-          <input id="in1" class="finf" type="text" placeholder="NAME" autocomplete="off" style="width:9em" >               
-          <input id="in2" class="finf" type="tel" placeholder="$BUY ÷1000" autocomplete="off" style="width:8em">         
-          <input id="in3" class="finf" type="tel" placeholder="$WON ÷100" autocopmplete="off" style="width:7em">
-          <input id="in4" class="finf" type="tel" placeholder="#nG" autocomplete="off" style="width:3em" >
+          <input class="finf" id="in1c0" type="tel" disabled placeholder="ID" autocomplete="off" style="width:3em" >
+          <input class="finf" id="in1c1" type="text" placeholder="NAME" autocomplete="off" >
           <input class="ord" id="subBut" type="button" value="New" style="margin:0 0 3px 5px; width:95px">
         </div>
 
@@ -144,7 +141,7 @@
            style="font-size:54px; width:450px; height:90px;
                   text-align:right; margin:0; padding:10px 30px;
                   display:inline-block; border:1px solid grey; border-radius:8px"
-           >00:00<b id="timeTxt">Click to START<br>Game time 00:00</b></p>
+           >--:--<b id="timeTxt">Click..<br>Game time 00:00</b></p>
 
         <select id="blindSelect">
           <option value="1">50/100</option> <option value="2">100/200</option>
@@ -158,7 +155,7 @@
         </select>
 
         <select id="timeSelect" style="top:-40px; margin-bottom:-50px">
-          <option value="1">2 min</option>
+          <option value="1">1 min</option>
           <option value="2">3 min</option>
           <option value="3">5 min</option> 
           <option value="4">7 min</option> 
@@ -180,7 +177,7 @@
         <div class="adminEdit" style="display:none; text-align:right; margin-top:-5px">
         
           <input id="dtEdit" class="finf initDis" autocomplete="off"
-                 type="tel" placeholder="YYYYMMDDHHMMSS" style="width:21ch;" disabled>
+                 type="tel" placeholder="YYYYMMDDHHMMSS" disabled>
           <button class="ord initDis" id="rdt3But" disabled>Re-Date</button>
           <button class="ord initDis" id="mdf3But" disabled>Modify</button>
           <button class="ord initDis" id="rmr3But" disabled>Remove</button>
@@ -194,7 +191,7 @@
         <table id="historyTable">
           <thead id="hth"><!--/thead-->
             <tr><th tabindex="1" style="width:90px">DATE</th>
-            <th tabindex="1" style="width:30px">#nP</th>
+            <th tabindex="1" style="width:40px">#ppl</th>
             <th tabindex="1" style="width:80px; text-align:right">$BANK</th>
             <th tabindex="1" style="width:90px; text-align:right">1st $</th>
             <th tabindex="1" style="text-align:left; width:80px">:NAME</th>
@@ -210,11 +207,10 @@
       <div id="tab4" class="ptab pde" style="padding:20px 14px">
         <div style="text-align:right; margin-top:-5px">
           <input id="pasIn" class="finf" type="password"
-                 placeholder="PASSWORD" autocomplete="off" style="width:9em" >
+                 placeholder="PASSWORD" autocomplete="off" >
           <input class="ord" id="log4But" type="button" value="Logme" >
           <input class="ord" id="wlk4But" type="button" value="Wake Lock" style="width:150px; margin-right:0" >
         </div>
-      
 
         <pre id="dbFrame"
              style="width:100%; height:9px; padding:5px;
