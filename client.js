@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r19g \n';
+  var versionCode= 'v2.0r19h \n';
   var appPath= 'https://pok-d.glitch.me';
   var curDate= new Date();
   $.ajaxSetup({async:true, cache:false, timeout:7000,
@@ -1666,9 +1666,9 @@ $(document).ready(function()
     if(useThisDate > 0) {
       alert('Not now, game modification in progress!'); return; }
 
-    resetEdit();
     if(editMode= !editMode)
     {
+      resetEdit();
       if(curTab === 1) sortem(1, -1);
       else if(curTab === 3) sortem(3, -1);
       $('.adminEdit').css('display', 'block');
