@@ -1,10 +1,9 @@
-// *** r20abcdefgh
+// *** r20abcdefghijk
 self.addEventListener('install', e => {
   caches.delete('pmpAppCache').then(cache => {
       caches.open('pmpAppCache').then(cache => {
-        return cache.addAll([ '/',
-          '/index.html', '/client.js', '/icons/aux.js', '/style.css',
-          '/manifest.json', '/icons/ibm.ttf', '/icons/quack.wav' ])
+        return cache.addAll([ '/', '/index.html', '/client.js', '/icons/aux.js',
+          '/style.css', '/manifest.json', '/icons/ibm.ttf', '/icons/quack.wav' ])
           .then(() => self.skipWaiting()); }); });
 });
 self.addEventListener('activate', event => {self.clients.claim(); });

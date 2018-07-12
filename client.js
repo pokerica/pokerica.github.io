@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r20h \n';
+  var versionCode= 'v2.0r20k \n';
   var appPath= 'https://pok-d.glitch.me';
   var curDate= new Date();
   $.ajaxSetup({async:true, cache:false, timeout:9999,
@@ -1681,43 +1681,37 @@ $(document).ready(function()
   // *** TAB 2 : ADMIN BUTTONS ***************************************
   $("#rng2But").click(function()
   { //>Create Random Game<
-    $('#mnu1').click();
-    if(tGm.length < 4) {
+    var g= tGm.length;
+    if(g < 4) {
       nBar.innerText= ' #need 4 players at least'; return; }
 
-    var unq, plst= [ 1, 2, 3 ];
-    var npx= Math.min(5,tGm.length-3);
-    var nP= 4+ Math.floor( Math.random()*npx );
-   
-    plst.length= 0;
-    for(var i= 0; i < nP; i++)
+    var x, u= false, p= [1,2,3];
+    var n= Math.round(Math.random()*g) -g/5;
+        n= Math.max(4, n); n= Math.min(9, n);
+
+    p.length= 0;
+    for(var i= 0; i < n; i++)
     {
-      unq= false;
-      while(!unq)
+      while(!u)
       {
-        unq= true;
-        npx= Math.floor( Math.random()*tGm.length );
-        plst.forEach(function(id) { if(npx === +id) unq= false; });
+        u= true;
+        x= Math.round(Math.random()*g);
+        for(var j= 0; j < p.length; j++) {
+          if(x === p[j]) { u= false; break; } }
       }
-      plst.push([ npx ]);
+      u= false; p.push(x);
     }
 
-    npx= 1;
-    tGm.forEach(function(r) { 
+    $('#mnu1').click();
+    tGm.forEach(function(r) {
       r[0]= 'F'; r[2]= r[3]= r[4]= 0; });
-    plst.forEach(function(id)
+
+    p.forEach(function(id, c)
     {
-      tGm[+id][0]= 'A';
-      tGm[+id][2]= npx++;
-      
-      $('#ptb>tr').eq(rvsPLindex[(+id)+1]).addClass('selected');
-      if(+id < 4)
-        tGm[+id][4]= 2+ Math.floor( Math.random()*8 );
-      else
-      if(+id < 8)
-        tGm[+id][4]= 1+ Math.floor( Math.random()*5 );
-      else
-        tGm[+id][4]= 1+ Math.floor( Math.random()*3 );
+      var k= tGm[+id]; k[0]= 'A'; k[2]= c+1;
+      if(+id < 4) k[4]= 2+ Math.floor(Math.random()*8);
+      else if(+id < 8) k[4]= 1+ Math.floor(Math.random()*5);
+      else k[4]= 1+ Math.floor(Math.random()*3);
     });
     $('#mtb2').click();
   });
@@ -1866,17 +1860,20 @@ $(document).ready(function()
   });
 
   // *** Remote Game - save & load
+  function tgm2str()
+  {
+    var x= [];
+    tGm.forEach(function(r) {
+      if(r[0] !== 'F') r[0]= 'A'; x.push( r.join(':') ); });
+    return x.join('|');
+  }
+
   function goSst()
   {
     adminInfo.innerText= 'REMOTE STATE:export \n';
-    var upDat= [];
-    tGm.forEach(function(row) {
-      if(row[0] !== 'F') row[0]= 'A'; upDat.push( row.join(':') ); });
-
-    var raw= upDat.join('|');
     $.ajax(
     {
-      url:appPath +'/sst', data:raw, type:'POST',
+      url:appPath +'/sst', data:tgm2str(), type:'POST',
       error:function(e, f) {
         nBar.innerText+= ' #remote state save FAIL@client:'+ f; },
       success:function(r, s, x)
@@ -1889,7 +1886,6 @@ $(document).ready(function()
     }); 
   }
 
-  var rmSta= '';
   $("#crg2But").click(function()
   {
     clrAdmin(1);
@@ -1901,13 +1897,12 @@ $(document).ready(function()
         nBar.innerText+= ' #remote state load FAIL@client:'+ f; },
       success:function(r, s, x)
       {
-        var loDat, k= r.replace(/\n|\r/g, '');        
-        if(k === rmSta) {
-          nBar.innerText+= ' #no changes since last time'; return; }
+        var k= r.replace(/\n|\r/g, '');        
+        if(k === tgm2str()) {
+          nBar.innerText+= ' #no changes since last update'; return; }
       
-        rmSta= k; tGm= [];
-        loDat= rmSta.split('|');
-        loDat.forEach(function(row) { tGm.push( row.split(':') ); });
+        tGm= [];k= k.split('|');
+        k.forEach(function(row) { tGm.push( row.split(':') ); });
         prtGm(); // *** need this now to init NaNs
 
         isRemote= true; $('#mtb2').click();
