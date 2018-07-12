@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r20f \n';
+  var versionCode= 'v2.0r20h \n';
   var appPath= 'https://pok-d.glitch.me';
   var curDate= new Date();
   $.ajaxSetup({async:true, cache:false, timeout:9999,
@@ -71,9 +71,9 @@ $(document).ready(function()
   }
 
   var lastNotif= '';
-  function clrAdmin()
+  function clrAdmin(a)
   {
-    adminInfo.innerText= versionCode;
+    if(!a) adminInfo.innerText= versionCode;
     lastNotif= nBar.innerText; nBar.innerText= '';
   }
 
@@ -597,7 +597,7 @@ $(document).ready(function()
       if(col[0] === 'F') 
       {
         col[2]= col[4]= 0;
-        adminInfo.innerText+= ('       '+ col[0]).slice(-7)+'\n';
+//        adminInfo.innerText+= ('       '+ col[0]).slice(-7)+'\n';
       }
       else
         adminInfo.innerText+=
@@ -667,7 +667,7 @@ $(document).ready(function()
 
     nBar.innerText+= ' #game state stored';           
     adminInfo.innerText+= "Game state stored, rows#: "+ tGm.length +'\n';
-    prtGm(tGm);
+//    prtGm(tGm);
   }
 
   // *** GAME OVER *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -716,14 +716,8 @@ $(document).ready(function()
     });
 
     var gdat= numCTD();
-    if(useThisDate > 0)
-    {
-      gdat= useThisDate;
-      hiTab.splice(editRow, 1);
-    }
-    else
-    if(hiTab.length > 0 && gdat <= lastDate)
-      gdat= lastDate +1;
+    if(useThisDate > 0) gdat= useThisDate;
+    else if(hiTab.length > 0 && gdat <= lastDate) gdat= lastDate +1;
 
     hiTab.push([ gdat, gamePlayers, bankTotal,
           cf1, sortedPl[rx1], cf2, sortedPl[rx2], 0, aux8.substr(1) ]);
@@ -736,10 +730,11 @@ $(document).ready(function()
     btSec= btMin= ttMin= 0;
     timerPaint();
   
-    reclcAll(); initG();
     if(useThisDate === 0) sortem(3, 1);
-    else sortem(3, mdfySort);
+    else {
+      sortem(3, mdfySort); hiTab.splice(editRow, 1); }
 
+    reclcAll(); initG();
     sortem(curTab= 1, 5); reFresh();
     curTab= 3; reFresh(); $('#mtb3').click();
     if(useThisDate > 0) $('#htb>tr').eq(editRow).children().eq(2).click();
@@ -758,13 +753,9 @@ $(document).ready(function()
     if(isNaN(cf1) || isNaN(cf2) || cf2 < 0 
        || cf1 < cf2 || cf1 < bankTotal*5 || cf1 > bankTotal*10)
     {
-      if(Math.random() < 0.3)
-        alert("Whaaat?!");
-      else
-      if(Math.random() < 0.5)
-        alert("La-le-li-lu-le-lo?!");
-      else
-        alert("It does not compute!");
+      if(Math.random() < 0.4) alert("It does not compute!");
+      else if(Math.random() < 0.7) alert("W-w-whaaat?!");
+      else alert("La-le-li-lu-le-lo?!");
 
       $('#gtb>tr')[rx1].cells[4].firstChild.focus();
     }
@@ -1242,27 +1233,24 @@ $(document).ready(function()
             return cache.keys(); 
           }).then(function(reqs)
           {
-              var strOut= "Cache data files: \n";
+              var strOut= 'Cache data files: \n';
               reqs.forEach(function(rs, i)
               {
                 strOut+= '            '+ ('   '+ (i+1)).slice(-3) +':: '
-                  + (rs.url).substr(0+ (rs.url).lastIndexOf('/')) +"\n";
+                  + (rs.url).substr(0+ (rs.url).lastIndexOf('/')) +'\n';
               });
-
-              adminInfo.innerText+= "Cache name: "+ cacheName +" \n"+ strOut +'\n';
-              strOut= "";
+              adminInfo.innerText+= 'Cache name: '+ cacheName +' \n'+ strOut +'\n';
+              strOut= '';
           });
         });
       });
     }
-    else
-      adminInfo.innerText+= 'FAIL' +t;
+    else adminInfo.innerText+= 'FAIL' +t;
     
     t= ':navigator.storage \n';
     if(navigator.storage)
     {
       adminInfo.innerText+= 'PASS' +t;
-      
       t= ':navigator.storage.estimate \n';
       if(navigator.storage.estimate)
       {
@@ -1274,28 +1262,22 @@ $(document).ready(function()
             + (est.quota/1048576).toFixed(2) +"MB. \n";
         });
       }
-      else
-        adminInfo.innerText+= 'FAIL' +t;
+      else adminInfo.innerText+= 'FAIL' +t;
 
       t= ':navigator.storage.persist \n';
       if(navigator.storage.persist)
       {
         adminInfo.innerText+= 'PASS' +t;
-        
         navigator.storage.persisted().then(function(getP) {
           adminInfo.innerText+= "Persistence: "+ getP +'\n'; });
       }
-      else
-        adminInfo.innerText+= 'FAIL' +t;
+      else adminInfo.innerText+= 'FAIL' +t;
     }
-    else
-      adminInfo.innerText+= 'FAIL' +t;
+    else adminInfo.innerText+= 'FAIL' +t;
 
     t= ':navigator.serviceWorker \n';
-    if(navigator.serviceWorker)
-      adminInfo.innerText+= 'PASS' +t;
-    else
-      adminInfo.innerText+= 'FAIL' +t;
+    if(navigator.serviceWorker) adminInfo.innerText+= 'PASS' +t;
+    else adminInfo.innerText+= 'FAIL' +t;
 
     adminInfo.innerText+= '\n';
   }
@@ -1311,24 +1293,16 @@ $(document).ready(function()
       adminInfo.innerText+= 'USING:window.localStorage \n';
    
     var t, d= localStorage.getItem('dataBase');
+    if(!d) { nBar.innerText+= ' #no cache data '; return; }
 
-    if(!d) {
-      nBar.innerText+= ' #no cache data '; return; }
-
-    if(isImport)
-    {
-      importDB(d);
-      adminInfo.innerText+=  'import@loadCache-RAW: \n';
-    }
+    if(isImport) {
+      importDB(d); adminInfo.innerText+=  'import@loadCache-RAW: \n'; }
     else
       adminInfo.innerText+=  'info@loadCache-RAW: \n';
 
     var as= '–––––––––1–––––––––2–––––––––3–––––––––4–––––––––5–––––––––6–––––––––7–––––––––8 \n';
-    for(var i= 0; i < d.length; i++)
-    {
-      if(i > 0 && i%80 === 0) as+= '\n';
-      as+= d.charAt(i);
-    }
+    for(var i= 0; i < d.length; i++) {
+      if(i > 0 && i%80 === 0) as+= '\n'; as+= d.charAt(i); }
     adminInfo.innerText+= as+'\n';
 
     var rd= d.split('@');
@@ -1338,16 +1312,14 @@ $(document).ready(function()
 
     adminInfo.innerText+= '\n\n'
       +'timestamp\t name\t $buy\t $won \n';
-    
     as= '';
     hiLoad.forEach(function(x)
     {
       var a= x.split(':');
       var wn1= +a[1];
       var wn2= +a[2];
-  
+
       var mg= a[3].substr(1).split('#');
-   
       mg.forEach(function(y,c)
       {
         var b= y.split('&');
@@ -1568,9 +1540,8 @@ $(document).ready(function()
 
   $('#blindTimer').click(function(e)
   {
-    if(isRemote) return;
-    if(gameOver) {
-      finalSave(); return; }
+    if(isRemote) { $("#crg2But").click(); return; }
+    if(gameOver) { finalSave(); return; }
 
     if(btState === 0) btState= 1;
     else if(btState === 1) btState= 0;
@@ -1594,30 +1565,27 @@ $(document).ready(function()
       case 1:
         goSst();
         if(btState === 8) { btState= 1; btInit(); }
-        timerPaint();
-        setTimeout( minuteUp, 1000);
+        timerPaint(); setTimeout( minuteUp, 1000);
       break;
        
       case 2:
         btState= 9; sirenState= 1;
-        if(curTab != 2) $('#mtb2').click();
-        setTimeout(bkgSiren, 350);
+        $('#mtb2').click(); setTimeout(bkgSiren, 320);
       break;
     }
   });
-  
+
   $('#timeSelect').on('focus change',function()
   {
     if(btState !== 0) return;
     var ni= (this.options[this.selectedIndex].text).indexOf('min');
     var ts= (this.options[this.selectedIndex].text).substring(0, ni);
-
-    btSec= 60; btMin= +ts -1;
-    timerPaint();
+    btSec= 60; btMin= +ts -1; timerPaint();
   });
 
   // *** BUTTONS #################################################
-  $('.ord2, .ptab').click( function() { clrAdmin(); });
+  $('.ord2').click( function() { clrAdmin(); });
+  $('.ptab').click( function() { clrAdmin(1); }); // 1= clr just #notif
   $('#headbar').click(function() { nBar.innerText= lastNotif; });
   $('.mnu, .mtb, .ord, .ord2').click(function(e) { e.stopPropagation(); });
   // *** .........................................................
@@ -1659,25 +1627,20 @@ $(document).ready(function()
 
   $("#mnu2").click(function()
   { // arrow B.
-    if(curTab < 4)
-      tbSpc[curTab]= (tbSpc[curTab] !== '45px')? '45px':'59px';
-    else
-      tbSpc[curTab]= (tbSpc[curTab] !== '300px')? '300px':'auto';
-      
+    if(curTab < 4) tbSpc[curTab]= (tbSpc[curTab] !== '45px')? '45px':'59px';
+    else tbSpc[curTab]= (tbSpc[curTab] !== '300px')? '300px':'auto';
     setRowSpc();
   });
    
   $("#mnu3").click(function()
   { // line C.
     if(curTab === 4) {
-      clrAdmin();
-      adminInfo.innerText= 
+      clrAdmin(); adminInfo.innerText=
         'What?! Why did you do that just now? \n'; return; }
-    
+
     if(++tbLst[curTab] > 3) tbLst[curTab]= 1;
     setRowCol();
   });
-
   
   $('#subBut').click(function()
   {
@@ -1689,9 +1652,8 @@ $(document).ready(function()
     else
       plTab.push([ col0, col1, 0, 0, 0, 0, 0, 0 ]);
 
-    initG();
     resetEdit();
-    reFresh();
+    initG(); reFresh();
   });
 
   // *** INPUT TEXT FIELD ...............................
@@ -1708,26 +1670,20 @@ $(document).ready(function()
       col[2]= col[3]= col[5]= col[6]= col[7]= 0; col[4]= (-900 -col[0]); });
     
     hiTab.length= 0;
-
-    initG();
-    reFresh();
+    initG(); reFresh();
   });
-  
-  // *** To be, or no delete
-  // instead, just set inactive by #nG= -1, hmm?
+  // *** To be, or no delete?
   $('#rli1But').click( //>Remove Last ID<
     function() { plTab.splice(nextID-1, 1); reFresh(); });
-  
   $("#rma1But").click(function() { //>Remove All<
-    plTab.length= 0; hiTab.length= 0; reFresh(); });
-
+    plTab.length= 0; hiTab.length= 0; initG(); reFresh(); });
 
   // *** TAB 2 : ADMIN BUTTONS ***************************************
   $("#rng2But").click(function()
   { //>Create Random Game<
     $('#mnu1').click();
     if(tGm.length < 4) {
-      nBar.innerText= ' #need 4 players min.'; return; }
+      nBar.innerText= ' #need 4 players at least'; return; }
 
     var unq, plst= [ 1, 2, 3 ];
     var npx= Math.min(5,tGm.length-3);
@@ -1746,9 +1702,9 @@ $(document).ready(function()
       plst.push([ npx ]);
     }
 
-    tGm.forEach(function(r) { r[0]= 'F'; r[2]= r[3]= r[4]= 0; });
-   
     npx= 1;
+    tGm.forEach(function(r) { 
+      r[0]= 'F'; r[2]= r[3]= r[4]= 0; });
     plst.forEach(function(id)
     {
       tGm[+id][0]= 'A';
@@ -1763,7 +1719,6 @@ $(document).ready(function()
       else
         tGm[+id][4]= 1+ Math.floor( Math.random()*3 );
     });
-
     $('#mtb2').click();
   });
 
@@ -1804,32 +1759,20 @@ $(document).ready(function()
   { //>Remove<
     if(editRow < 0) {
       alert("Row #: "+ editRow +"...Something's wrong!"); return; }
-    
+
     hiTab.splice(editRow, 1);
-    reclcAll(); initG();
-    reFresh();
+    reclcAll(); initG(); reFresh();
   });
   
   // *** tab3 - class="ord2" : DARK BOTTOM BUTTON
-  $("#rcl3But").click(function()
-  { //>Recalculate All<
-    reclcAll();
-    $('#mtb1').click();
-  });
-
-  $("#rma3But").click(function()
-  { //>Remove All<
-    hiTab.length= 0;
-    reFresh();
-  });
+  $("#rcl3But").click(function() { //>Recalculate All<
+    reclcAll(); $('#mtb1').click(); });
+  $("#rma3But").click(function() { //>Remove All<
+    hiTab.length= 0; reFresh(); });
   
   // *** TAB 4 : ADMIN BUTTONS ***************************************
-  $("#log4But").click(function()
-  { //>Log In<
-    if(isLogged) return;
-    dbPass= $('input#pasIn').val();
-    logMe();
-  });
+  $("#log4But").click(function() { //>Log In<
+    if(isLogged) return; dbPass= $('#pasIn').val(); logMe(); });
   
   // *** class="ord2" : DARK BOTTOM BUTTON
   $("#gms4But").click( function() { // >Game State<
@@ -1852,14 +1795,12 @@ $(document).ready(function()
   {
     if(!navigator.storage) {
       adminInfo.innerText+= 'No navigator.storage! \n'; return; }
-    
     if(!navigator.storage.persist) {
       adminInfo.innerText+= 'No navigator.storage.persist! \n'; return; }
 
     navigator.storage.persisted().then(function(getP)
     {
-      if(getP)
-        adminInfo.innerText+= "Storage persistence already granted! \n";
+      if(getP) adminInfo.innerText+= "Storage persistence already granted! \n";
       else
       {
         navigator.storage.persist().then(function(setP)
@@ -1875,7 +1816,7 @@ $(document).ready(function()
             adminInfo.innerText+= 'Storage persistence denied, \n'
                                 + 'try again after enabing notifications! \n';
             if(!Notification)
-              adminInfo.innerText+= 'Desktop notifications not available, try Chromium! \n';
+              adminInfo.innerText+= 'Notifications unavailable, try Chromium! \n';
             else
               Notification.requestPermission();
           }
@@ -1893,7 +1834,6 @@ $(document).ready(function()
       as+= ''+ r[0]+'\t '+r[1]+'\t '+r[2]+'\t '+r[3]
         +'\t '+r[4]+'\t '+r[5]+'\t '+r[6]+'\t '+r[7]+'\n'; });
     adminInfo.innerText+= as;
-    
     as= '';
     adminInfo.innerText+= '\n'+'[hiTab: '+ hiTab.length+']\n'
       + 'dtm   #   $bank    $1st\t :name\t $2nd\t :name\t rid\t #<pid:buy..> \n';
@@ -1928,18 +1868,17 @@ $(document).ready(function()
   // *** Remote Game - save & load
   function goSst()
   {
+    adminInfo.innerText= 'REMOTE STATE:export \n';
     var upDat= [];
-    tGm.forEach(function(row)
-    {
-      if(row[0] !== 'F') row[0]= 'A';
-      upDat.push( row.join(':') );
-    });
+    tGm.forEach(function(row) {
+      if(row[0] !== 'F') row[0]= 'A'; upDat.push( row.join(':') ); });
 
     var raw= upDat.join('|');
     $.ajax(
     {
       url:appPath +'/sst', data:raw, type:'POST',
-      error:function(e, f) { nBar.innerText+= ' #remote state save FAIL@client:'+ f; },
+      error:function(e, f) {
+        nBar.innerText+= ' #remote state save FAIL@client:'+ f; },
       success:function(r, s, x)
       {
         if(r.substring(0,4) !== 'size') {
@@ -1950,25 +1889,29 @@ $(document).ready(function()
     }); 
   }
 
+  var rmSta= '';
   $("#crg2But").click(function()
   {
-    clrAdmin();
+    clrAdmin(1);
+    adminInfo.innerText+= 'REMOTE STATE:import \n';
     $.ajax(
     {
       url:appPath +'/lst', type:'GET',
-      error:function(e, f) { nBar.innerText+= ' #remote state load FAIL@client:'+ f; },
+      error:function(e, f) {
+        nBar.innerText+= ' #remote state load FAIL@client:'+ f; },
       success:function(r, s, x)
       {
-        var loDat= r.replace(/\n|\r/g, '');
-        tGm.length= 0;
-        loDat= loDat.split('|');
-        loDat.forEach(function(row) {
-          tGm.push( row.split(':') ); });
-
-        nBar.innerText+= ' #remote state applied';
+        var loDat, k= r.replace(/\n|\r/g, '');        
+        if(k === rmSta) {
+          nBar.innerText+= ' #no changes since last time'; return; }
+      
+        rmSta= k; tGm= [];
+        loDat= rmSta.split('|');
+        loDat.forEach(function(row) { tGm.push( row.split(':') ); });
         prtGm(); // *** need this now to init NaNs
-        isRemote= true;
-        $('#mtb2').click();
+
+        isRemote= true; $('#mtb2').click();
+        nBar.innerText+= ' #remote state applied';
       }
     });
   });
