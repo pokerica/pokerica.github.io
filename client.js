@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r20s \n';
-  var appPath= 'https://pok-d.glitch.me';
+  var versionCode= 'v2.0r21d \n';
+  var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
 
@@ -18,7 +18,7 @@ $(document).ready(function()
   var filesha= '#';
   var isLogged= false;
   var ttxt= 'Party Mix';
-  
+
   var curTab= 1;
   var lastTab= 0;
   var editRow= -1;
@@ -482,7 +482,6 @@ $(document).ready(function()
     naMny(rx); curRank--;
     // *** GAME OVER
     if(curRank === 0) mnySplit();
-    else goSst();
   }
 
   function freshTab2()
@@ -598,6 +597,53 @@ $(document).ready(function()
     });
   }
 
+  function rmtLod()
+  {
+    useThisDate= 0;
+    adminInfo.innerText+= 'REMOTE STATE:import \n';
+    $.ajax(
+    {
+      url:appPath +'/lst', type:'GET',
+      error:function(e, f) {
+        nBar.innerText= ' #remote state import FAIL@client:'+ f; },
+      success:function(r, s, x)
+      {
+        var k= r.replace(/\n|\r/g, '');
+        if(k === '@#' || k.length < 9) {
+          nBar.innerText= ' #no active remote game found'; $('#mtb2').click(); return; }
+        
+        if(k === tgm2str()) {
+          nBar.innerText= ' #no changes since last update'; $('#mtb2').click(); return; }
+      
+        tGm= [];k= k.split('|');
+        k.forEach(function(row) { tGm.push( row.split(':') ); });
+        prtGm(); // *** need this now to init NaNs
+
+        isRemote= true; $('#mtb2').click();
+        nBar.innerText= ' #remote state imported';
+      }
+    });    
+  }
+
+  function rmtSav(clr)
+  {
+    var upDat= (clr)? '@#' : tgm2str();
+    adminInfo.innerText+= 'REMOTE STATE:export \n';
+    $.ajax(
+    {
+      url:appPath +'/sst', data:upDat, type:'POST',
+      error:function(e, f) {
+        nBar.innerText+= ' #remote state export FAIL@client:'+ f; },
+      success:function(r, s, x)
+      {
+        if(r.substring(0,4) !== 'size') {
+          nBar.innerText+= ' #remote state export FAIL@server:'+ r; return; }
+
+        nBar.innerText+= ' #remote state exported '+ r.substring(5);
+      }
+    }); 
+  }
+
   function loadState(isImport)
   { 
     if(!window.localStorage) {
@@ -626,36 +672,50 @@ $(document).ready(function()
     loDat.forEach(function(row) {
       tGm.push( row.split(':') ); });
 
-    nBar.innerText= ' #local state applied';
-    adminInfo.innerText+= 'Local state applied, rows#: '+ tGm.length +'\n';
+    nBar.innerText= ' #local state imported';
+    adminInfo.innerText+= 'Local state imported, rows#: '+ tGm.length +'\n';
     
     prtGm(); // *** need this now to init NaNs
     $('#mtb1').click();
   }
-
-  function saveState(isClear)
+  
+  function tgm2str()
   {
-    if(!window.localStorage) {
-      adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
-
-    if(isClear)
-    {
-      localStorage.removeItem('gameState');
-      adminInfo.innerText+= "Local state cleared \n";
-      return;
-    }
+    var x= [];
+    tGm.forEach(function(r) {
+      if(r[0] !== 'F') r[0]= 'A'; x.push( r.join(':') ); });
+    return x.join('|');
+  }
+  
+  function saveState(clr)
+  {
     
-    var upDat= [];
-    tGm.forEach(function(row)
+    if(isRemote || useThisDate > 0)
+      adminInfo.innerText+= 'FAIL@saveSate:remote or edit mode active \n';
+    else
     {
-      if(row[0] !== 'F') row[0]= 'A';
-      upDat.push( row.join(':') );
-    });
+      rmtSav(clr);
+      if(!window.localStorage)
+        adminInfo.innerText+= 'FAIL:window.localStorage \n';
+      else
+      { // local PASS
+        var loDat= localStorage.getItem('gameState');
+        if(loDat || clr)
+        {
+          localStorage.removeItem('gameState');
+          adminInfo.innerText+= "Local state cleared \n";
+        }
 
-    localStorage.setItem('gameState', upDat.join('|'));
+        if(!clr)
+        {
+          localStorage.setItem('gameState', tgm2str());
+          nBar.innerText+= ' #local state exported';           
+          adminInfo.innerText+= "Local state exported, rows#: "+ tGm.length +'\n';
+        }
+      }
+    }
 
-    nBar.innerText+= ' #local state stored';           
-    adminInfo.innerText+= "Local state stored, rows#: "+ tGm.length +'\n';
+    $('#mtb2').click();
   }
 
   // *** GAME OVER *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -826,8 +886,8 @@ $(document).ready(function()
       sortedPl.push( col[1] );
     });
 
-    isRemote= false; useThisDate= 0; btInit();
-    sortem(3, 1); if(hiTab.length > 0) lastDate= hiTab[0][0];
+//    isRemote= false; useThisDate= 0; btInit();
+//    sortem(3, 1); if(hiTab.length > 0) lastDate= hiTab[0][0];
   }
   
   function reFresh()
@@ -1509,7 +1569,7 @@ $(document).ready(function()
 
   $('#blindTimer').click(function(e)
   {
-    if(isRemote) { $("#crg2But").click(); return; }
+    if(isRemote) { rmtLod(); return; }
     if(gameOver) { finalSave(); return; }
 
     if(btState === 0) btState= 1;
@@ -1531,7 +1591,7 @@ $(document).ready(function()
       break;
        
       case 1:
-        goSst(); timerPaint(); setTimeout( minuteUp, 1000);
+        timerPaint(); setTimeout( minuteUp, 1000);
       break;
        
       case 2:
@@ -1556,6 +1616,8 @@ $(document).ready(function()
     var t= nBar.innerText; nBar.innerText= lastNotif; lastNotif= t;  });
   $('.mnu, .mtb, .ord, .ord2').click(function(e) { e.stopPropagation(); });
   // *** .........................................................
+  $("#rmtLod2").click(function() { rmtLod(); });
+  
   $("#mnu1").click(function()
   { // star A.
     if(curTab === 4) {
@@ -1821,61 +1883,5 @@ $(document).ready(function()
       document.body.style.backgroundColor= "#333333";
     }
   });
-
-  // *** Remote Game - save & load
-  function tgm2str()
-  {
-    var x= [];
-    tGm.forEach(function(r) {
-      if(r[0] !== 'F') r[0]= 'A'; x.push( r.join(':') ); });
-    return x.join('|');
-  }
-
-  function goSst()
-  {
-    if(isRemote || useThisDate > 0) return;
-    if(gamePlayers < 1) {
-      nBar.innerText= ' #empty game, aborting remote state save'; return; }
-
-    adminInfo.innerText= 'REMOTE STATE:export \n';
-    $.ajax(
-    {
-      url:appPath +'/sst', data:tgm2str(), type:'POST',
-      error:function(e, f) {
-        nBar.innerText+= ' #remote state save FAIL@client:'+ f; },
-      success:function(r, s, x)
-      {
-        if(r.substring(0,4) !== 'size') {
-          nBar.innerText+= ' #remote state save FAIL@server:'+ r; return; }
-
-        nBar.innerText+= ' #remote state stored '+ r.substring(5);
-      }
-    }); 
-  }
-
-  $("#crg2But").click(function()
-  {
-    useThisDate= 0;
-    adminInfo.innerText+= 'REMOTE STATE:import \n';
-    $.ajax(
-    {
-      url:appPath +'/lst', type:'GET',
-      error:function(e, f) {
-        nBar.innerText= ' #remote state load FAIL@client:'+ f; },
-      success:function(r, s, x)
-      {
-        var k= r.replace(/\n|\r/g, '');
-        if(k === tgm2str()) {
-          nBar.innerText= ' #no changes since last update'; return; }
-      
-        tGm= [];k= k.split('|');
-        k.forEach(function(row) { tGm.push( row.split(':') ); });
-        prtGm(); // *** need this now to init NaNs
-
-        isRemote= true; $('#mtb2').click();
-        nBar.innerText= ' #remote state applied';
-      }
-    });
-  });
-
+  
 }); // THE END
