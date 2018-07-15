@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r21i \n';
+  var versionCode= 'v2.0r21m \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -682,13 +682,14 @@ $(document).ready(function()
     {
       url:appPath +'/sst', data:upDat, type:'POST',
       error:function(e, f) {
-        nBar.innerText+= ' #remote state export FAIL@client:'+ f; },
+        adminInfo.innerText+= 'Remote state export FAIL@client:'+ f; },
       success:function(r, s, x)
       {
         if(r.substring(0,4) !== 'size') {
-          nBar.innerText+= ' #remote state export FAIL@server:'+ r; return; }
+          adminInfo.innerText+= 'Remote state export FAIL@server:'+ r; return; }
 
-        nBar.innerText+= ' #remote state exported '+ r.substring(5);
+        if(clr) adminInfo.innerText+= 'Remote state cleared \n';
+        else adminInfo.innerText+= 'Remote state exported '+ r.substring(5)+'\n';
       }
     }); 
   }
@@ -698,6 +699,8 @@ $(document).ready(function()
     if(!window.localStorage) {
       adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
    
+    adminInfo.innerText+= 'LOCAL STATE:import \n';
+    
     var loDat= localStorage.getItem('gameState');
     if(!loDat) {
       adminInfo.innerText+=
@@ -739,6 +742,8 @@ $(document).ready(function()
   function saveState(clr)
   {
     if(!clr && curRank < 2) return;
+    
+    adminInfo.innerText+= 'LOCAL STATE:export \n';
                      
     if(isRemote || useThisDate > 0)
       adminInfo.innerText+= 'ABORT@saveSate:remote or edit mode active \n';
@@ -761,13 +766,12 @@ $(document).ready(function()
         if(!clr)
         {
           localStorage.setItem('gameState', tgm2str());
-          nBar.innerText+= ' #local state exported';           
+          nBar.innerText+= ' #game state stored';           
           adminInfo.innerText+= "Local state exported, rows#: "+ tGm.length +'\n';
         }
       }
     }
-
-    $('#mtb2').click();
+//    $('#mtb2').click();
   }
 
   // *** GAME OVER *** *** *** *** *** *** *** *** *** *** *** *** ***
@@ -823,9 +827,6 @@ $(document).ready(function()
     hiTab.push([ gdat, gamePlayers, bankTotal, cf1,
                  sortedPl[rx1], cf2, sortedPl[rx2], 0, aux8.substr(1) ]);
     
-    $("#ssv4But").click();
-    saveState(true);
-
     reclcAll(); initG();
     sortem(curTab= 1, 5); reFresh();
     
@@ -833,10 +834,14 @@ $(document).ready(function()
     if(!udt) sortem(3, 1);
     else sortem(3, mdfySort);
 
-    reFresh(); useThisDate= 0;
+    reFresh();
     if(!udt) $('#htb>tr')[0].click();
     else $('#htb>tr')[editRow].click();
-
+    
+    saveDB(false);
+    saveState(true);
+    
+    useThisDate= 0;
     gamePlayers= 0;
     gameOver= false;
     rx1= rx2= mdfySort= 0;
@@ -885,8 +890,13 @@ $(document).ready(function()
       $('#gtb>tr')[rx2].cells[4].innerText= "???";
     });
 
-    $(wf).on("keydown", function(e) {
-      if(e.which === 13 || e.which === 9) finalSave(); });
+    $(wf).on("keydown", function(e)
+    {
+      if(e.which === 13 || e.which === 9)
+      {
+        finalSave();
+      }
+    });
 
     $(wf).on("keyup", function(e)
     {
@@ -1663,11 +1673,13 @@ $(document).ready(function()
   });
 
   // *** BUTTONS #################################################
+// alert('tag: '+e.target.tagName);
+// if(useThisDate === 0)
   $('.ord2').click( function() { clrAdmin(); });
-  $('.ptab').click( function() { if(useThisDate === 0)  clrAdmin(1); }); // 1= clr just #notif
+  $('.ptab').click( function(e) { clrAdmin(1); }); // 1= clr just #notif
   $('#headbar').click(function() {
     var t= nBar.innerText; nBar.innerText= lastNotif; lastNotif= t;  });
-  $('.mnu, .mtb, .ord, .ord2').click(function(e) { e.stopPropagation(); });
+  $('.mnu, .mtb, .ord, .ord2, #blindTimer').click(function(e) { e.stopPropagation(); });
   // *** .........................................................
   $("#rmtLod2").click(function() { rmtLod(); });
   
@@ -1709,9 +1721,6 @@ $(document).ready(function()
       $('.adminEdit').css('display', 'none');
     }
     
-/*    if(curTab === 3 &&  useThisDate > 0)
-      nBar.innerText+= ' #edit mode activated';
-    else*/
     if(useThisDate === 0) reFresh();
   });
 
@@ -1944,5 +1953,5 @@ $(document).ready(function()
     }
   });
   var noSleep= new window.NoSleep();
-  
+
 }); // THE END
