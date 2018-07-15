@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r21g \n';
+  var versionCode= 'v2.0r21h \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -363,8 +363,8 @@ $(document).ready(function()
 
   function timeText(istt)
   {
-    if(gameOver && !istt) return 'ENTER';
     if(isRemote && !istt) return 'RFRSH';
+    if(gameOver && !istt) return 'ENTER';
  
     if(!istt)
     {
@@ -659,7 +659,7 @@ $(document).ready(function()
       {
         var k= r.replace(/\n|\r/g, '');
         if(k === '@#' || k.length < 9) {
-          nBar.innerText= ' #no active remote game found'; $('#mtb2').click(); return; }
+          nBar.innerText= ' #no active remote state found, check history tab for finished games'; $('#mtb2').click(); return; }
         
         if(k === tgm2str()) {
           nBar.innerText= ' #no changes since last update'; $('#mtb2').click(); return; }
@@ -937,8 +937,8 @@ $(document).ready(function()
       sortedPl.push( col[1] );
     });
 
-//    isRemote= false; useThisDate= 0; btInit();
-//    sortem(3, 1); if(hiTab.length > 0) lastDate= hiTab[0][0];
+    isRemote= false; useThisDate= 0; btInit();
+    sortem(3, 1); if(hiTab.length > 0) lastDate= hiTab[0][0];
   }
   
   function reFresh()
