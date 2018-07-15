@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r21d \n';
+  var versionCode= 'v2.0r21g \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -106,6 +106,11 @@ $(document).ready(function()
               $('#ptb>tr').eq(i).addClass('already');
           } 
         }
+
+        if(!editMode)
+          $('#ptb>tr').last('tr').removeClass()
+            .css({'border-top':'3px double grey', background:'white',
+                  'user-select':'none', 'pointer-events':'none'});
       break;
 
       case 2:
@@ -148,6 +153,12 @@ $(document).ready(function()
             $('#htb>tr.extra').css({color:'white', background:'#3f3f3f'});
           break;
         }
+
+        if(!editMode)
+          $('#htb>tr').last('tr').removeClass()
+            .css({'border-top':'3px double grey', background:'white',
+                  'user-select':'none', 'pointer-events':'none'});
+      break;
     }
   }
 
@@ -405,10 +416,20 @@ $(document).ready(function()
   // *** tabs# redraw... ************************************************
   function freshTab1()
   {
+    var curDate= new Date();
+    document.getElementById("lblDate1")
+      .innerText= curDate.toLocaleDateString('en-NZ',
+                    {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+    var tbuy, twon, tbal, tgms, tavb, tavw;
+    tbuy= twon= tbal= tgms= tavb= tavw= 0;
+
     nextID= 0;
     $("#ptb").empty();
     plTab.forEach(function(col, cx)
     {
+      tbuy+= col[2]; twon+= col[3]; tbal+= col[4];
+      tgms+= col[5]; tavb+= col[6]; tavw+= col[7];
       if(+col[0] > nextID) nextID= +col[0];
       $('#ptb').append(
          '<tr tabindex="1"><td class="admin">'+ col[0]
@@ -421,10 +442,20 @@ $(document).ready(function()
         +'</td><td>'+ fCash(col[7]*100, col[2])
         +'</td></tr>');
     });
-    var curDate= new Date();
-    document.getElementById("lblDate1")
-      .innerText= curDate.toLocaleDateString('en-NZ',
-                    {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+    if(editMode) return;
+    
+    var a= plTab.length;
+    $('#ptb').append( '<tr span="9"><td style="text-align:right">Total:\nAverage:'
+        +'</td><td>'+ fCash(tbuy*1000)+'\n'+fCash(Math.round(tbuy /a)*1000)
+        +'</td><td>'+ fCash(twon*100)+'\n'+fCash(Math.round(twon /a)*100)
+        +'</td><td>'+ fCash(tbal*100)+'\n'
+        +'</td><td>'+ tgms+'\n'+Math.round(tgms /a)
+        +'</td><td>'+ fCash(tavb*100)+'\n'+fCash(Math.round(tavb /a)*100)
+        +'</td><td>'+ fCash(tavw*100)+'\n'+fCash(Math.round(tavw /a)*100)
+        +'</td></tr>'
+    );
+    $('#ptb>tr').last('tr').children().css({'font-size':'14px'});
   }
 
   function yeMny(cnt)
@@ -547,9 +578,14 @@ $(document).ready(function()
                           'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   function freshTab3()
   {
+    var tppl, tbnk, t1st, t2nd;
+    tppl= tbnk= t1st= t2nd= 0;
+
     var m, d; $('#htb').empty();
     hiTab.forEach(function(col, cnt)
     {
+      tppl+= +col[1]; tbnk+= +col[2]; t1st+= +col[3]; t2nd+= +col[5];
+
       m= +(''+col[0]).substring(4,6);
       d= (''+col[0]).substring(6,8)+" " + msa[m-1]+"`"+(''+col[0]).substring(2,4);
       $('#htb').append(
@@ -562,9 +598,22 @@ $(document).ready(function()
         +'</td><td style="text-align:left">'+ col[6]
         +'</td><td style="display:none">'+ (col[7]= cnt) +'</td></tr>');
     });
+
     reclcSelHrows();
     if(editMode) {
-      $('#dtEdit').val(''); $('.initDis').prop("disabled", true); }
+      $('#dtEdit').val(''); $('.initDis').prop("disabled", true); return; }
+    
+    var a= hiTab.length;
+      $('#htb').append(
+         '<tr tabindex="1"><td style="font-size:17px; text-align:right">Total:\nAverage:'
+        +'</td><td>'+ tppl+'\n'+Math.round(tppl /a)
+        +'</td><td>'+ fCash(tbnk*1000)+'\n'+fCash(Math.round(tbnk /a)*1000)
+        +'</td><td>'+ fCash(t1st*100)+'\n'+fCash(Math.round(t1st /a)*100)
+        +'</td><td>'
+        +'</td><td>'+ fCash(t2nd*100)+'\n'+fCash(Math.round(t2nd /a)*100)
+        +'</td><td></td></tr>'
+      );
+    $('#htb>tr').last('tr').children().css({'font-size':'14px'});
   }
 
   // *** clear state timeout
@@ -691,10 +740,12 @@ $(document).ready(function()
   {
     
     if(isRemote || useThisDate > 0)
-      adminInfo.innerText+= 'FAIL@saveSate:remote or edit mode active \n';
+      adminInfo.innerText+= 'ABORT@saveSate:remote or edit mode active \n';
     else
     {
-      rmtSav(clr);
+      if(gsE) rmtSav(clr);
+      else adminInfo.innerText+= 'ABORT@remote export:sharing off \n';
+
       if(!window.localStorage)
         adminInfo.innerText+= 'FAIL:window.localStorage \n';
       else
@@ -899,7 +950,8 @@ $(document).ready(function()
       case 2: freshTab2(); break;
       case 3: freshTab3(); break;
     }
-    setRowSpc(); setRowCol();
+    setRowSpc();
+    setRowCol();
     lastTab= curTab;
   }
   // *** END REFRESH *****************************************
@@ -1625,9 +1677,13 @@ $(document).ready(function()
         'Made by zele-chelik!, Jun 2018. \n'; return; }
 
     if(editMode= !editMode)
-    { 
-      if(curTab === 3 &&  useThisDate > 0) editMode= false; 
-      else
+    {
+      if(useThisDate > 0)
+      {
+        nBar.innerText+= ' #edit mode activated';
+        editMode= false; return;
+      }
+
       {
         if(curTab === 1) { resetEdit(); sortem(1, -1); }
         else if(curTab === 3) sortem(3, -1);
@@ -1652,10 +1708,10 @@ $(document).ready(function()
       $('.adminEdit').css('display', 'none');
     }
     
-    if(curTab === 3 &&  useThisDate > 0)
+/*    if(curTab === 3 &&  useThisDate > 0)
       nBar.innerText+= ' #edit mode activated';
-    else
-      reFresh();
+    else*/
+    if(useThisDate === 0) reFresh();
   });
 
   $("#mnu2").click(function()
@@ -1866,22 +1922,26 @@ $(document).ready(function()
   $("#ssv4But").click( function() { saveDB(); }); //>Server Save<
 
 // *** WAKE LOCK
-  var wlEnabled= false,
-      noSleep= new window.NoSleep();
-  $("#wlk4But").click(function()
+  var wlE= false, gsE= true;
+  $('#rgs4But').click(function()
   {
-    if(wlEnabled)
+    if(gsE= !gsE) this.value= 'Sharing:ON';
+    else this.value= 'Sharing:OFF';
+  });
+
+  $('#wlk4But').click(function()
+  {
+    if(wlE= !wlE)
     {
-      noSleep.disable(); // let the screen turn off.
-      wlEnabled= false; this.value= "WL disabled";
-      document.body.style.backgroundColor= "#777777";
+      noSleep.enable(); this.value= 'WakeLock:ON';
+      document.body.style.backgroundColor= '#333333';
     }
     else
     {
-      noSleep.enable(); // keep the screen on!
-      wlEnabled= true; this.value= "WL enabled";
-      document.body.style.backgroundColor= "#333333";
+      noSleep.disable(); this.value= 'WakeLock:OFF';
+      document.body.style.backgroundColor= '#777777';
     }
   });
+  var noSleep= new window.NoSleep();
   
 }); // THE END
