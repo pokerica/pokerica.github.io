@@ -1,5 +1,5 @@
 // *** r21abcdefgh
-self.addEventListener('install', e => {
+iself.addEventListener('install', e => {
   caches.delete('pmpAppCache').then(cache => {
       caches.open('pmpAppCache').then(cache => {
         return cache.addAll([ '/', '/index.html', '/client.js', '/icons/aux.js',

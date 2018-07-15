@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r21h \n';
+  var versionCode= 'v2.0r21i \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -738,7 +738,8 @@ $(document).ready(function()
   
   function saveState(clr)
   {
-    
+    if(!clr && curRank < 2) return;
+                     
     if(isRemote || useThisDate > 0)
       adminInfo.innerText+= 'ABORT@saveSate:remote or edit mode active \n';
     else
