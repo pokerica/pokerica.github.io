@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r21m \n';
+  var versionCode= 'v2.0r21p \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -1143,6 +1143,7 @@ $(document).ready(function()
   $('#historyTable').on('click', function (e)
   {
     if(useThisDate > 0) {
+      e.stopPropagation();
       nBar.innerText= ' #not now, edit mode activated'; return;
     }
 

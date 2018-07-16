@@ -1,4 +1,4 @@
-// *** r21abcdefghijklm
+// *** r21abcdefghijklmnop
 self.addEventListener('install', e => {
   caches.delete('pmpAppCache').then(cache => {
       caches.open('pmpAppCache').then(cache => {
