@@ -19,16 +19,9 @@
   <title>Pokerica</title>
 
   <link  rel="stylesheet" type="text/css" href="style.css" >
-  <audio id="audQuack" type="audio/wav" src="/icons/quack.wav"></audio>
 
   <script type="text/javascript" src="/icons/aux.js"></script>
   <script type="text/javascript" src="client.js"></script>
-  <script> 
-        window.onbeforeunload= function() { return "Reload database?"; }
-
-        if(navigator.serviceWorker)
-          navigator.serviceWorker.register('sw.js', { scope: '/' });
-  </script>
 </head>
   
   <!-- user-select:none; body oncontextmenu="return false" onselectstart="return false" ondragstart="return false" -->
@@ -238,5 +231,13 @@
 
     <div style="background:none; user-select:none;
                 height:300px; pointer-events:none"></div>
+
+  <audio id="audQuack" type="audio/wav" src="/icons/quack.wav"></audio>
+  <script> 
+        window.onbeforeunload= function() { return "Reload database?"; }
+
+        if(navigator.serviceWorker)
+          navigator.serviceWorker.register('sw.js', { scope: '/' });
+  </script>
 </body>
 </html>
