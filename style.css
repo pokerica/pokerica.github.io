@@ -76,7 +76,7 @@ select {
   padding:4px 22px 4px 4px; margin:0;
 
   /*** Removes default arrow from firefox ...or not?*/
-  text-indent:1px; text-overflow:"";
+  text-indent:1px; text-overflow:'';
 }
 
 #timeTxt {
@@ -166,7 +166,7 @@ th {
 }
 
 td {
-  padding:5px;
+  padding:5px; white-space:pre;
 }
 
 #htb tr.selected,
