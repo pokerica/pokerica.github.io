@@ -1,5 +1,5 @@
 
-// *** r23 a
+// *** r23 ab
 self.addEventListener('install', e => {
   caches.delete('pmpAppCache').then(cache => {
       caches.open('pmpAppCache').then(cache => {
