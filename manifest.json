@@ -2,8 +2,8 @@
   "name":"Party Mix Pokerica",
   "short_name":"Pokerica",
   "icons":[{
-      "src":"/icons/Icon-152.png",
-      "sizes":"256x256 192x192 152x152 144x144 128x128",
+      "src":"/aux/icon-144.png",
+      "sizes":"144x144",
       "type":"image/png"
   }],
 
