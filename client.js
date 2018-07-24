@@ -1,12 +1,12 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r23a \n';
+  var versionCode= 'v2.0r23b \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
 
-  // ☆☆☆ load from cache blob?
-  var audQuack= document.getElementById('audQuack'); //var audQuack= new Audio('');
+  // *** load from cache blob?
+  var audQuack= document.getElementById('audQuack');
   
   var nBar= document.getElementById('notif');
   var adminInfo= document.getElementById('dbFrame');
@@ -499,8 +499,7 @@ $(document).ready(function()
     if(gameOver)
     {
       gameOver= false; timerPaint();
-      var wf= $('#gtb>tr')[rx1].cells[4].firstChild;
-      $(wf).val('pooo');
+ //     var wf= $('#gtb>tr')[rx1].cells[4].firstChild; $(wf).val('pooo');
     }
     curRank++; yeMny(rx);
   }
@@ -518,8 +517,6 @@ $(document).ready(function()
 
   function freshTab2()
   {
-//    alert('tGm: '+ tGm);
-           
     gameOver= false;
     var curDate= new Date();
     var ldt= curDate.toLocaleDateString('en-NZ',

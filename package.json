@@ -16,7 +16,7 @@
     "node": "8.x"
   },
   "repository": {
-    "url": "https://pokerica.github.io/"
+    "url": "https://pokerica.github.io"
   },
   "license": "MIT",
   "keywords": [
