@@ -1,3 +1,3 @@
-Poker Home Game Manager v2.0r20f
+Poker Home Game Manager
 
 https://pokerica.github.io

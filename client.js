@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r22h \n';
+  var versionCode= 'v2.0r23a \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999,
                dataType:'text', contentType:'text/plain', processData:false});
@@ -17,7 +17,7 @@ $(document).ready(function()
   var dbPass= '*';
   var filesha= '#';
   var isLogged= false;
-  var ttxt= 'Party Mix';
+  var ttxt= 't1';
 
   var curTab= 1;
   var lastTab= 0;
@@ -874,12 +874,12 @@ $(document).ready(function()
 
   function mnySplit()
   {
-    var wf= $('#gtb>tr')[rx1].cells[4];
-    wf.innerText= '';
-    wf.innerHTML= '<input type="tel" autocomplete="off" '
+    var wfO= $('#gtb>tr')[rx1].cells[4];
+    wfO.innerText= '';
+    wfO.innerHTML= '<input type="tel" autocomplete="off" '
       +'style="text-align:right; padding:2px 9px; margin:-5px">';       
   
-    wf= wf.firstChild;
+    var wf= wfO.firstChild;
     $(wf).css({border:'1px solid gold', width:'90%'});
     
     $(wf).off();
@@ -887,9 +887,9 @@ $(document).ready(function()
     {
       tGm[rx1][3]= 0;
       tGm[rx2][3]= 0;
-      this.value= "00";
+      this.value= '00';
       this.setSelectionRange(0, 0);
-      $('#gtb>tr')[rx2].cells[4].innerText= "???";
+      $('#gtb>tr')[rx2].cells[4].innerText= '???';
     });
 
     $(wf).on("keydown", function(e)
@@ -902,22 +902,22 @@ $(document).ready(function()
 
     $(wf).on("keyup", function(e)
     {
-      var w1Typ= e.target;
       var w2Typ= $('#gtb>tr')[rx2].cells[4];
 
       var wf1, wf2;
-      var nsf= (w1Typ.value.replace(/,/g, ''));
+      var nsf= (this.value.replace(/,/g, ''));
 
       if(e.which === 8 || isNaN(nsf)
-         || +nsf <= 0 || nsf === "00")
+         || +nsf <= 0 || nsf === '00')
       {
         tGm[rx1][3]= 0;
         tGm[rx2][3]= 0;
-        this.value= "00";
+        this.value= '00';
         this.setSelectionRange(0, 0);
-        w2Typ.innerText= "???";
+        w2Typ.innerText= '???';
         return;
       }
+
       if(nsf > 99) nsf/= 100;
 
       wf1= parseInt(nsf, 10);
@@ -925,10 +925,9 @@ $(document).ready(function()
 
       tGm[rx1][3]= wf1;
       tGm[rx2][3]= wf2;
-      w1Typ.value= fCash(wf1*100);
+      this.value= fCash(wf1*100);
       w2Typ.innerText= fCash(wf2*100);
-      w1Typ.setSelectionRange(w1Typ.value.length-2,
-                              w1Typ.value.length-2);
+//      w1Typ.setSelectionRange(w1Typ.value.length-2, w1Typ.value.length-2);
     });
     btState= 0; sirenState= 0;
     gameOver= true; timerPaint();
@@ -937,7 +936,7 @@ $(document).ready(function()
 
   // *** main redraw function ***************************************
   function initG()
-  { 
+  {
     tGm.length= 0;
     sortedPl.length= plTab.length;
     plTab.forEach(function(x, c)
@@ -962,10 +961,10 @@ $(document).ready(function()
       case 2: freshTab2(); break;
       case 3: freshTab3(); break;
     }
+
     setRowSpc(); setRowCol();
     lastTab= curTab;
 
-// tab2 only needs 
     if(editMode) $(".admin").css("display", "table-cell");
     else $(".admin").css("display", "none");
   }
