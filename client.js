@@ -1,9 +1,8 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r23b \n';
+  var versionCode= 'v2.0r23d \n';
   var appPath= 'https://pok.glitch.me';
-  $.ajaxSetup({async:true, cache:false, timeout:9999,
-               dataType:'text', contentType:'text/plain', processData:false});
+  $.ajaxSetup({async:true, cache:false, timeout:9999});
 
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
