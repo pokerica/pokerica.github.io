@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r23f \n';
+  var versionCode= 'v2.0r23g \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
@@ -320,7 +320,7 @@ $(document).ready(function()
     document.getElementById('sumSg').innerHTML= '<pre id="selSum" '
       + 'style="font-size:15px; padding:1px 12px">'+ stb +'</pre>';
    
-    pl= 7+ (pl +1)*15; //$('#selSum').css({height:pl+'px'});
+    pl= 7+ (pl +1)*15; $('#selSum').css({height:pl+'px'});
     
     if(!z) return;
     if(z.getBoundingClientRect().bottom > window.innerHeight)
@@ -1209,9 +1209,10 @@ $(document).ready(function()
           + ('           '+ wons).slice(-10) +' \n';
     });
 
+    var h= (+hiTab[ri][1] +4) *15;
     $(etpn).after(
-        '<tr class="extra"><td colspan=7>'
-      + '<pre style="padding:9px 10px; margin:0; text-align:left; '
+        '<tr class="extra"><td colspan=7>'+'<pre style="height:'
+      + h +'px; '+'padding:9px 10px; margin:0; text-align:left; '
       + 'user-select: none; pointer-events:none; font-size:14px">'
       + scd +'</pre></td></tr>');
     rowAnim(etpn, true);
@@ -1224,8 +1225,7 @@ $(document).ready(function()
     var a= (s.toString(10)).substr(4);
     for(i= 0; i < a.length-2; i+= 2) {
       t= +a.substr(i, 2); r+= (t).toString(36); }
-    
-    t= (+a.substr(i, 2) /2); r+= (t).toString(36);
+    t= ~~(+a.substr(i, 2) /2); r+= (t).toString(36);
     return r;
   }
 
