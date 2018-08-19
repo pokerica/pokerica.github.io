@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r23g \n';
+  var versionCode= 'v2.0r24b \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
@@ -45,8 +45,8 @@ $(document).ready(function()
   var hiTab= [];
 
 // *** tGm:  0.in?  1.pid  2.rnk  3.won  4.buy
-  var tGm = [ ['F', 0, 0, 0, 0] ];
-  var sortedPl= [ 'a', 'b', 'c' ];
+  var tGm= []; //[ ['F', 0, 0, 0, 0] ];
+  var sortedPl= []; //[ 'a', 'b', 'c' ];
   
   function fCash(num, mod)
   { // *** clear commas: .replace(/,/g, '');
@@ -1223,9 +1223,9 @@ $(document).ready(function()
   {
     var i, t, r= '';
     var a= (s.toString(10)).substr(4);
-    for(i= 0; i < a.length-2; i+= 2) {
+    for(i= 0; i < a.length-3; i+= 2) {
       t= +a.substr(i, 2); r+= (t).toString(36); }
-    t= ~~(+a.substr(i, 2) /2); r+= (t).toString(36);
+    t= +a.substr(i, 2) /2; r+= (t).toString(36);
     return r;
   }
 
@@ -1234,7 +1234,7 @@ $(document).ready(function()
     var i, r= '2018';
     for(i= 0; i < a.length-1; i++) {
       r+= ('00'+ parseInt(a.charAt(i), 36)).slice(-2); }
-    r+= ('00'+ (2*parseInt(a.charAt(i +0), 36))).slice(-2);
+    r+= ('00'+ (2*parseInt(a.charAt(i), 36))).slice(-2);
     return +r;
   }
   
