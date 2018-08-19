@@ -1,5 +1,4 @@
-
-// *** [23d]-rollback.efg
+// *** [23d]-24a[b]
 self.addEventListener('install', e => {
   caches.delete('pmpAppCache').then(cache => {
       caches.open('pmpAppCache').then(cache => {
