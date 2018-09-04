@@ -1,30 +1,32 @@
 $(document).ready(function()
 {
-  var versionCode= 'v.24j \n';
+  var versionCode= 'v.24k \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
   
-  navigator.serviceWorker.register('sw.js')
-  .then(function(reg) {
-      reg.addEventListener('updatefound', function() {
+  if(navigator.serviceWorker)
+  {
+    navigator.serviceWorker.register('sw.js')
+    .then(function(reg) {
+        reg.addEventListener('updatefound', function() {
 
-        var iw= this.installing;
-        alert('Update pending...');
+          var iw= this.installing;
+          alert('Update pending...');
 
-        iw.addEventListener('statechange', function() {
-          if(this.state === 'activated') {
-            window.location.reload(true);
-            alert('Software updated!');
-          }
+          iw.addEventListener('statechange', function() {
+            if(this.state === 'activated') {
+              window.location.reload(true);
+              alert('Software updated!');
+            }
+          });
         });
-      });
-  }).catch(function(err) {
-    adminInfo.innerText+= 'SW fail:'+ err +'\n';
-  });
-  
+    }).catch(function(err) {
+      adminInfo.innerText+= 'SW fail:'+ err +'\n';
+    });
+  }
   window.onbeforeunload= function() { return "Reload database?"; }
   
   var nBar= document.getElementById('notif');
