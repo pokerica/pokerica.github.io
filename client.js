@@ -1,11 +1,31 @@
 $(document).ready(function()
 {
-  var versionCode= 'v2.0r24e \n';
+  var versionCode= 'v.24g \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
+  
+  navigator.serviceWorker.register('sw.js')
+  .then(function(reg) {
+      reg.addEventListener('updatefound', function() {
+
+        var iw= this.installing;
+        alert('Update pending...');
+
+        iw.addEventListener('statechange', function() {
+          if(this.state === 'activated') {
+            window.location.reload(true);
+            alert('Software updated!');
+          }
+        });
+      });
+  }).catch(function(err) {
+    adminInfo.innerText+= 'SW fail:'+ err +'\n';
+  });
+  
+  window.onbeforeunload= function() { return "Reload database?"; }
   
   var nBar= document.getElementById('notif');
   var adminInfo= document.getElementById('dbFrame');
@@ -1219,13 +1239,14 @@ $(document).ready(function()
     firefoxFix(); setRowCol();
   });
   
+  
   function zipN(s)
   {
     var i, t, r= '';
     var a= (s.toString(10)).substr(4);
-    for(i= 0; i < a.length-3; i+= 2) {
+    for(i= 0; i < a.length-2; i+= 2) {
       t= +a.substr(i, 2); r+= (t).toString(36); }
-    t= +a.substr(i, 2) /2; r+= (t).toString(36);
+    t= ~~(+a.substr(i, 2) /2); r+= (t).toString(36);
     return r;
   }
 
@@ -1234,7 +1255,7 @@ $(document).ready(function()
     var i, r= '2018';
     for(i= 0; i < a.length-1; i++) {
       r+= ('00'+ parseInt(a.charAt(i), 36)).slice(-2); }
-    r+= ('00'+ (2*parseInt(a.charAt(i), 36))).slice(-2);
+    r+= ('00'+ (2*parseInt(a.charAt(i +0), 36))).slice(-2);
     return +r;
   }
   
