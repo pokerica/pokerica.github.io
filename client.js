@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v.24h \n';
+  var versionCode= 'v.24i \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
