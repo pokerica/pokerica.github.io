@@ -1,12 +1,8 @@
-// *** [23d]-24a[bcde]
+// *** [23d]-24a[bcde]*error..f[g]
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
-    caches.open('pmpAppCache').then(function(cache) {
-        return cache.addAll([ '/', '/index.html', '/client.js',
-          '/aux/aux.js', '/style.css', '/manifest.json',
-          '/aux/icon-144.png', '/aux/ibm.ttf', '/aux/quack.wav' ]);
-    }).then(function() {
+    caches.delete('pmpAppCache').then(function() {
       return self.skipWaiting();
     })
   );
@@ -14,7 +10,11 @@ self.addEventListener('install', function(event)
 
 self.addEventListener('activate', function(event) {
   event.waitUntil(
-    caches.delete('pmpAppCache').then(function() {
+    caches.open('pmpAppCache').then(function(cache) {
+        return cache.addAll([ '/', '/index.html', '/client.js',
+          '/aux/aux.js', '/style.css', '/manifest.json',
+          '/aux/icon-144.png', '/aux/ibm.ttf', '/aux/quack.wav' ]);
+    }).then(function() {
       return self.clients.claim();
     })
   );

@@ -232,12 +232,7 @@
     <div style="background:none; user-select:none;
                 height:300px; pointer-events:none"></div>
 
-  <audio id="audQuack" type="audio/wav" src="/aux/quack.wav"></audio>
-  <script> 
-        window.onbeforeunload= function() { return "Reload database?"; }
+  <audio id="audQuack" type="audio/wav" src="/aux/quack.wav"></audio>    
 
-        if(navigator.serviceWorker)
-          navigator.serviceWorker.register('sw.js', { scope: '/' });
-  </script>
 </body>
 </html>

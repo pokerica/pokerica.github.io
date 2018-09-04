@@ -3,7 +3,7 @@
   "//3": "updating this file will download and update your packages",
 
   "name": "Pokerica",
-  "version": "2.0.4",
+  "version": "3.7",
   "description": "What am I about?",
   "main": "server.js",
   "scripts": {
