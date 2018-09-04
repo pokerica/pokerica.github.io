@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v.24g \n';
+  var versionCode= 'v.24h \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
@@ -1578,7 +1578,8 @@ $(document).ready(function()
     loadServer();
   }
 
-  // *** action starts here *********************************                     
+  // *** action starts here *********************************
+  logMe();
   if(navigator.storage) {
     navigator.storage.persisted().then(function(getP) {
       if(getP) {
