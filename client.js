@@ -1,33 +1,12 @@
 $(document).ready(function()
 {
-  var versionCode= 'v.24k \n';
+  var versionCode= 'v24m \n';
   var appPath= 'https://pok.glitch.me';
   $.ajaxSetup({async:true, cache:false, timeout:9999});
 
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
   
-  if(navigator.serviceWorker)
-  {
-    navigator.serviceWorker.register('sw.js')
-    .then(function(reg) {
-        reg.addEventListener('updatefound', function() {
-
-          var iw= this.installing;
-          alert('Update pending...');
-
-          iw.addEventListener('statechange', function() {
-            if(this.state === 'activated') {
-              window.location.reload(true);
-              alert('Software updated!');
-            }
-          });
-        });
-    }).catch(function(err) {
-      adminInfo.innerText+= 'SW fail:'+ err +'\n';
-    });
-  }
-  window.onbeforeunload= function() { return "Reload database?"; }
   
   var nBar= document.getElementById('notif');
   var adminInfo= document.getElementById('dbFrame');
@@ -1581,7 +1560,34 @@ $(document).ready(function()
   }
 
   // *** action starts here *********************************
-  //logMe();
+  function updates()
+  {
+      navigator.serviceWorker.register('sw.js')
+      .then(function(reg) {
+          reg.addEventListener('updatefound', function() {
+
+            var cf, iw= this.installing;
+//            cf= confirm('Update pending!');
+
+//            if(false) return;
+  //          else
+              iw.addEventListener('statechange', function() {
+                if(this.state === 'activated') {
+
+                  cf= confirm('Software update activated, refresh?');
+                  if(cf) window.location.reload(true);
+                }
+              });
+
+          });
+      }).catch(function(err) {
+        adminInfo.innerText+= 'SW fail:'+ err +'\n';
+      });
+    window.onbeforeunload= function() { return "Reload database?"; }
+  }
+ 
+  if(navigator.serviceWorker) updates();
+  
   if(navigator.storage) {
     navigator.storage.persisted().then(function(getP) {
       if(getP) {

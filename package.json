@@ -1,27 +1,20 @@
 {
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-
-  "name": "Pokerica",
-  "version": "3.7",
-  "description": "What am I about?",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
+  "name":"Pokerica",
+  "version":"2.24.7",
+  "description":"What?",
+  "main":"server.js",
+  "scripts":{
+    "start":"node server.js"
   },
-  "dependencies": {
-    "express": "^4.16.3"
+  "dependencies":{
+    "express":"^4.16.3"
   },
-  "engines": {
-    "node": "8.x"
+  "engines":{
+    "node":"8.x"
   },
-  "repository": {
-    "url": "https://pokerica.github.io"
+  "repository":{
+    "url":"https://pokerica.github.io"
   },
-  "license": "MIT",
-  "keywords": [
-    "node",
-    "glitch",
-    "poker"
-  ]
+  "license":"MIT",
+  "keywords":[ "node", "glitch", "poker" ]
 }
