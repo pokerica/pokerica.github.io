@@ -1,4 +1,4 @@
-// *** [23d]-24a[bcde]*error..fghij[k]l[m]nop[q]
+// *** [23d]-24a[bcde]*error..fghij[k]l[m]nop[qr]
 self.addEventListener('install', function(event)
 {
   event.waitUntil(

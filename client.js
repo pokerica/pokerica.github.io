@@ -1,12 +1,10 @@
 $(document).ready(function()
 {
-  var versionCode= 'v24q \n';
+  var versionCode= 'v24r \n';
   var appPath= 'https://pok.glitch.me';
-//  $.ajaxSetup({async:true, cache:false, timeout:9999});
 
   $.ajaxSetup({async:true, cache:false, timeout:19999,
-               dataType:'text',
-               contentType:'text/plain; charset=utf-8'});
+               dataType:'text', contentType:'text/plain; charset=utf-8'});
   
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
@@ -1578,7 +1576,7 @@ $(document).ready(function()
               iw.addEventListener('statechange', function() {
                 if(this.state === 'activated') {
 
-                  cf= confirm('Software update activated, reload now?');
+                  cf= confirm('Software update pending, restart now?');
                   if(cf) window.location.reload(true);
                 }
               });
