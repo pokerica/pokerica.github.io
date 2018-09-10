@@ -1,10 +1,11 @@
 $(document).ready(function()
 {
-  var versionCode= 'v24r \n';
+  var versionCode= 'v245 \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, cache:false, timeout:19999,
-               dataType:'text', contentType:'text/plain; charset=utf-8'});
+               //dataType:'text', 
+               contentType:'text/plain; charset=utf-8'});
   
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
@@ -19,7 +20,7 @@ $(document).ready(function()
   var dbPass= '*';
   var filesha= '#';
   var isLogged= false;
-  var ttxt= 't1';
+  var ttxt= 'ttx5';
 
   var curTab= 1;
   var lastTab= 0;
