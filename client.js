@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v24z \n';
+  var versionCode= 'v24y \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, cache:false, timeout:19999,
@@ -1586,7 +1586,8 @@ $(document).ready(function()
       }).catch(function(err) {
         adminInfo.innerText+= 'SW fail:'+ err +'\n';
       });
-    window.onbeforeunload= function() { return "Reload database?"; }
+    
+//    window.onbeforeunload= function() { return "Reload database?"; }
   }
  
   if(navigator.serviceWorker) updates();
