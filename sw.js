@@ -1,5 +1,5 @@
 // *** [23d] [24m]
-// *** 24 nopqs5uvxy
+// *** 24 nopqs5uvxyx
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
