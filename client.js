@@ -1,15 +1,14 @@
 $(document).ready(function()
 {
-  var versionCode= 'v24z \n';
+  var versionCode= 'v24z2 \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, cache:false, timeout:19999,
-               dataType:'text', 
+//               dataType:'text', 
                contentType:'text/plain; charset=utf-8'});
   
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
-  
   
   var nBar= document.getElementById('notif');
   var adminInfo= document.getElementById('dbFrame');
