@@ -1,10 +1,10 @@
 $(document).ready(function()
 {
-  var versionCode= 'v24z4 \n';
+  var versionCode= 'v25a \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, cache:false, timeout:19999,
-               dataType:'text', 
+//               dataType:'text', 
                contentType:'text/plain; charset=utf-8'});
   
   // *** load from cache blob?
