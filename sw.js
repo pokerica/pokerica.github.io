@@ -1,5 +1,5 @@
-// *** 23d 24m
-// *** 25 ab
+// *** 23d 24m 25a
+// *** 25 abc
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
