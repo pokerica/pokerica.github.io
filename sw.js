@@ -1,12 +1,12 @@
-// *** [23d] [24m]
-// *** 25 a
+// *** 23d 24m
+// *** 25 ab
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
-    caches.open('pmpAppCache').then(function(cache) {
-        return cache.addAll([ '/', '/index.html', '/client.js',
-          '/aux/aux.js', '/style.css', '/manifest.json',
-          '/aux/icon-144.png', '/aux/ibm.ttf', '/aux/quack.wav' ]);
+    caches.open('p25b').then(function(cache) {
+        return cache.addAll([ '/', 'index.html', 'client.js',
+          'aux/aux.js', 'style.css', 'manifest.json',
+          'aux/icon-144.png', 'aux/ibm.ttf', 'aux/quack.wav' ]);
     }).then(function() {
       return self.skipWaiting();
     })
