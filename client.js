@@ -1,9 +1,9 @@
 $(document).ready(function()
 {
-  var versionCode= 'v25b \n';
+  var versionCode= 'v25c \n';
   var appPath= 'https://pok.glitch.me';
 
-  $.ajaxSetup({async:true, cache:false, timeout:19999,
+  $.ajaxSetup({async:true, cache:false, timeout:29999,
 //               dataType:'text', 
                contentType:'text/plain; charset=utf-8'});
   
@@ -1482,6 +1482,8 @@ $(document).ready(function()
         isLogged= true;
         $('#log4But').css({background:'none', 'box-shadow':'none'});
         $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
+        
+        loadDB();
       }
     });
   }
