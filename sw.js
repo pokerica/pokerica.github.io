@@ -1,9 +1,10 @@
 // *** 23d 24m 25a
-// *** 25 abc
+// *** 25 abcde
+var vrz= 'p25e';
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
-    caches.open('p25b').then(function(cache) {
+    caches.open(vrz).then(function(cache) {
         return cache.addAll([ '/', 'index.html', 'client.js',
           'aux/aux.js', 'style.css', 'manifest.json',
           'aux/icon-144.png', 'aux/ibm.ttf', 'aux/quack.wav' ]);
@@ -16,7 +17,14 @@ self.addEventListener('install', function(event)
 self.addEventListener('activate', function(event)
 {
   event.waitUntil(
-    self.clients.claim()
+    caches.keys().then(function(ns) {
+      return Promise.all(ns.map(function(nm) {
+        if(nm !== vrz) {
+          return caches.delete(nm); }
+      }) );
+    }).then(function() {
+      return self.clients.claim();
+    })
   );
 });
 
