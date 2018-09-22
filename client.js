@@ -1,11 +1,11 @@
 $(document).ready(function()
 {
-  var versionCode= 'v25e \n';
+  var versionCode= 'v25f \n';
   var appPath= 'https://pok.glitch.me';
 
-  $.ajaxSetup({async:true, cache:false, timeout:29999,
-//               dataType:'text', 
-               contentType:'text/plain; charset=utf-8'});
+  $.ajaxSetup({async:true, cache:false, timeout:59999,  // contentType:false, 
+    dataType:"text", contentType:'text/plain', processData:false});
+  
   
   // *** load from cache blob?
   var audQuack= document.getElementById('audQuack');
@@ -1443,7 +1443,8 @@ $(document).ready(function()
     adminInfo.innerText+= 'SERVER:load & import \n';
     $.ajax(
     {
-      url:appPath +'/lod', type:'GET',
+      url:appPath +'/lod',
+      type:'GET',
       error:function(e, f)
       {
         adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
@@ -1466,7 +1467,8 @@ $(document).ready(function()
     adminInfo.innerText+= 'SERVER:logme \n';
     $.ajax(
     {
-      url:appPath +'/lgn:'+dbPass, type:'GET',
+      url:appPath +'/lgn:'+dbPass,
+      type:'GET',
       error:function(e, f)
       {
         adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
@@ -1535,7 +1537,8 @@ $(document).ready(function()
 
     $.ajax(
     {
-      url:appPath +'/sav:'+dbPass, data:rawdb, type:'POST',
+      url:appPath +'/sav:'+dbPass,
+      data:rawdb, type:'POST',
       error:function(e, f)
       {
         adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
