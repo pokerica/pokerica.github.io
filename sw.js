@@ -1,6 +1,6 @@
 // *** 23d 25e
-var vrz= 'p25f';
-// *** 25abcdef 012345789
+// *** 25abcdefghijk
+var vrz= 'p25k';
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
@@ -32,7 +32,7 @@ self.addEventListener('activate', function(event)
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request)
+    caches.match(event.request, {ignoreVary:true, ignoreSearch:true})
     .then(function(response) {
       return response || fetch(event.request)
     })
