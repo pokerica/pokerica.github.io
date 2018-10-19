@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v25k \n';
+  var versionCode= 'v25m \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, timeout:59999,  // cache:false, contentType:false, 
@@ -905,7 +905,7 @@ $(document).ready(function()
 
       var wf1, wf2;
       var nsf= (this.value.replace(/,/g, ''));
-
+      
       if(e.which === 8 || isNaN(nsf)
          || +nsf <= 0 || nsf === '00')
       {
@@ -926,8 +926,10 @@ $(document).ready(function()
       tGm[rx2][3]= wf2;
       this.value= fCash(wf1*100);
       w2Typ.innerText= fCash(wf2*100);
-//      w1Typ.setSelectionRange(w1Typ.value.length-2, w1Typ.value.length-2);
+      var sl= (''+this.value).length-2
+      this.setSelectionRange(sl, sl);
     });
+    
     btState= 0; sirenState= 0;
     gameOver= true; timerPaint();
     wf.focus();
