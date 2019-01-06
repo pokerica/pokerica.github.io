@@ -1,6 +1,6 @@
-// *** 23d 25e 25k
-// *** 25abcdefghijklm
-var vrz= 'p25m';
+// *** 23d 25e 25k 25m
+// *** 25abcdefghijklmno
+var vrz= '25o';
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
