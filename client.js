@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v25m \n';
+  var versionCode= 'v25o \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, timeout:59999,  // cache:false, contentType:false, 
@@ -943,7 +943,9 @@ $(document).ready(function()
     plTab.forEach(function(x, c)
     {
       if(x[5] < 1) {
-        x[2]= x[3]= x[5]= x[6]= x[7]= 0; x[4]= (-900 - x[0]); }
+        x[2]= x[3]= x[5]= x[6]= x[7]= 0;
+        x[4]= 0; //(-900 - x[0]);
+      }
 
       sortedPl[ +x[0]-1 ]= x[1];
       tGm.push([ 'F', c+1, 0, 0, 0 ]);
@@ -1487,7 +1489,7 @@ $(document).ready(function()
         $('#log4But').css({background:'none', 'box-shadow':'none'});
         $('#log4But').val("Logged"); $('#pasIn').css({display:'none'});
         
-        loadDB();
+//        loadDB();
       }
     });
   }
@@ -1803,7 +1805,9 @@ $(document).ready(function()
   $("#raz1But").click(function()
   { //>Reset All to Zero<
     plTab.forEach(function(col) {
-      col[2]= col[3]= col[5]= col[6]= col[7]= 0; col[4]= (-900 -col[0]); });
+      col[2]= col[3]= col[5]= col[6]= col[7]= 0;
+      col[4]= 0; //(-900 -col[0]);
+    });
     
     hiTab.length= 0;
     initG(); reFresh();
