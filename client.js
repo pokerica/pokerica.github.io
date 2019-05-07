@@ -1,9 +1,9 @@
 $(document).ready(function()
 {
-  var versionCode= 'v25o \n';
+  var versionCode= 'v25r \n';
   var appPath= 'https://pok.glitch.me';
 
-  $.ajaxSetup({async:true, timeout:59999,  // cache:false, contentType:false, 
+  $.ajaxSetup({async:true, timeout:89999,  // cache:false, contentType:false, 
     dataType:"text", contentType:'text/plain', processData:false});
   
   
@@ -77,7 +77,7 @@ $(document).ready(function()
   var lastNotif= '';
   function clrAdmin(a)
   {
-    if(!a) adminInfo.innerText= versionCode;
+    if(!a) adminInfo.textContent= versionCode;
     if(nBar.innerText !== '...') {
       lastNotif= nBar.innerText; nBar.innerText= '...'; }
   }
@@ -622,7 +622,7 @@ $(document).ready(function()
   function prtGm(x)
   {
     if(!x) x= tGm;
-    adminInfo.innerText+= '\n'
+    adminInfo.textContent+= '\n'
       + '[tGm]: 0    1   2      3      4 \n'
       + '      in?  id  rnk   $won   $buy \n'
       + '--------------------------------- \n';
@@ -634,10 +634,10 @@ $(document).ready(function()
       if(col[0] === 'F') 
       {
         col[2]= col[4]= 0;
-//        adminInfo.innerText+= ('       '+ col[0]).slice(-7)+'\n';
+//        adminInfo.textContent+= ('       '+ col[0]).slice(-7)+'\n';
       }
       else
-        adminInfo.innerText+=
+        adminInfo.textContent+=
             ('        '+ col[0]).slice(-8)
           + ('     '+ col[1]).slice(-5)
           + ('     '+ col[2]).slice(-5)
@@ -649,7 +649,7 @@ $(document).ready(function()
   function rmtLod()
   {
     useThisDate= 0;
-    adminInfo.innerText+= 'REMOTE STATE:import \n';
+    adminInfo.textContent+= 'REMOTE STATE:import \n';
     $.ajax(
     {
       url:appPath +'/lst', type:'GET',
@@ -685,19 +685,19 @@ $(document).ready(function()
   function rmtSav(clr)
   {
     var upDat= (clr)? '@#' : tgm2str();
-    adminInfo.innerText+= 'REMOTE STATE:export \n';
+    adminInfo.textContent+= 'REMOTE STATE:export \n';
     $.ajax(
     {
       url:appPath +'/sst', data:upDat, type:'POST',
       error:function(e, f) {
-        adminInfo.innerText+= 'Remote state export FAIL@client:'+ f; },
+        adminInfo.textContent+= 'Remote state export FAIL@client:'+ f; },
       success:function(r, s, x)
       {
         if(r.substring(0,4) !== 'size') {
-          adminInfo.innerText+= 'Remote state export FAIL@server:'+ r; return; }
+          adminInfo.textContent+= 'Remote state export FAIL@server:'+ r; return; }
 
-        if(clr) adminInfo.innerText+= 'Remote state cleared \n';
-        else adminInfo.innerText+= 'Remote state exported '+ r.substring(5)+'\n';
+        if(clr) adminInfo.textContent+= 'Remote state cleared \n';
+        else adminInfo.textContent+= 'Remote state exported '+ r.substring(5)+'\n';
       }
     }); 
   }
@@ -705,16 +705,16 @@ $(document).ready(function()
   function loadState(isImport)
   { 
     if(!window.localStorage) {
-      adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
+      adminInfo.textContent+= 'FAIL:window.localStorage \n'; return; }
    
-    adminInfo.innerText+= 'LOCAL STATE:import \n';
+    adminInfo.textContent+= 'LOCAL STATE:import \n';
     
     var loDat= localStorage.getItem('gameState');
     if(!loDat) {
-      adminInfo.innerText+=
+      adminInfo.textContent+=
         'Local state empty, skip import \n'; return; }
 
-    adminInfo.innerText+= 'Local state acquired, ';
+    adminInfo.textContent+= 'Local state acquired, ';
     if(!isImport)
     {
       var t= [];
@@ -722,7 +722,7 @@ $(document).ready(function()
       loDat.forEach(function(row) {
         t.push( row.split(':') ); });
       
-      adminInfo.innerText+= 'show only rows#: '+ t.length +'\n';
+      adminInfo.textContent+= 'show only rows#: '+ t.length +'\n';
       prtGm(t);
       return;
     }
@@ -733,7 +733,7 @@ $(document).ready(function()
       tGm.push( row.split(':') ); });
 
     nBar.innerText= ' #local state imported';
-    adminInfo.innerText+= 'Local state imported, rows#: '+ tGm.length +'\n';
+    adminInfo.textContent+= 'Local state imported, rows#: '+ tGm.length +'\n';
     
     prtGm(); // *** need this now to init NaNs
   }
@@ -749,31 +749,31 @@ $(document).ready(function()
   function saveState(clr)
   {
     if(!clr && curRank < 2) return;
-    adminInfo.innerText+= 'LOCAL STATE:export \n';
+    adminInfo.textContent+= 'LOCAL STATE:export \n';
                      
     if(isRemote || useThisDate > 0)
-      adminInfo.innerText+= 'ABORT@saveSate:remote or edit mode active \n';
+      adminInfo.textContent+= 'ABORT@saveSate:remote or edit mode active \n';
     else
     {
       if(gsE) rmtSav(clr);
-      else adminInfo.innerText+= 'ABORT@remote export:sharing off \n';
+      else adminInfo.textContent+= 'ABORT@remote export:sharing off \n';
 
       if(!window.localStorage)
-        adminInfo.innerText+= 'FAIL:window.localStorage \n';
+        adminInfo.textContent+= 'FAIL:window.localStorage \n';
       else
       { // local PASS
         var loDat= localStorage.getItem('gameState');
         if(loDat || clr)
         {
           localStorage.removeItem('gameState');
-          adminInfo.innerText+= "Local state cleared \n";
+          adminInfo.textContent+= "Local state cleared \n";
         }
 
         if(!clr)
         {
           localStorage.setItem('gameState', tgm2str());
           nBar.innerText+= ' #game state stored';           
-          adminInfo.innerText+= "Local state exported, rows#: "+ tGm.length +'\n';
+          adminInfo.textContent+= "Local state exported, rows#: "+ tGm.length +'\n';
         }
       }
     }
@@ -1324,11 +1324,11 @@ $(document).ready(function()
   }
 
   function cchInfo()
-  { //    adminInfo.innerText+= "Cache info.v9 -- \n";
+  { //    adminInfo.textContent+= "Cache info.v9 -- \n";
     var t= ':window.caches \n';
     if(window.caches)
     {
-      adminInfo.innerText+= 'PASS' +t;
+      adminInfo.textContent+= 'PASS' +t;
       caches.keys().then(function(cacheNames)
       {
         cacheNames.forEach(function(cacheName)
@@ -1344,78 +1344,78 @@ $(document).ready(function()
                 strOut+= '            '+ ('   '+ (i+1)).slice(-3) +':: '
                   + (rs.url).substr(0+ (rs.url).lastIndexOf('/')) +'\n';
               });
-              adminInfo.innerText+= 'Cache name: '+ cacheName +' \n'+ strOut +'\n';
+              adminInfo.textContent+= 'Cache name: '+ cacheName +' \n'+ strOut +'\n';
               strOut= '';
           });
         });
       });
     }
-    else adminInfo.innerText+= 'FAIL' +t;
+    else adminInfo.textContent+= 'FAIL' +t;
     
     t= ':navigator.storage \n';
     if(navigator.storage)
     {
-      adminInfo.innerText+= 'PASS' +t;
+      adminInfo.textContent+= 'PASS' +t;
       t= ':navigator.storage.estimate \n';
       if(navigator.storage.estimate)
       {
-        adminInfo.innerText+= 'PASS' +t;
+        adminInfo.textContent+= 'PASS' +t;
         navigator.storage.estimate().then(function(est)
         {
-          adminInfo.innerText+= "Usage: "
+          adminInfo.textContent+= "Usage: "
             + (est.usage/1048576).toFixed(2) +"MB out of "
             + (est.quota/1048576).toFixed(2) +"MB. \n";
         });
       }
-      else adminInfo.innerText+= 'FAIL' +t;
+      else adminInfo.textContent+= 'FAIL' +t;
 
       t= ':navigator.storage.persist \n';
       if(navigator.storage.persist)
       {
-        adminInfo.innerText+= 'PASS' +t;
+        adminInfo.textContent+= 'PASS' +t;
         navigator.storage.persisted().then(function(getP) {
-          adminInfo.innerText+= "Persistence: "+ getP +'\n'; });
+          adminInfo.textContent+= "Persistence: "+ getP +'\n'; });
       }
-      else adminInfo.innerText+= 'FAIL' +t;
+      else adminInfo.textContent+= 'FAIL' +t;
     }
-    else adminInfo.innerText+= 'FAIL' +t;
+    else adminInfo.textContent+= 'FAIL' +t;
 
     t= ':navigator.serviceWorker \n';
-    if(navigator.serviceWorker) adminInfo.innerText+= 'PASS' +t;
-    else adminInfo.innerText+= 'FAIL' +t;
+    if(navigator.serviceWorker) adminInfo.textContent+= 'PASS' +t;
+    else adminInfo.textContent+= 'FAIL' +t;
 
-    adminInfo.innerText+= '\n';
+    adminInfo.textContent+= '\n';
   }
 
   function loadCache(isImport)
   {
-    adminInfo.innerText+= 'CACHE:info & import \n';
+    adminInfo.textContent+= 'CACHE:info & import \n';
     
     cchInfo();
     if(!window.localStorage) {
-      adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
+      adminInfo.textContent+= 'FAIL:window.localStorage \n'; return; }
     else
-      adminInfo.innerText+= 'USING:window.localStorage \n';
+      adminInfo.textContent+= 'USING:window.localStorage \n';
    
     var t, d= localStorage.getItem('dataBase');
     if(!d) { nBar.innerText= ' #no cache data '; return; }
 
     if(isImport) {
-      importDB(d); adminInfo.innerText+=  'import@loadCache-RAW: \n'; }
+      importDB(d); adminInfo.textContent+=  'import@loadCache-RAW: \n'; }
     else
-      adminInfo.innerText+=  'info@loadCache-RAW: \n';
+      adminInfo.textContent+=  'info@loadCache-RAW: \n';
 
     var as= '–––––––––1–––––––––2–––––––––3–––––––––4–––––––––5–––––––––6–––––––––7–––––––––8 \n';
     for(var i= 0; i < d.length; i++) {
       if(i > 0 && i%80 === 0) as+= '\n'; as+= d.charAt(i); }
-    adminInfo.innerText+= as+'\n';
+    adminInfo.textContent+= as+'\n';
 
     var rd= d.split('@');
     var yr= rd[0];
     sortedPl= rd[1].split('|');
     var hiLoad= rd[2].split('|');
 
-    adminInfo.innerText+= '\n\n'
+    adminInfo.textContent+= '\n\n'
       +'timestamp\t name\t $buy\t $won \n';
     as= '';
     hiLoad.forEach(function(x)
@@ -1439,25 +1439,25 @@ $(document).ready(function()
           +'\t '+buy*1000+'\t '+won*100+'\n';
       });
     });
-    adminInfo.innerText+= as+'\n';
+    adminInfo.textContent+= as+'\n';
   }
 
   function loadServer()
   {
-    adminInfo.innerText+= 'SERVER:load & import \n';
+    adminInfo.textContent+= 'SERVER:load & import \n';
     $.ajax(
     {
       url:appPath +'/lod',
       type:'GET',
       error:function(e, f)
       {
-        adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
+        adminInfo.textContent+= 'FAIL@client:'+ f +'\n';
         ttxt= 'CACHE'; loadCache(true); $("#mtb4").click();
       },
       success:function(r, s, x)
       {
         var d= r.replace(/\n|\r/g, '');
-        adminInfo.innerText+= x.getAllResponseHeaders() +'\n'
+        adminInfo.textContent+= x.getAllResponseHeaders() +'\n'
           + 'PASS:server load '+ (d.length/1024).toFixed(2) +'KB \n';
         ttxt= 'Party Mix';
         importDB(d);
@@ -1468,21 +1468,21 @@ $(document).ready(function()
   function logMe()
   {
     clrAdmin();
-    adminInfo.innerText+= 'SERVER:logme \n';
+    adminInfo.textContent+= 'SERVER:logme \n';
     $.ajax(
     {
       url:appPath +'/lgn:'+dbPass,
       type:'GET',
       error:function(e, f)
       {
-        adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
+        adminInfo.textContent+= 'FAIL@client:'+ f +'\n';
       },
       success:function(r, s, x)
       {
         if(r !== 'pOkk') {
-          adminInfo.innerText+= 'FAIL@server:'+ r +'\n'; return; }
+          adminInfo.textContent+= 'FAIL@server:'+ r +'\n'; return; }
   
-        adminInfo.innerText+= 
+        adminInfo.textContent+= 
           x.getAllResponseHeaders() +'\n'+ 'PASS:logme logged \n';
         
         isLogged= true;
@@ -1497,12 +1497,12 @@ $(document).ready(function()
   function saveDB(cchOnly)
   {
     // *** CACHE SAVE
-    adminInfo.innerText+= 'CACHE:export & save \n';
+    adminInfo.textContent+= 'CACHE:export & save \n';
 
     if(!window.localStorage) {
-      adminInfo.innerText+= 'FAIL:window.localStorage \n'; return; }
+      adminInfo.textContent+= 'FAIL:window.localStorage \n'; return; }
     else
-      adminInfo.innerText+= 'USING:window.localStorage \n';
+      adminInfo.textContent+= 'USING:window.localStorage \n';
     
     var rawdb= '2018'+ '@'+ sortedPl.join('|');
    
@@ -1525,18 +1525,18 @@ $(document).ready(function()
     localStorage.setItem('dataBase', rawdb);
 
     nBar.innerText+= ' #cache save OK';
-    adminInfo.innerText+= 'PASS:cache save '+ (rawdb.length/1024).toFixed(2) +'KB \n';
+    adminInfo.textContent+= 'PASS:cache save '+ (rawdb.length/1024).toFixed(2) +'KB \n';
 
     if(cchOnly) return;
 
     // *** SERVER SAVE
-    adminInfo.innerText+= 'SERVER:export & save \n';
+    adminInfo.textContent+= 'SERVER:export & save \n';
 
     if(!navigator.onLine) {
-      adminInfo.innerText+= 'FAIL:navigator.online \n'; return; }
+      adminInfo.textContent+= 'FAIL:navigator.online \n'; return; }
     else
     if(!isLogged) {
-      adminInfo.innerText+= 'FAIL:no password\n';
+      adminInfo.textContent+= 'FAIL:no password\n';
       nBar.innerText= ' #must be logged to update server database'; return; }
 
     $.ajax(
@@ -1545,15 +1545,15 @@ $(document).ready(function()
       data:rawdb, type:'POST',
       error:function(e, f)
       {
-        adminInfo.innerText+= 'FAIL@client:'+ f +'\n';
+        adminInfo.textContent+= 'FAIL@client:'+ f +'\n';
       },
       success:function(r, s, x)
       {
         if(r.substring(0,4) !== 'size') {
-          adminInfo.innerText+= 'FAIL@server:'+ r +'\n'; return; }
+          adminInfo.textContent+= 'FAIL@server:'+ r +'\n'; return; }
 
         nBar.innerText+= ' #server save '+ r.substring(5);
-        adminInfo.innerText+= x.getAllResponseHeaders() +'\n'
+        adminInfo.textContent+= x.getAllResponseHeaders() +'\n'
           + 'PASS:server save '+ (rawdb.length/1024).toFixed(2) +'KB \n';
       }
     });
@@ -1563,7 +1563,7 @@ $(document).ready(function()
   {
     if(!navigator.onLine)
     {
-      adminInfo.innerText+= 'FAIL@navigator.offline \n';
+      adminInfo.textContent+= 'FAIL@navigator.offline \n';
       ttxt= 'OFFLINE'; loadCache(true); $("#mtb4").click();
       return;
     }
@@ -1592,7 +1592,7 @@ $(document).ready(function()
 
           });
       }).catch(function(err) {
-        adminInfo.innerText+= 'SW fail:'+ err +'\n';
+        adminInfo.textContent+= 'SW fail:'+ err +'\n';
       });
     
 //    window.onbeforeunload= function() { return "Reload database?"; }
@@ -1728,7 +1728,7 @@ $(document).ready(function()
   $("#mnu1").click(function()
   { // star A.
     if(curTab === 4) {
-      clrAdmin(); adminInfo.innerText+=
+      clrAdmin(); adminInfo.textContent+=
         'Made by zele-chelik!, Jun 2018. \n'; return; }
 //alert('ct= '+curTab);
     if(editMode= !editMode)
@@ -1775,7 +1775,7 @@ $(document).ready(function()
   $("#mnu3").click(function()
   { // line C.
     if(curTab === 4) {
-      clrAdmin(); adminInfo.innerText=
+      clrAdmin(); adminInfo.textContent=
         'What?! Why did you do that just now? \n'; return; }
 
     if(++tbLst[curTab] > 3) tbLst[curTab]= 1;
@@ -1922,29 +1922,29 @@ $(document).ready(function()
   $("#gpc4But").click(function()
   {
     if(!navigator.storage) {
-      adminInfo.innerText+= 'No navigator.storage! \n'; return; }
+      adminInfo.textContent+= 'No navigator.storage! \n'; return; }
     if(!navigator.storage.persist) {
-      adminInfo.innerText+= 'No navigator.storage.persist! \n'; return; }
+      adminInfo.textContent+= 'No navigator.storage.persist! \n'; return; }
 
     navigator.storage.persisted().then(function(getP)
     {
-      if(getP) adminInfo.innerText+= "Storage persistence already granted! \n";
+      if(getP) adminInfo.textContent+= "Storage persistence already granted! \n";
       else
       {
         navigator.storage.persist().then(function(setP)
         {
           if(setP)
           {
-            adminInfo.innerText+= "Storage persistence is now granted! \n";
+            adminInfo.textContent+= "Storage persistence is now granted! \n";
             $('#gpc4But').val("Persistance Granted");
             $('#gpc4But').css({background:'none', color:'black', 'box-shadow':'none'});
           }
           else
           {
-            adminInfo.innerText+= 'Storage persistence denied, \n'
+            adminInfo.textContent+= 'Storage persistence denied, \n'
                                 + 'try again after enabing notifications! \n';
             if(!Notification)
-              adminInfo.innerText+= 'Notifications unavailable, try Chromium! \n';
+              adminInfo.textContent+= 'Notifications unavailable, try Chromium! \n';
             else
               Notification.requestPermission();
           }
@@ -1956,19 +1956,19 @@ $(document).ready(function()
   $("#med4But").click(function()
   { //>Memory Data<'
     var as= '';
-    adminInfo.innerText+= '\n'+'[plTab: '+ plTab.length+']\n'
+    adminInfo.textContent+= '\n'+'[plTab: '+ plTab.length+']\n'
       + 'pid\t name\t $buy\t $won\t $bal\t #ngm\t %buy\t %won \n';
     plTab.forEach(function(r) {
       as+= ''+ r[0]+'\t '+r[1]+'\t '+r[2]+'\t '+r[3]
         +'\t '+r[4]+'\t '+r[5]+'\t '+r[6]+'\t '+r[7]+'\n'; });
-    adminInfo.innerText+= as;
+    adminInfo.textContent+= as;
     as= '';
-    adminInfo.innerText+= '\n'+'[hiTab: '+ hiTab.length+']\n'
+    adminInfo.textContent+= '\n'+'[hiTab: '+ hiTab.length+']\n'
       + 'dtm   #   $bank    $1st\t :name\t $2nd\t :name\t rid\t #<pid:buy..> \n';
     hiTab.forEach(function(r, c) {
       as+= ''+ zipN(r[0])+'  '+r[1]+'\t '+r[2]+'\t '+r[3]
         +'\t '+r[4]+'\t '+r[5]+'\t '+r[6]+'\t '+r[7]+'\t '+r[8]+'\n'; });
-    adminInfo.innerText+= as;
+    adminInfo.textContent+= as;
   });
 
   $("#sld4But").click( function() { loadDB(); }); //>Server Load<
