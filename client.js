@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-  var versionCode= 'v25r \n';
+  var versionCode= 'v25t \n';
   var appPath= 'https://pok.glitch.me';
 
   $.ajaxSetup({async:true, timeout:89999,  // cache:false, contentType:false, 
@@ -15,6 +15,7 @@ $(document).ready(function()
 
   var nextID= 0;
   var curRank= 0;
+  var curYear= '2001';
 
   var dbPass= '*';
   var filesha= '#';
@@ -1239,7 +1240,7 @@ $(document).ready(function()
 
   function uzpN(a)
   {
-    var i, r= '2018';
+    var i, r= curYear;
     for(i= 0; i < a.length-1; i++) {
       r+= ('00'+ parseInt(a.charAt(i), 36)).slice(-2); }
     r+= ('00'+ (2*parseInt(a.charAt(i +0), 36))).slice(-2);
@@ -1252,7 +1253,7 @@ $(document).ready(function()
 // *** UNPACK & IMPORT
     var rd= data.split('@');
 
-    var yr= rd[0];
+    var yr= curYear= rd[0];
     sortedPl= rd[1].split('|');
     var hiLoad= rd[2].split('|');
   
@@ -1504,7 +1505,7 @@ $(document).ready(function()
     else
       adminInfo.textContent+= 'USING:window.localStorage \n';
     
-    var rawdb= '2018'+ '@'+ sortedPl.join('|');
+    var rawdb= numCTD().toString(10).substr(0,4)+ '@'+ sortedPl.join('|');
    
     var hiSave= '';
     hiTab.forEach(function(x)
