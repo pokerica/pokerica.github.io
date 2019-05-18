@@ -1,5 +1,5 @@
-// *** 25o
-var vrz= '25r';
+// *** 25o 25r
+var vrz= '25t';
 self.addEventListener('install', function(event)
 {
   event.waitUntil(
